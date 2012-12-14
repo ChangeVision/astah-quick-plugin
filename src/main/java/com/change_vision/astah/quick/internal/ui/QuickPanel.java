@@ -50,5 +50,9 @@ public class QuickPanel extends JPanel {
     public void setCloseAction(Action action){
         this.closeButton.setAction(action);
     }
+    
+    public void reset(){
+        commandField.setText(null);
+    }
 
 }

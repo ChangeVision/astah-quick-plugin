@@ -11,13 +11,15 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
     
+    private QuickPanel quickPanel;
+
     public QuickWindow(JFrame parent){
         super(parent);
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        QuickPanel quickPanel = new QuickPanel();
+        quickPanel = new QuickPanel();
         quickPanel.setCloseAction(closeAction);
         add(quickPanel);
         setLocationRelativeTo(parent);
@@ -25,6 +27,11 @@ public class QuickWindow extends JWindow {
         setAutoRequestFocus(true);
         pack();
         
+    }
+
+    public void close() {
+        quickPanel.reset();
+        setVisible(false);
     }
 
 }
