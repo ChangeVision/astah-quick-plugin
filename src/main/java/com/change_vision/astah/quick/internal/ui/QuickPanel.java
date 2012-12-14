@@ -1,6 +1,5 @@
 package com.change_vision.astah.quick.internal.ui;
 
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,12 +36,8 @@ public class QuickPanel extends JPanel {
         JLabel astah = new JLabel(astahIcon);
         add(astah, "cell 0 0");
         
-        commandField = new JTextField();
-        commandField.setFont(new Font("Dialog", Font.PLAIN, 32));
+        commandField = new CommandField();
         add(commandField, "cell 1 0,growx");
-        commandField.setColumns(16);
-        commandField.setEditable(true);
-        
         closeButton = new JButton();
         add(closeButton, "cell 2 0");
     }
