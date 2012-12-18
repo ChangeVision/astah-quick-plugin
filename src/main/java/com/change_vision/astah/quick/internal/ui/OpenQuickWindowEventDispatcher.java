@@ -4,7 +4,6 @@ import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
      */
     private static final Logger logger = LoggerFactory.getLogger(OpenQuickWindowEventDispatcher.class);
 
-    private JWindow window;
+    private QuickWindow window;
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -33,7 +32,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                 logger.trace("window is already visible.");
                 return false;
             }
-            window.setVisible(true);
+            window.open();
             return true;
         }
         return false;

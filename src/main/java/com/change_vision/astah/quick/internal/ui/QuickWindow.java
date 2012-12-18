@@ -26,12 +26,16 @@ public class QuickWindow extends JWindow {
         setAlwaysOnTop(true);
         setAutoRequestFocus(true);
         pack();
-        
     }
 
     public void close() {
         quickPanel.reset();
         setVisible(false);
+    }
+
+    public void open() {
+        setVisible(true);
+        quickPanel.setParentWindow(this);
     }
 
 }

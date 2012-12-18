@@ -1,6 +1,7 @@
 package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -12,14 +13,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JWindow;
 
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class QuickPanel extends JPanel {
 
-    private JTextField commandField;
+    private CommandField commandField;
     private JButton closeButton;
 
     public QuickPanel() {
@@ -47,7 +48,11 @@ public class QuickPanel extends JPanel {
     }
     
     public void reset(){
-        commandField.setText(null);
+        commandField.reset();
+    }
+
+    public void setParentWindow(JWindow window) {
+        commandField.setParentWindow(window);
     }
 
 }
