@@ -7,7 +7,7 @@ public final class CommandListWindow extends JWindow {
     
     public CommandListWindow(){
         CommandWindowPanel panel = new CommandWindowPanel();
-        add(panel);
+        setContentPane(panel);
         pack();
     }
 }

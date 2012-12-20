@@ -41,8 +41,9 @@ public final class CommandField extends JTextField {
                 if(text == null || text.isEmpty()){
                     commandList.setVisible(false);
                 } else{
-                    commandList.setLocationRelativeTo(parent.getOwner());
-                    Point location = new Point(0, 100);
+                	Point location = (Point) parent.getLocation().clone();
+                	location.translate(0, 80);
+                	logger.trace("commandList:location{}",location);
                     commandList.setLocation(location);
                     commandList.setVisible(true);
                 }
