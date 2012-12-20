@@ -1,7 +1,5 @@
 package com.change_vision.astah.quick;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 
