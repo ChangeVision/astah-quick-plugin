@@ -8,34 +8,31 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Commands;
+
 @SuppressWarnings("serial")
 public class CommandWindowPanel extends JPanel {
-
     /**
-     * Create the panel.
+     * Logger for this class
      */
+    private static final Logger logger = LoggerFactory.getLogger(CommandWindowPanel.class);
+
+    private JList candidateList;
+	private Commands candidates;
+
     public CommandWindowPanel() {
         JScrollPane scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
-        JList candidateList = new JList();
-        List<String> data = new ArrayList<String>();
-        data.add("hogehoge");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        data.add("fugafuga");
-        Object[] listData = data.toArray(new String[]{});
-        candidateList.setListData(listData);
+        candidateList = new JList();
         scrollPane.setViewportView(candidateList);
         scrollPane.setPreferredSize(new Dimension(300,200));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -56,6 +53,29 @@ public class CommandWindowPanel extends JPanel {
         graphics.setPaint(gp);
         graphics.fillRect(0, 0, getWidth(), getHeight());
 		super.paintComponent(graphics);
+	}
+
+	public void updateCandidateText(String commandCandidateText) {
+		candidates = Commands.candidates(commandCandidateText);
+		candidateList.setListData(candidates.getCommands());
+	}
+
+	public void up() {
+		candidates.up();
+		Command command = candidates.current();
+		candidateList.setSelectedValue(command, true);
+	}
+
+	public void down() {
+		candidates.down();
+		Command command = candidates.current();
+		candidateList.setSelectedValue(command, true);
+	}
+
+	public void execute() {
+		Command current = candidates.current();
+		logger.trace("execute :'{}'",current.getCommandName());
+		current.execute();
 	}
 
 }
