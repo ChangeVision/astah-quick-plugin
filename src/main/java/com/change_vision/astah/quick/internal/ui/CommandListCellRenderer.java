@@ -5,8 +5,10 @@ import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import com.change_vision.astah.quick.command.Command;
@@ -15,27 +17,44 @@ final class CommandListCellRenderer implements ListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
-		JLabel label = new JLabel();
-		label.setOpaque(true);
-		label.setComponentOrientation(list.getComponentOrientation());
+		JPanel panel = new JPanel();
+		panel.setOpaque(true);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setComponentOrientation(list.getComponentOrientation());
+		panel.setBorder(BorderFactory.createEmptyBorder());
 
 		if (isSelected) {
-			label.setBackground(Color.DARK_GRAY.darker());
-			label.setForeground(Color.lightGray.brighter());
+			panel.setBackground(Color.blue.darker());
+			panel.setForeground(Color.lightGray.brighter());
 		} else {
-			label.setBackground(Color.lightGray.brighter());
-			label.setForeground(Color.DARK_GRAY.darker());
+			panel.setBackground(Color.lightGray.brighter());
+			panel.setForeground(Color.DARK_GRAY.darker());
 		}
 
 		if (value instanceof Command) {
 			Command command = (Command) value;
-			label.setText(command.getCommandName());
+			JLabel title = createTitleLabel(list, command);
+			panel.add(title);
+			JLabel description = new JLabel();
+			description.setText(command.getDescription());
+			if (isSelected) {
+				title.setForeground(Color.lightGray.brighter());
+				description.setForeground(Color.lightGray.brighter());
+			} else {
+				title.setForeground(Color.DARK_GRAY.darker());
+				description.setForeground(Color.gray);
+			}
+			panel.add(description);
 		}
+		return panel;
+	}
 
-		label.setEnabled(list.isEnabled());
-		label.setFont(new Font("Dialog", Font.PLAIN, 20));
-
-		label.setBorder(BorderFactory.createEmptyBorder());
-		return label;
+	private JLabel createTitleLabel(JList list, Command command) {
+		JLabel title = new JLabel();
+		title.setText(command.getCommandName());
+		title.setEnabled(list.isEnabled());
+		title.setFont(new Font("Dialog", Font.PLAIN, 20));
+		title.setComponentOrientation(list.getComponentOrientation());
+		return title;
 	}
 }

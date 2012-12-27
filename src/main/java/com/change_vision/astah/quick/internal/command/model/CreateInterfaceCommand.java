@@ -14,8 +14,8 @@ public class CreateInterfaceCommand implements Command{
 	}
 
 	@Override
-	public String toString() {
-		return getCommandName();
+	public String getDescription() {
+		return "create interface [interface name]";
 	}
 
 }

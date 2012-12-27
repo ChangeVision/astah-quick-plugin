@@ -14,8 +14,7 @@ public class FindClassCommand implements Command{
 	}
 	
 	@Override
-	public String toString() {
-		return getCommandName();
+	public String getDescription() {
+		return "find class [classname]";
 	}
-
 }

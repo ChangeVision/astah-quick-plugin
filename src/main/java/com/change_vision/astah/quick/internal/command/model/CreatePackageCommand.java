@@ -12,10 +12,10 @@ public class CreatePackageCommand implements Command{
 	@Override
 	public void execute() {
 	}
-
+	
 	@Override
-	public String toString() {
-		return getCommandName();
+	public String getDescription() {
+		return "create package [package name]";
 	}
 
 }

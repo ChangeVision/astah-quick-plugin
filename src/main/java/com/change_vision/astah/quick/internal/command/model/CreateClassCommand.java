@@ -14,8 +14,8 @@ public class CreateClassCommand implements Command{
 	}
 	
 	@Override
-	public String toString() {
-		return getCommandName();
+	public String getDescription() {
+		return "create class [classname]";
 	}
 
 }
