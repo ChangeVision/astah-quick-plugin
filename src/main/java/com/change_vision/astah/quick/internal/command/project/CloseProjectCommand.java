@@ -14,5 +14,10 @@ public class CloseProjectCommand implements Command{
 		ProjectAPI api = new ProjectAPI();
 		api.closeProject();
 	}
+	
+	@Override
+	public String getDescription() {
+		return "close current project";
+	}
 
 }

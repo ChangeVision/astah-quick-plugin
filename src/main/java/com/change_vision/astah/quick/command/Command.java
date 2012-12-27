@@ -5,4 +5,6 @@ public interface Command {
 	public abstract String getCommandName();
 	
 	public abstract void execute();
+	
+	public abstract String getDescription();
 }

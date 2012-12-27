@@ -22,7 +22,8 @@ import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
 public class CommandWindowPanel extends JPanel {
-    /**
+
+	/**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandWindowPanel.class);
@@ -33,6 +34,7 @@ public class CommandWindowPanel extends JPanel {
     public CommandWindowPanel() {
         JScrollPane scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new JList();
+        candidateList.setCellRenderer(new CommandListCellRenderer());
         scrollPane.setViewportView(candidateList);
         scrollPane.setPreferredSize(new Dimension(300,200));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());

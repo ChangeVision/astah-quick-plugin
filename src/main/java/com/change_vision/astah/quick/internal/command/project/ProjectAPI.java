@@ -23,7 +23,7 @@ public class ProjectAPI {
 		try {
 			return ProjectAccessorFactory.getProjectAccessor();
 		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("It may be occurred by class path issue.");
+			throw new IllegalArgumentException("It maybe occurred by class path issue.");
 		}
 	}
 

@@ -14,8 +14,8 @@ public class OpenProjectCommand implements Command{
 	}
 
 	@Override
-	public String toString() {
-		return getCommandName();
+	public String getDescription() {
+		return "open project...";
 	}
 
 }
