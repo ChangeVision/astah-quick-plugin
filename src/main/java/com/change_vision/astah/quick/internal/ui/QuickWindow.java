@@ -24,7 +24,6 @@ public class QuickWindow extends JWindow {
         add(quickPanel);
         setLocationRelativeTo(parent);
         setAlwaysOnTop(true);
-        setAutoRequestFocus(true);
         pack();
     }
 
