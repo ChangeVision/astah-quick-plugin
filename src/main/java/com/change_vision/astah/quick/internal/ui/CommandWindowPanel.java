@@ -63,12 +63,14 @@ public class CommandWindowPanel extends JPanel {
 	public void up() {
 		candidates.up();
 		Command command = candidates.current();
+		logger.trace("up : current '{}'",command);
 		candidateList.setSelectedValue(command, true);
 	}
 
 	public void down() {
 		candidates.down();
 		Command command = candidates.current();
+		logger.trace("down : current '{}'",command);
 		candidateList.setSelectedValue(command, true);
 	}
 

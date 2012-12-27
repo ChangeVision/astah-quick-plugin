@@ -2,18 +2,35 @@ package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.TextAction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
-    /**
+    private static final class EmptyAction extends AbstractAction {
+        private static final Logger logger = LoggerFactory.getLogger(EmptyAction.class);
+		private EmptyAction(String name) {
+			super(name);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			logger.trace("fired:{}",getValue(Action.NAME));
+		}
+	}
+
+	/**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandField.class);
@@ -40,16 +57,16 @@ public final class CommandField extends JTextField {
 	    				return;
 	    			}
 	            	if (isKeyCursor(e)){
-	            			if(isUp(e)){
-	            				commandList.up();
-	            				e.consume();
-	                    		return;
-	            			}
-	            			if(isDown(e)){
-	            				commandList.down();
-	            				e.consume();
-	                    		return;
-	            			}
+            			if(isUp(e)){
+            				commandList.up();
+            				e.consume();
+                    		return;
+            			}
+            			if(isDown(e)){
+            				commandList.down();
+            				e.consume();
+                    		return;
+            			}
 	            		return;
 	            	}
             	}
@@ -103,6 +120,14 @@ public final class CommandField extends JTextField {
             public void keyPressed(KeyEvent e) {
             }
         });
+    }
+    
+    @Override
+    public Action[] getActions() {
+    	return TextAction.augmentList(super.getActions(), new Action[]{
+    		new EmptyAction(DefaultEditorKit.beginLineAction),
+    		new EmptyAction(DefaultEditorKit.endLineAction),
+    	});
     }
     
     public void reset() {
