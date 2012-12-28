@@ -29,9 +29,10 @@ public class CommandWindowPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(CommandWindowPanel.class);
 
     private CommandList candidateList;
-	private Commands candidates;
+	private Commands commands;
 
-    public CommandWindowPanel() {
+    public CommandWindowPanel(Commands commands) {
+    	this.commands = commands;
         JScrollPane scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CommandList();
         scrollPane.setViewportView(candidateList);
@@ -57,27 +58,27 @@ public class CommandWindowPanel extends JPanel {
 	}
 
 	public void updateCandidateText(String commandCandidateText) {
-		candidates = Commands.candidates(commandCandidateText);
-		candidateList.setListData(candidates.getCommands());
+		commands.candidates(commandCandidateText);
+		candidateList.setListData(commands.getCommands());
 		candidateList.setSelectedIndex(0);
 	}
 
 	public void up() {
-		candidates.up();
-		Command command = candidates.current();
+		commands.up();
+		Command command = commands.current();
 		logger.trace("up : current '{}'",command);
 		candidateList.setSelectedValue(command, true);
 	}
 
 	public void down() {
-		candidates.down();
-		Command command = candidates.current();
+		commands.down();
+		Command command = commands.current();
 		logger.trace("down : current '{}'",command);
 		candidateList.setSelectedValue(command, true);
 	}
 
 	public void execute() {
-		Command current = candidates.current();
+		Command current = commands.current();
 		logger.trace("execute :'{}'",current.getCommandName());
 		current.execute();
 	}

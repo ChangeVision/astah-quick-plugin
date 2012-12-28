@@ -15,11 +15,14 @@ import javax.swing.text.TextAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Commands;
+
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
-    private static final class EmptyAction extends AbstractAction {
-        private static final Logger logger = LoggerFactory.getLogger(EmptyAction.class);
-		private EmptyAction(String name) {
+    private static final class DisableAction extends AbstractAction {
+        private static final Logger logger = LoggerFactory.getLogger(DisableAction.class);
+		private DisableAction(String name) {
 			super(name);
 		}
 
@@ -28,18 +31,37 @@ public final class CommandField extends JTextField {
 			logger.trace("fired:{}",getValue(Action.NAME));
 		}
 	}
+    
+    private static final class CommitCommandAction extends AbstractAction {
+        private final CommandField field;
+		private CommitCommandAction(String name,CommandField field) {
+			super(name);
+			this.field = field;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Command current = field.commands.current();
+			field.setText(current.getCommandName());
+			field.commandList.setCommandCandidateText(current.getCommandName());
+		}
+	}
 
 	/**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandField.class);
-
-    private CommandListWindow commandList;
+    
+    private final CommandListWindow commandList;
 
     private final QuickWindow quickWindow;
+
+	private final Commands commands;
     
-    public CommandField(QuickWindow quickWindow) {
+    public CommandField(QuickWindow quickWindow, Commands commands) {
     	this.quickWindow = quickWindow;
+    	this.commands = commands;
+    	this.commandList = new CommandListWindow(commands);
         setFont(new Font("Dialog", Font.PLAIN, 32));
         setColumns(16);
         setEditable(true);
@@ -71,25 +93,28 @@ public final class CommandField extends JTextField {
 	            		return;
 	            	}
             	}
-                if(commandList == null){
-                    commandList = new CommandListWindow();
-                }
                 CommandField source = (CommandField) e.getSource();
                 String commandCandidateText = source.getText();
                 if(commandCandidateText == null || commandCandidateText.isEmpty()){
-                    commandList.setVisible(false);
-                } else{
-                	Point location = (Point) CommandField.this.quickWindow.getLocation().clone();
-                	location.translate(0, 85);
-                	logger.trace("commandList:location{}",location);
-                	commandList.setCommandCandidateText(commandCandidateText);
-                	if(commandList.isVisible() == false) {
-                		commandList.setLocation(location);
-                		commandList.setAlwaysOnTop(true);
-                		commandList.setVisible(true);
-                	}
+                    closeCommandList();
+                } else {
+                	openCommandList(commandCandidateText);
                 }
             }
+			private void openCommandList(String commandCandidateText) {
+				Point location = (Point) CommandField.this.quickWindow.getLocation().clone();
+				location.translate(0, 85);
+				logger.trace("commandList:location{}",location);
+				commandList.setCommandCandidateText(commandCandidateText);
+				if(commandList.isVisible() == false) {
+					commandList.setLocation(location);
+					commandList.setAlwaysOnTop(true);
+					commandList.setVisible(true);
+				}
+			}
+			private void closeCommandList() {
+				commandList.setVisible(false);
+			}
 			private boolean isCommandListVisible() {
 				return commandList != null && commandList.isVisible();
 			}
@@ -126,8 +151,9 @@ public final class CommandField extends JTextField {
     @Override
     public Action[] getActions() {
     	return TextAction.augmentList(super.getActions(), new Action[]{
-    		new EmptyAction(DefaultEditorKit.beginLineAction),
-    		new EmptyAction(DefaultEditorKit.endLineAction),
+    		new CommitCommandAction(DefaultEditorKit.forwardAction,this),
+    		new DisableAction(DefaultEditorKit.beginLineAction),
+    		new DisableAction(DefaultEditorKit.endLineAction),
     	});
     }
     

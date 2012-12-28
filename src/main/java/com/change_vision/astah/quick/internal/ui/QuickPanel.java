@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.change_vision.astah.quick.internal.command.Commands;
+
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
@@ -20,6 +22,7 @@ public class QuickPanel extends JPanel {
 
     private CommandField commandField;
     private JButton closeButton;
+    private final Commands commands = new Commands();
 
     public QuickPanel(QuickWindow quickWindow) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
@@ -35,7 +38,7 @@ public class QuickPanel extends JPanel {
         JLabel astah = new JLabel(astahIcon);
         add(astah, "cell 0 0");
         
-        commandField = new CommandField(quickWindow);
+        commandField = new CommandField(quickWindow,commands);
         add(commandField, "cell 1 0,growx");
         closeButton = new JButton();
         add(closeButton, "cell 2 0");

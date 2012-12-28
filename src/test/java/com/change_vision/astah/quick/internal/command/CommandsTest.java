@@ -35,42 +35,48 @@ public class CommandsTest {
 
 	@Test
 	public void candidatesWithNull() throws Exception {
-		Commands commands = Commands.candidates(null);	
+		Commands commands = new Commands();
+		commands.candidates(null);
 		Command[] candidates = commands.getCommands();
 		assertThat(candidates.length, is(allCommands));		
 	}
 	
 	@Test
 	public void candidatesWithEmpty() throws Exception {
-		Commands commands = Commands.candidates("");		
+		Commands commands = new Commands();
+		commands.candidates("");
 		Command[] candidates = commands.getCommands();
 		assertThat(candidates.length, is(allCommands));
 	}
 	
 	@Test
 	public void candidatesWithNew() throws Throwable{
-		Commands commands = Commands.candidates("new");
+		Commands commands = new Commands();
+		commands.candidates("new");
 		Command[] candidates = commands.getCommands();
 		assertThat(candidates.length, is(1));
 	}
 	
 	@Test
 	public void candidatesWithCreate() throws Exception {
-		Commands commands = Commands.candidates("create");
+		Commands commands = new Commands();
+		commands.candidates("create");
 		Command[] candidates = commands.getCommands();
 		assertThat(candidates.length, is(2));		
 	}
 
 	@Test
 	public void current() throws Exception {
-		Commands commands = Commands.candidates("");
+		Commands commands = new Commands();
+		commands.candidates("");
 		Command current = commands.current();
 		assertThat(current,is(newProjectCommand));
 	}
 	
 	@Test
 	public void down() throws Exception {
-		Commands commands = Commands.candidates("");
+		Commands commands = new Commands();
+		commands.candidates("");
 		commands.down();
 		Command current = commands.current();
 		assertThat(current,is(createClassCommand));
@@ -78,7 +84,8 @@ public class CommandsTest {
 	
 	@Test
 	public void rotateWhenUp() throws Exception {
-		Commands commands = Commands.candidates("");
+		Commands commands = new Commands();
+		commands.candidates("");
 		commands.up();
 		Command current = commands.current();
 		assertThat(current,is(createPackageCommand));		
@@ -86,7 +93,8 @@ public class CommandsTest {
 	
 	@Test
 	public void downAndUp() throws Exception {
-		Commands commands = Commands.candidates("");
+		Commands commands = new Commands();
+		commands.candidates("");
 		commands.down();
 		commands.up();
 		Command current = commands.current();
@@ -95,7 +103,8 @@ public class CommandsTest {
 	
 	@Test
 	public void rotateWhenUpAndDown() throws Exception {
-		Commands commands = Commands.candidates("");
+		Commands commands = new Commands();
+		commands.candidates("");
 		commands.up();
 		commands.down();
 		Command current = commands.current();
@@ -104,6 +113,7 @@ public class CommandsTest {
 
 	private void createCommand(String commandName, Command command) {
 		when(command.getCommandName()).thenReturn(commandName);
+		when(command.isEnable()).thenReturn(true);
 		Commands.add(command);
 		allCommands++;
 	}

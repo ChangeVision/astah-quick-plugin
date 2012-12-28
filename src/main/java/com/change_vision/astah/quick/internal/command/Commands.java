@@ -38,15 +38,15 @@ public class Commands {
 	
 	private int currentIndex = 0;
 	
-	private Commands(Command[] commands){
-		this.commands = commands;
+	public Commands(){
+		this.commands = allCommands.toArray(new Command[]{});
 	}
 
-	public static Commands candidates(String searchKey) {
+	public void candidates(String searchKey) {
 		logger.trace("candidate searchKey:'{}'",searchKey);
 		if (searchKey == null) {
-			Command[] currentCommands = allCommands.toArray(new Command[]{});
-			return new Commands(currentCommands);
+			this.commands = allCommands.toArray(new Command[]{});
+			return;
 		}
 		List<Command> candidates = new ArrayList<Command>();
 		for (Command command : allCommands) {
@@ -54,8 +54,7 @@ public class Commands {
 				candidates.add(command);
 			}
 		}
-		Command[] currentCommands = candidates.toArray(new Command[]{});
-		return new Commands(currentCommands);
+		this.commands = candidates.toArray(new Command[]{});
 	}
 
 	public Command[] getCommands() {

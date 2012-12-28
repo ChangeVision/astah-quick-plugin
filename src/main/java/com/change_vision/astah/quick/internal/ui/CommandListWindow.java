@@ -2,13 +2,15 @@ package com.change_vision.astah.quick.internal.ui;
 
 import javax.swing.JWindow;
 
+import com.change_vision.astah.quick.internal.command.Commands;
+
 @SuppressWarnings("serial")
 public final class CommandListWindow extends JWindow {
     
     private CommandWindowPanel panel;
 
-	public CommandListWindow(){
-        panel = new CommandWindowPanel();
+	public CommandListWindow(Commands commands){
+        panel = new CommandWindowPanel(commands);
         setContentPane(panel);
         pack();
     }
@@ -29,4 +31,5 @@ public final class CommandListWindow extends JWindow {
 		panel.execute();
 		setVisible(false);
 	}
+
 }
