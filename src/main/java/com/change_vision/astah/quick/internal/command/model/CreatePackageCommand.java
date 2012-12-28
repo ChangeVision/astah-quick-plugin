@@ -17,5 +17,9 @@ public class CreatePackageCommand implements Command{
 	public String getDescription() {
 		return "create package [package name]";
 	}
-
+	
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
 }

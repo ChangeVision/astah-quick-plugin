@@ -17,4 +17,9 @@ public class FindClassCommand implements Command{
 	public String getDescription() {
 		return "find class [classname]";
 	}
+	
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
 }

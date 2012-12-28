@@ -17,5 +17,9 @@ public class CreateInterfaceCommand implements Command{
 	public String getDescription() {
 		return "create interface [interface name]";
 	}
-
+	
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
 }

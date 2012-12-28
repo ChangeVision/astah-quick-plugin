@@ -17,5 +17,10 @@ public class CreateClassCommand implements Command{
 	public String getDescription() {
 		return "create class [classname]";
 	}
+	
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
 
 }

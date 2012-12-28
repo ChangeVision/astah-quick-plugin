@@ -5,6 +5,8 @@ import com.change_vision.astah.quick.command.Command;
 
 public class NewProjectCommand implements Command{
 	
+	private ProjectAPI api = new ProjectAPI();
+	
 	public String getCommandName(){
 		return "new project";
 	}
@@ -18,5 +20,9 @@ public class NewProjectCommand implements Command{
 	public String getDescription() {
 		return "create new project";
 	}
-
+	
+	@Override
+	public boolean isEnable() {
+		return api.isClosedProject();
+	}
 }

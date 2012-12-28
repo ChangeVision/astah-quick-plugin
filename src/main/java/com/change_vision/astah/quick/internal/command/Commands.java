@@ -50,7 +50,7 @@ public class Commands {
 		}
 		List<Command> candidates = new ArrayList<Command>();
 		for (Command command : allCommands) {
-			if (command.getCommandName().startsWith(searchKey)) {
+			if (command.getCommandName().startsWith(searchKey) && command.isEnable()) {
 				candidates.add(command);
 			}
 		}

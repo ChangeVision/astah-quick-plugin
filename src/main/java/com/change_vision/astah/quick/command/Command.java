@@ -7,4 +7,6 @@ public interface Command {
 	public abstract void execute();
 	
 	public abstract String getDescription();
+	
+	public abstract boolean isEnable();
 }

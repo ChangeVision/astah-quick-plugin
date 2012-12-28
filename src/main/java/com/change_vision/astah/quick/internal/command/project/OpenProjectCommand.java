@@ -17,5 +17,9 @@ public class OpenProjectCommand implements Command{
 	public String getDescription() {
 		return "open project...";
 	}
-
+	
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
 }

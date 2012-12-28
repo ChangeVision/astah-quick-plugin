@@ -3,6 +3,8 @@ package com.change_vision.astah.quick.internal.command.project;
 import com.change_vision.astah.quick.command.Command;
 
 public class CloseProjectCommand implements Command{
+	
+	private ProjectAPI api = new ProjectAPI();
 
 	@Override
 	public String getCommandName() {
@@ -19,5 +21,10 @@ public class CloseProjectCommand implements Command{
 	public String getDescription() {
 		return "close current project";
 	}
-
+	
+	@Override
+	public boolean isEnable() {
+		return api.isOpenedProject();
+	}
+	
 }
