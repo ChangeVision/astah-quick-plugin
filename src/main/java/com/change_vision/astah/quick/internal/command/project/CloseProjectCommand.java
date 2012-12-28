@@ -12,7 +12,7 @@ public class CloseProjectCommand implements Command{
 	}
 
 	@Override
-	public void execute() {
+	public void execute(String... args) {
 		ProjectAPI api = new ProjectAPI();
 		api.closeProject();
 	}

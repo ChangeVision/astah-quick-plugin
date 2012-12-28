@@ -11,7 +11,7 @@ public class NewProjectCommand implements Command{
 		return "new project";
 	}
 	
-	public void execute(){
+	public void execute(String... args){
 		ProjectAPI api = new ProjectAPI();
 		api.createProject();
 	}

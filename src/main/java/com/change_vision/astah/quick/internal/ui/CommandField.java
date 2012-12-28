@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -71,38 +72,51 @@ public final class CommandField extends JTextField {
             }
             @Override
             public void keyReleased(KeyEvent e) {
+                CommandField field = (CommandField) e.getSource();
+                String commandCandidateText = field.getText();
+                final Commands commands = CommandField.this.commands;
             	if(isCommandListVisible()){
-            		logger.trace("commandList:keyMove{}" , e.getKeyCode());
+                    if(commandCandidateText == null || commandCandidateText.isEmpty()){
+                		logger.trace("commandList:close");
+                        closeCommandList();
+                        return;
+                    }
 	    			if(isEnter(e)){
-	    				commandList.execute();
+						String commandName = commands.current().getCommandName();
+						logger.trace("commandList:execute",commandName);
+						String[] splitedCommand = commandCandidateText.split(" ");
+						String[] args = null;
+						int commandRange = commandName.split(" ").length;
+						if(splitedCommand.length > commandRange){
+							args = Arrays.copyOfRange(splitedCommand, commandRange, splitedCommand.length);
+						}
+	    				commandList.execute(args);
 	    				e.consume();
-	    				CommandField.this.quickWindow.close();
+	    				field.quickWindow.close();
 	    				return;
 	    			}
 	            	if (isKeyCursor(e)){
             			if(isUp(e)){
+    						logger.trace("commandList:up");
             				commandList.up();
             				e.consume();
                     		return;
             			}
             			if(isDown(e)){
+    						logger.trace("commandList:down");
             				commandList.down();
             				e.consume();
                     		return;
             			}
 	            		return;
 	            	}
+            	} else {
+                	openCommandList(field,commandCandidateText);
+                	return;
             	}
-                CommandField source = (CommandField) e.getSource();
-                String commandCandidateText = source.getText();
-                if(commandCandidateText == null || commandCandidateText.isEmpty()){
-                    closeCommandList();
-                } else {
-                	openCommandList(commandCandidateText);
-                }
             }
-			private void openCommandList(String commandCandidateText) {
-				Point location = (Point) CommandField.this.quickWindow.getLocation().clone();
+			private void openCommandList(CommandField field, String commandCandidateText) {
+				Point location = (Point) field.quickWindow.getLocation().clone();
 				location.translate(0, 85);
 				logger.trace("commandList:location{}",location);
 				commandList.setCommandCandidateText(commandCandidateText);
