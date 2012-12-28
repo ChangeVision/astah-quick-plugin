@@ -19,7 +19,7 @@ public class QuickWindow extends JWindow {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        quickPanel = new QuickPanel();
+        quickPanel = new QuickPanel(this);
         quickPanel.setCloseAction(closeAction);
         add(quickPanel);
         setLocationRelativeTo(parent);
@@ -34,7 +34,6 @@ public class QuickWindow extends JWindow {
 
     public void open() {
         setVisible(true);
-        quickPanel.setParentWindow(this);
     }
 
 }

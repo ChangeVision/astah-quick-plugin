@@ -27,5 +27,6 @@ public final class CommandListWindow extends JWindow {
 
 	public void execute() {
 		panel.execute();
+		setVisible(false);
 	}
 }

@@ -10,7 +10,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -23,18 +22,18 @@ import com.change_vision.astah.quick.internal.command.Commands;
 @SuppressWarnings("serial")
 public class CommandWindowPanel extends JPanel {
 
+
 	/**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandWindowPanel.class);
 
-    private JList candidateList;
+    private CommandList candidateList;
 	private Commands candidates;
 
     public CommandWindowPanel() {
         JScrollPane scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
-        candidateList = new JList();
-        candidateList.setCellRenderer(new CommandListCellRenderer());
+        candidateList = new CommandList();
         scrollPane.setViewportView(candidateList);
         scrollPane.setPreferredSize(new Dimension(300,200));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -60,6 +59,7 @@ public class CommandWindowPanel extends JPanel {
 	public void updateCandidateText(String commandCandidateText) {
 		candidates = Commands.candidates(commandCandidateText);
 		candidateList.setListData(candidates.getCommands());
+		candidateList.setSelectedIndex(0);
 	}
 
 	public void up() {

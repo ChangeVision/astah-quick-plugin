@@ -9,7 +9,6 @@ import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTextField;
-import javax.swing.JWindow;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.TextAction;
 
@@ -37,9 +36,10 @@ public final class CommandField extends JTextField {
 
     private CommandListWindow commandList;
 
-    private JWindow parent;
+    private final QuickWindow quickWindow;
     
-    public CommandField() {
+    public CommandField(QuickWindow quickWindow) {
+    	this.quickWindow = quickWindow;
         setFont(new Font("Dialog", Font.PLAIN, 32));
         setColumns(16);
         setEditable(true);
@@ -54,6 +54,7 @@ public final class CommandField extends JTextField {
 	    			if(isEnter(e)){
 	    				commandList.execute();
 	    				e.consume();
+	    				CommandField.this.quickWindow.close();
 	    				return;
 	    			}
 	            	if (isKeyCursor(e)){
@@ -78,7 +79,7 @@ public final class CommandField extends JTextField {
                 if(commandCandidateText == null || commandCandidateText.isEmpty()){
                     commandList.setVisible(false);
                 } else{
-                	Point location = (Point) parent.getLocation().clone();
+                	Point location = (Point) CommandField.this.quickWindow.getLocation().clone();
                 	location.translate(0, 85);
                 	logger.trace("commandList:location{}",location);
                 	commandList.setCommandCandidateText(commandCandidateText);
@@ -137,7 +138,4 @@ public final class CommandField extends JTextField {
         }
     }
     
-    public void setParentWindow(JWindow window) {
-        this.parent = window;
-    }
 }

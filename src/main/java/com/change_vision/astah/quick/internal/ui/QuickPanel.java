@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JWindow;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -22,7 +21,7 @@ public class QuickPanel extends JPanel {
     private CommandField commandField;
     private JButton closeButton;
 
-    public QuickPanel() {
+    public QuickPanel(QuickWindow quickWindow) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
@@ -36,7 +35,7 @@ public class QuickPanel extends JPanel {
         JLabel astah = new JLabel(astahIcon);
         add(astah, "cell 0 0");
         
-        commandField = new CommandField();
+        commandField = new CommandField(quickWindow);
         add(commandField, "cell 1 0,growx");
         closeButton = new JButton();
         add(closeButton, "cell 2 0");
@@ -48,10 +47,6 @@ public class QuickPanel extends JPanel {
     
     public void reset(){
         commandField.reset();
-    }
-
-    public void setParentWindow(JWindow window) {
-        commandField.setParentWindow(window);
     }
 
 }
