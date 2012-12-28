@@ -77,10 +77,4 @@ public class CommandWindowPanel extends JPanel {
 		candidateList.setSelectedValue(command, true);
 	}
 
-	public void execute(String... args) {
-		Command current = commands.current();
-		logger.trace("execute :'{}'",current.getCommandName());
-		current.execute(args);
-	}
-
 }

@@ -82,7 +82,8 @@ public final class CommandField extends JTextField {
                         return;
                     }
 	    			if(isEnter(e)){
-						String commandName = commands.current().getCommandName();
+						Command current = commands.current();
+						String commandName = current.getCommandName();
 						logger.trace("commandList:execute",commandName);
 						String[] splitedCommand = commandCandidateText.split(" ");
 						String[] args = null;
@@ -90,7 +91,8 @@ public final class CommandField extends JTextField {
 						if(splitedCommand.length > commandRange){
 							args = Arrays.copyOfRange(splitedCommand, commandRange, splitedCommand.length);
 						}
-	    				commandList.execute(args);
+	    				current.execute(args);
+	    				commandList.setVisible(false);
 	    				e.consume();
 	    				field.quickWindow.close();
 	    				return;
