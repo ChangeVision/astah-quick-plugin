@@ -21,7 +21,8 @@ import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
-    private static final class DisableAction extends AbstractAction {
+
+	private static final class DisableAction extends AbstractAction {
         private static final Logger logger = LoggerFactory.getLogger(DisableAction.class);
 		private DisableAction(String name) {
 			super(name);
@@ -67,6 +68,7 @@ public final class CommandField extends JTextField {
         setColumns(16);
         setEditable(true);
         addKeyListener(new KeyListener() {
+            private static final String SEPARATE_COMMAND_CHAR = " ";
             @Override
             public void keyTyped(KeyEvent e) {
             }
@@ -84,13 +86,13 @@ public final class CommandField extends JTextField {
 	    			if(isEnter(e)){
 						Command current = commands.current();
 						String commandName = current.getCommandName();
-						logger.trace("commandList:execute",commandName);
-						String[] splitedCommand = commandCandidateText.split(" ");
+						String[] splitedCommand = commandCandidateText.split(SEPARATE_COMMAND_CHAR);
 						String[] args = null;
-						int commandRange = commandName.split(" ").length;
+						int commandRange = commandName.split(SEPARATE_COMMAND_CHAR).length;
 						if(splitedCommand.length > commandRange){
 							args = Arrays.copyOfRange(splitedCommand, commandRange, splitedCommand.length);
 						}
+						logger.trace("commandList:execute commandName:'{}',args:'{}'",commandName,args);
 	    				current.execute(args);
 	    				commandList.setVisible(false);
 	    				e.consume();
