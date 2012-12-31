@@ -9,11 +9,11 @@ import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
 
-public class ProjectAPI {
+class ProjectAPI {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectAPI.class);
 	
-	public void createProject(){
+	void createProject(){
 		try {
 			getProjectAccessor().create();
 		} catch (IOException e) {
@@ -21,11 +21,11 @@ public class ProjectAPI {
 		}
 	}
 	
-	public void closeProject(){
+	void closeProject(){
 		getProjectAccessor().close();
 	}
 	
-	public boolean isOpenedProject(){
+	boolean isOpenedProject(){
 		try {
 			String projectPath = getProjectAccessor().getProjectPath();
 			logger.trace("isOpenedProject project path : '{}'",projectPath);
@@ -36,7 +36,7 @@ public class ProjectAPI {
 		}
 	}
 	
-	public boolean isClosedProject(){
+	boolean isClosedProject(){
 		return isOpenedProject() == false;
 	}
 

@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -20,7 +21,8 @@ import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
-    private static final class DisableAction extends AbstractAction {
+
+	private static final class DisableAction extends AbstractAction {
         private static final Logger logger = LoggerFactory.getLogger(DisableAction.class);
 		private DisableAction(String name) {
 			super(name);
@@ -66,43 +68,59 @@ public final class CommandField extends JTextField {
         setColumns(16);
         setEditable(true);
         addKeyListener(new KeyListener() {
+            private static final String SEPARATE_COMMAND_CHAR = " ";
             @Override
             public void keyTyped(KeyEvent e) {
             }
             @Override
             public void keyReleased(KeyEvent e) {
+                CommandField field = (CommandField) e.getSource();
+                String commandCandidateText = field.getText();
+                final Commands commands = CommandField.this.commands;
             	if(isCommandListVisible()){
-            		logger.trace("commandList:keyMove{}" , e.getKeyCode());
+                    if(commandCandidateText == null || commandCandidateText.isEmpty()){
+                		logger.trace("commandList:close");
+                        closeCommandList();
+                        return;
+                    }
 	    			if(isEnter(e)){
-	    				commandList.execute();
+						Command current = commands.current();
+						String commandName = current.getCommandName();
+						String[] splitedCommand = commandCandidateText.split(SEPARATE_COMMAND_CHAR);
+						String[] args = null;
+						int commandRange = commandName.split(SEPARATE_COMMAND_CHAR).length;
+						if(splitedCommand.length > commandRange){
+							args = Arrays.copyOfRange(splitedCommand, commandRange, splitedCommand.length);
+						}
+						logger.trace("commandList:execute commandName:'{}',args:'{}'",commandName,args);
+	    				current.execute(args);
+	    				commandList.setVisible(false);
 	    				e.consume();
-	    				CommandField.this.quickWindow.close();
+	    				field.quickWindow.close();
 	    				return;
 	    			}
 	            	if (isKeyCursor(e)){
             			if(isUp(e)){
+    						logger.trace("commandList:up");
             				commandList.up();
             				e.consume();
                     		return;
             			}
             			if(isDown(e)){
+    						logger.trace("commandList:down");
             				commandList.down();
             				e.consume();
                     		return;
             			}
 	            		return;
 	            	}
+            	} else {
+                	openCommandList(field,commandCandidateText);
+                	return;
             	}
-                CommandField source = (CommandField) e.getSource();
-                String commandCandidateText = source.getText();
-                if(commandCandidateText == null || commandCandidateText.isEmpty()){
-                    closeCommandList();
-                } else {
-                	openCommandList(commandCandidateText);
-                }
             }
-			private void openCommandList(String commandCandidateText) {
-				Point location = (Point) CommandField.this.quickWindow.getLocation().clone();
+			private void openCommandList(CommandField field, String commandCandidateText) {
+				Point location = (Point) field.quickWindow.getLocation().clone();
 				location.translate(0, 85);
 				logger.trace("commandList:location{}",location);
 				commandList.setCommandCandidateText(commandCandidateText);

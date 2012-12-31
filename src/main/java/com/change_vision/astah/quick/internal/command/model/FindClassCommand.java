@@ -10,7 +10,7 @@ public class FindClassCommand implements Command{
 	}
 
 	@Override
-	public void execute() {
+	public void execute(String... args) {
 	}
 	
 	@Override
