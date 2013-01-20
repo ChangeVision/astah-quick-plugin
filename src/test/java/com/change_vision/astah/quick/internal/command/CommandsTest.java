@@ -84,6 +84,17 @@ public class CommandsTest {
 	}
 	
 	@Test
+	public void downAndCandidates() throws Exception {
+		Commands commands = new Commands();
+		commands.candidates("");
+		commands.down();
+		commands.candidates("");
+		Command current = commands.current();
+		assertThat(current,is(newProjectCommand));
+	}
+
+	
+	@Test
 	public void rotateWhenUp() throws Exception {
 		Commands commands = new Commands();
 		commands.candidates("");

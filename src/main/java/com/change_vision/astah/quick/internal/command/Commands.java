@@ -10,6 +10,7 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
+import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class Commands {
     /**
@@ -54,7 +55,13 @@ public class Commands {
 				candidates.add(command);
 			}
 		}
+		INamedElement[] foundModels = ModelCommands.find(searchKey);
+		for (INamedElement foundModel : foundModels) {
+			Command selectCommand = ModelCommands.createSelectCommand(foundModel);
+			candidates.add(selectCommand);
+		}
 		this.commands = candidates.toArray(new Command[]{});
+		this.currentIndex = 0;
 	}
 
 	public Command[] getCommands() {

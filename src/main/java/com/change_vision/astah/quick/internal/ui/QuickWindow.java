@@ -28,11 +28,11 @@ public class QuickWindow extends JWindow {
     }
 
     public void close() {
-        quickPanel.reset();
         setVisible(false);
     }
 
     public void open() {
+        quickPanel.reset();
         setVisible(true);
     }
 

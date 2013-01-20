@@ -10,6 +10,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 import javax.swing.text.JTextComponent;
@@ -41,7 +43,15 @@ public final class CommandField extends JTextField {
 			final Commands commands = field.commands;
 			Command current = commands.current();
 			String commandName = getCommandName();
-			String[] splitedCommand = field.getText().split(SEPARATE_COMMAND_CHAR);
+			String fieldText = field.getText();
+
+			field.quickWindow.close();
+			
+			if (fieldText.startsWith(commandName) != false && fieldText.length() == commandName.length()) {
+				current.execute();
+				return;
+			}
+			String[] splitedCommand = fieldText.split(SEPARATE_COMMAND_CHAR);
 			String[] args = null;
 			int commandRange = commandName.split(SEPARATE_COMMAND_CHAR).length;
 			if(splitedCommand.length > commandRange){
@@ -49,7 +59,6 @@ public final class CommandField extends JTextField {
 			}
 			logger.trace("commandList:execute commandName:'{}',args:'{}'",commandName,args);
 			current.execute(args);
-			field.quickWindow.close();
 		}
 		
 		private String getCommandName() {
@@ -114,15 +123,6 @@ public final class CommandField extends JTextField {
 		public void actionPerformed(ActionEvent e) {
 			logger.trace("commandList:up");
 			field.commandList.up();
-			String commandName = getCommandName();
-			field.setText(commandName);
-		}
-		
-		private String getCommandName() {
-			final Commands commands = field.commands;
-			Command current = commands.current();
-			String commandName = current.getCommandName();
-			return commandName;
 		}
 	}
 	
@@ -138,18 +138,10 @@ public final class CommandField extends JTextField {
 		public void actionPerformed(ActionEvent e) {
 			logger.trace("commandList:down");
 			field.commandList.down();
-			String commandName = getCommandName();
-			field.setText(commandName);
-		}
-		
-		private String getCommandName() {
-			final Commands commands = field.commands;
-			Command current = commands.current();
-			String commandName = current.getCommandName();
-			return commandName;
 		}
 	}    
-    private static final class CommitCommandAction extends AbstractAction {
+
+	private static final class CommitCommandAction extends AbstractAction {
         private final CommandField field;
 		private CommitCommandAction(String name,CommandField field) {
 			super(name);
@@ -186,6 +178,23 @@ public final class CommandField extends JTextField {
         customizedKeyMap.addActionForKeyStroke(ExecuteCommandAction.KEY_STROKE,new ExecuteCommandAction(this));
         customizedKeyMap.setDefaultAction(new CommandListWindowAction(this));
         setKeymap(customizedKeyMap);
+        getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changeInputField();
+			}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changeInputField();
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				changeInputField();
+			}
+			private void changeInputField() {
+				commandList.setCommandCandidateText(CommandField.this.getText());
+			}
+		});
     }
     
     @Override
