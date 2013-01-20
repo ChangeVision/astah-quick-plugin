@@ -1,6 +1,7 @@
 package com.change_vision.astah.quick.internal.command;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -109,6 +110,26 @@ public class CommandsTest {
 		commands.down();
 		Command current = commands.current();
 		assertThat(current,is(newProjectCommand));				
+	}
+	
+	@Test
+	public void notHappenedExceptionsWhenCandidatesAreZeroAndUp() throws Exception {
+		Commands commands = new Commands();
+		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroUp");
+		commands.up();
+		Command current = commands.current();
+		assertThat(current,is(nullValue()));
+		assertThat(commands.currentIndex,is(0));
+	}
+	
+	@Test
+	public void notHappenedExceptionsWhenCandidatesAreZeroAndDown() throws Exception {
+		Commands commands = new Commands();
+		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroDown");
+		commands.down();
+		Command current = commands.current();
+		assertThat(current,is(nullValue()));
+		assertThat(commands.currentIndex,is(0));
 	}
 
 	private void createCommand(String commandName, Command command) {

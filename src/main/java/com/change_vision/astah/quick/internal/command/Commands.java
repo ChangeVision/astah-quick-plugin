@@ -36,7 +36,7 @@ public class Commands {
 
 	private Command[] commands;
 	
-	private int currentIndex = 0;
+	int currentIndex = 0;
 	
 	public Commands(){
 		this.commands = allCommands.toArray(new Command[]{});
@@ -62,6 +62,7 @@ public class Commands {
 	}
 
 	public void up() {
+		if(commands.length == 0) return;
 		currentIndex--;
 		if(currentIndex < 0){
 			currentIndex = commands.length - 1;
@@ -70,6 +71,7 @@ public class Commands {
 	}
 
 	public Command current() {
+		if(commands.length == 0) return null;
 		return commands[currentIndex];
 	}
 
