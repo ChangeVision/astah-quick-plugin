@@ -12,9 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.Keymap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +21,71 @@ import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
+
+	private final class CommandFieldDocumentListenr implements
+			DocumentListener {
+		private final CommandField field;
+
+		public CommandFieldDocumentListenr(CommandField commandField) {
+			this.field = commandField;
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			changeInputField();
+			handleCommandList();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			changeInputField();
+			handleCommandList();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			changeInputField();
+			handleCommandList();
+		}
+
+		private void changeInputField() {
+			commandList.setCommandCandidateText(CommandField.this.getText());
+		}
+
+		private void handleCommandList() {
+			String commandCandidateText = field.getText();
+			if(isCommandListVisible()){
+		        if(commandCandidateText == null || commandCandidateText.isEmpty()){
+		    		logger.trace("commandList:close");
+		            closeCommandList();
+		            return;
+		        }
+			} else {
+		    	openCommandList(field,commandCandidateText);
+		    	return;
+			}
+		}
+
+		private void openCommandList(CommandField field, String commandCandidateText) {
+			Point location = (Point) field.quickWindow.getLocation().clone();
+			location.translate(0, 85);
+			logger.trace("commandList:location{}",location);
+			field.commandList.setCommandCandidateText(commandCandidateText);
+			if(field.commandList.isVisible() == false) {
+				field.commandList.setLocation(location);
+				field.commandList.setAlwaysOnTop(true);
+				field.commandList.setVisible(true);
+			}
+		}
+
+		private void closeCommandList() {
+			field.commandList.setVisible(false);
+		}
+
+		private boolean isCommandListVisible() {
+			return field.commandList != null && field.commandList.isVisible();
+		}
+	}
 
 	private static final class ExecuteCommandAction extends AbstractAction {
 		private static final String SEPARATE_COMMAND_CHAR = " ";
@@ -70,49 +132,7 @@ public final class CommandField extends JTextField {
 			return commandName;
 		}
 	}
-	
-	private static final class CommandListWindowAction extends DefaultKeyTypedAction {
-        private final CommandField field;
-		
-		private CommandListWindowAction(CommandField field){
-			this.field = field;
-		}
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			super.actionPerformed(e);
-            String commandCandidateText = field.getText();
-        	if(isCommandListVisible()){
-                if(commandCandidateText == null || commandCandidateText.isEmpty()){
-            		logger.trace("commandList:close");
-                    closeCommandList();
-                    return;
-                }
-        	} else {
-            	openCommandList(field,commandCandidateText);
-            	return;
-        	}
-		}
-		private void openCommandList(CommandField field, String commandCandidateText) {
-			Point location = (Point) field.quickWindow.getLocation().clone();
-			location.translate(0, 85);
-			logger.trace("commandList:location{}",location);
-			field.commandList.setCommandCandidateText(commandCandidateText);
-			if(field.commandList.isVisible() == false) {
-				field.commandList.setLocation(location);
-				field.commandList.setAlwaysOnTop(true);
-				field.commandList.setVisible(true);
-			}
-		}
-		private void closeCommandList() {
-			field.commandList.setVisible(false);
-		}
-		private boolean isCommandListVisible() {
-			return field.commandList != null && field.commandList.isVisible();
-		}
-
-	}
-	
 	private static final class UpCommandListAction extends AbstractAction {
         private final CommandField field;
         private static final String KEY ="UP";
@@ -196,27 +216,7 @@ public final class CommandField extends JTextField {
 		new UpCommandListAction(this);
 		new DownCommandListAction(this);
 		
-		Keymap customizedKeyMap = JTextComponent.addKeymap("command-field", getKeymap());
-		customizedKeyMap.setDefaultAction(new CommandListWindowAction(this));
-		setKeymap(customizedKeyMap);
-		
-		getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				changeInputField();
-			}
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				changeInputField();
-			}
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				changeInputField();
-			}
-			private void changeInputField() {
-				commandList.setCommandCandidateText(CommandField.this.getText());
-			}
-		});
+		getDocument().addDocumentListener(new CommandFieldDocumentListenr(this));
     }
     
     public void reset() {
