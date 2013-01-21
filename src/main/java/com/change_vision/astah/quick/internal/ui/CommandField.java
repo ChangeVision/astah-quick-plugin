@@ -3,20 +3,18 @@ package com.change_vision.astah.quick.internal.ui;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import javax.swing.text.TextAction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +27,16 @@ public final class CommandField extends JTextField {
 
 	private static final class ExecuteCommandAction extends AbstractAction {
 		private static final String SEPARATE_COMMAND_CHAR = " ";
-		static final KeyStroke KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0);
+		private static final String KEY = "ENTER";
         private final CommandField field;
 
 		private ExecuteCommandAction(CommandField field){
 			super("execute-command");
 			this.field = field;
+	        InputMap inputMap = field.getInputMap();
+	        ActionMap actionMap = field.getActionMap();        
+	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			actionMap.put(KEY, this);
 		}
 
 		@Override
@@ -113,10 +115,15 @@ public final class CommandField extends JTextField {
 	
 	private static final class UpCommandListAction extends AbstractAction {
         private final CommandField field;
+        private static final String KEY ="UP";
 		
-		private UpCommandListAction(String name,CommandField field){
-			super(name);
+		private UpCommandListAction(CommandField field){
+			super("up-command");
 			this.field = field;
+	        InputMap inputMap = field.getInputMap();
+	        ActionMap actionMap = field.getActionMap();        
+	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			actionMap.put(KEY, this);
 		}
 
 		@Override
@@ -128,10 +135,15 @@ public final class CommandField extends JTextField {
 	
 	private static final class DownCommandListAction extends AbstractAction {
         private final CommandField field;
+        private static final String KEY ="DOWN";
 		
-		private DownCommandListAction(String name,CommandField field){
-			super(name);
+		private DownCommandListAction(CommandField field){
+			super("down-command");
 			this.field = field;
+	        InputMap inputMap = field.getInputMap();
+	        ActionMap actionMap = field.getActionMap();        
+	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			actionMap.put(KEY, this);
 		}
 
 		@Override
@@ -143,9 +155,14 @@ public final class CommandField extends JTextField {
 
 	private static final class CommitCommandAction extends AbstractAction {
         private final CommandField field;
-		private CommitCommandAction(String name,CommandField field) {
-			super(name);
+        private static final String KEY = "RIGHT";
+		private CommitCommandAction(CommandField field) {
+			super("commit-command");
 			this.field = field;
+	        InputMap inputMap = field.getInputMap();
+	        ActionMap actionMap = field.getActionMap();        
+	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			actionMap.put(KEY, this);
 		}
 
 		@Override
@@ -174,11 +191,16 @@ public final class CommandField extends JTextField {
         setFont(new Font("Dialog", Font.PLAIN, 32));
         setColumns(16);
         setEditable(true);
-        Keymap customizedKeyMap = JTextComponent.addKeymap("command-field", getKeymap());
-        customizedKeyMap.addActionForKeyStroke(ExecuteCommandAction.KEY_STROKE,new ExecuteCommandAction(this));
-        customizedKeyMap.setDefaultAction(new CommandListWindowAction(this));
-        setKeymap(customizedKeyMap);
-        getDocument().addDocumentListener(new DocumentListener() {
+		new ExecuteCommandAction(this);
+		new CommitCommandAction(this);
+		new UpCommandListAction(this);
+		new DownCommandListAction(this);
+		
+		Keymap customizedKeyMap = JTextComponent.addKeymap("command-field", getKeymap());
+		customizedKeyMap.setDefaultAction(new CommandListWindowAction(this));
+		setKeymap(customizedKeyMap);
+		
+		getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changeInputField();
@@ -195,15 +217,6 @@ public final class CommandField extends JTextField {
 				commandList.setCommandCandidateText(CommandField.this.getText());
 			}
 		});
-    }
-    
-    @Override
-    public Action[] getActions() {
-    	return TextAction.augmentList(super.getActions(), new Action[]{
-    		new CommitCommandAction(DefaultEditorKit.forwardAction,this),
-    		new UpCommandListAction(DefaultEditorKit.beginLineAction,this),
-    		new DownCommandListAction(DefaultEditorKit.endLineAction,this),
-    	});
     }
     
     public void reset() {
