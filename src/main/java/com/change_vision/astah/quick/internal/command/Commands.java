@@ -51,7 +51,10 @@ public class Commands {
 		}
 		List<Command> candidates = new ArrayList<Command>();
 		for (Command command : allCommands) {
-			if (command.getCommandName().startsWith(searchKey) && command.isEnable()) {
+			String commandName = command.getCommandName();
+			if (command.isEnable() &&
+				isCandidate(searchKey, commandName)
+					) {
 				candidates.add(command);
 			}
 		}
@@ -62,6 +65,10 @@ public class Commands {
 		}
 		this.commands = candidates.toArray(new Command[]{});
 		this.currentIndex = 0;
+	}
+
+	private boolean isCandidate(String searchKey, String commandName) {
+		return commandName.startsWith(searchKey) || searchKey.startsWith(commandName);
 	}
 
 	public Command[] getCommands() {
