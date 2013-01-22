@@ -110,6 +110,7 @@ public final class CommandField extends JTextField {
 			String fieldText = field.getText();
 
 			field.quickWindow.close();
+			field.commandList.close();
 			
 			if (fieldText.startsWith(commandName) != false && fieldText.length() == commandName.length()) {
 				current.execute();
