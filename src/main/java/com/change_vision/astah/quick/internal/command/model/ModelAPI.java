@@ -1,8 +1,11 @@
 package com.change_vision.astah.quick.internal.command.model;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
@@ -11,6 +14,7 @@ import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
@@ -33,6 +37,9 @@ class ModelAPI {
 	}
 	
 	private ProjectAccessor getProjectAccessor(){
+		if (projectAccessorForTest != null) {
+			return projectAccessorForTest;
+		}
 		try {
 			return ProjectAccessorFactory.getProjectAccessor();
 		} catch (ClassNotFoundException e) {
@@ -41,16 +48,88 @@ class ModelAPI {
 	}
 
 	void createClass(String className) {
-		IModel project = getProject();
-		ITransactionManager transactionManager = getProjectAccessor().getTransactionManager();
+		if (className == null)	throw new IllegalArgumentException("className is null.");
+		IPackage parent = getProject();
+		ITransactionManager transactionManager = getTransactionManager();
+		BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+
+		String[] namespaces = className.split("\\.");
+		if (namespaces.length != 1) {
+			className = namespaces[namespaces.length - 1];
+			namespaces = Arrays.copyOfRange(namespaces, 0, namespaces.length - 1);
+			parent = createPackage(parent, namespaces);
+		}
 		try {
 			transactionManager.beginTransaction();
-			getBasicModelEditorFactory().createClass(project, className);
+			basicModelEditorFactory.createClass(parent, className);
 			transactionManager.endTransaction();
 		} catch (InvalidEditingException e) {
 			transactionManager.abortTransaction();
 			throw new IllegalStateException(e);
 		}
+	}
+	
+	void createInterface(String interfaceName) {
+		if (interfaceName == null) throw new IllegalArgumentException("interfaceName is null.");
+		IPackage parent = getProject();
+		ITransactionManager transactionManager = getTransactionManager();
+		BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+
+		String[] namespaces = interfaceName.split("\\.");
+		if (namespaces.length != 1) {
+			interfaceName = namespaces[namespaces.length - 1];
+			namespaces = Arrays.copyOfRange(namespaces, 0, namespaces.length - 1);
+			parent = createPackage(parent, namespaces);
+		}
+		try {
+			transactionManager.beginTransaction();
+			basicModelEditorFactory.createInterface(parent, interfaceName);
+			transactionManager.endTransaction();
+		} catch (InvalidEditingException e) {
+			transactionManager.abortTransaction();
+			throw new IllegalStateException(e);
+		}
+	}
+
+	void createPackage(String packageName) {
+		IModel project = getProject();
+		String[] namespaces = packageName.split("\\.");
+		createPackage(project, namespaces);
+	}
+
+	private IPackage createPackage(IPackage parent, String[] namespaces) {
+		ITransactionManager transactionManager = getTransactionManager();
+		BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+		for (int i = 0; i < namespaces.length; i++) {
+			String namespace = namespaces[i];
+			INamedElement[] ownedElements = parent.getOwnedElements();
+			boolean found = false;
+			for (INamedElement element : ownedElements) {
+				logger.trace("check exist package {}",element.getName());
+				if(element.getName().equals(namespace)){
+					if (element instanceof IPackage) {
+						parent = (IPackage) element;
+						found = true;
+					} else {
+						throw new IllegalArgumentException("Same name is existed.");
+					}
+				}
+			}
+			if(found) continue;
+			try {
+				transactionManager.beginTransaction();
+				parent = basicModelEditorFactory.createPackage(parent, namespace);
+				transactionManager.endTransaction();
+			} catch (InvalidEditingException e) {
+				transactionManager.abortTransaction();
+				throw new IllegalStateException(e);
+			}
+		}
+		return parent;
+	}
+
+	private ITransactionManager getTransactionManager() {
+		return getProjectAccessor().getTransactionManager();
 	}
 
 	private BasicModelEditor getBasicModelEditorFactory() {
@@ -115,4 +194,12 @@ class ModelAPI {
 			throw new IllegalStateException(e);
 		}
 	}
+	
+	private ProjectAccessor projectAccessorForTest;
+	
+	@TestForMethod
+	void setProjectAccessorForTest(ProjectAccessor projectAccessorForTest) {
+		this.projectAccessorForTest = projectAccessorForTest;
+	}
+
 }

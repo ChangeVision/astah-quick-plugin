@@ -1,8 +1,15 @@
 package com.change_vision.astah.quick.internal.command.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.change_vision.astah.quick.command.Command;
 
 public class CreatePackageCommand implements Command{
+	
+	private final ModelAPI api = new ModelAPI();
+	
+	private static final Logger logger = LoggerFactory.getLogger(CreatePackageCommand.class);
 
 	@Override
 	public String getCommandName() {
@@ -11,6 +18,11 @@ public class CreatePackageCommand implements Command{
 
 	@Override
 	public void execute(String... args) {
+		if(args == null || args.length == 0) throw new IllegalArgumentException("'create package' command needs argument.");
+		for (String packageName : args) {
+			logger.trace("create package '{}'",packageName);
+			api.createPackage(packageName);
+		}
 	}
 	
 	@Override
@@ -20,6 +32,6 @@ public class CreatePackageCommand implements Command{
 	
 	@Override
 	public boolean isEnable() {
-		return true;
+		return api.isOpenedProject();
 	}
 }

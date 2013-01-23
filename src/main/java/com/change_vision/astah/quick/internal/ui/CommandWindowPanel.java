@@ -3,7 +3,7 @@ package com.change_vision.astah.quick.internal.ui;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,14 +31,16 @@ public class CommandWindowPanel extends JPanel {
     private CommandList candidateList;
 	private Commands commands;
 
+	private JScrollPane scrollPane;
+
     public CommandWindowPanel(Commands commands) {
     	this.commands = commands;
-        JScrollPane scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CommandList();
         scrollPane.setViewportView(candidateList);
-        scrollPane.setPreferredSize(new Dimension(300,200));
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        add(scrollPane);
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder());
     }
     

@@ -13,7 +13,30 @@ import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class Commands {
-    /**
+    public class NullCommand implements Command {
+
+		@Override
+		public String getCommandName() {
+			return "Not Found";
+		}
+
+		@Override
+		public void execute(String... args) {
+		}
+
+		@Override
+		public String getDescription() {
+			return "Candidate are not found.";
+		}
+
+		@Override
+		public boolean isEnable() {
+			return true;
+		}
+
+	}
+
+	/**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(Commands.class);
@@ -63,6 +86,9 @@ public class Commands {
 			Command selectCommand = ModelCommands.createSelectCommand(foundModel);
 			candidates.add(selectCommand);
 		}
+		if (candidates.size() == 0) {
+			candidates.add(new NullCommand());
+		}
 		this.commands = candidates.toArray(new Command[]{});
 		this.currentIndex = 0;
 	}
@@ -85,7 +111,7 @@ public class Commands {
 	}
 
 	public Command current() {
-		if(commands.length == 0) return null;
+		if(commands.length == 0) return new NullCommand();
 		return commands[currentIndex];
 	}
 
