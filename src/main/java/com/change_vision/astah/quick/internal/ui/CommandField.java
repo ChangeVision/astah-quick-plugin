@@ -116,7 +116,11 @@ public final class CommandField extends JTextField {
 
 			if (fieldText.startsWith(commandName) != false
 					&& fieldText.length() == commandName.length()) {
-				current.execute();
+				try {
+					current.execute();
+				} catch (Exception ex) {
+					field.quickWindow.notifyError("Alert", ex.getMessage());
+				}
 				return;
 			}
 			String[] splitedCommand = fieldText.split(SEPARATE_COMMAND_CHAR);

@@ -43,6 +43,7 @@ public class ModelAPITest {
 	@Mock
 	private IPackage fugaPackage;
 	
+	
 	@Before
 	public void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
@@ -56,7 +57,7 @@ public class ModelAPITest {
 		when(hogePackage.getName()).thenReturn("hoge");
 		when(project.getOwnedElements()).thenReturn(new INamedElement[0]);
 		when(hogePackage.getOwnedElements()).thenReturn(new INamedElement[0]);
-		when(fugaPackage.getOwnedElements()).thenReturn(new INamedElement[0]);
+		when(fugaPackage.getOwnedElements()).thenReturn(new INamedElement[0]);		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

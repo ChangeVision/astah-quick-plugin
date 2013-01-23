@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
-import com.change_vision.astah.quick.internal.ui.MessageNotifier;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
@@ -25,11 +24,6 @@ import com.change_vision.jude.api.inf.view.IViewManager;
 class ModelAPI {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
-	
-	void notifyErrorMessage(String title,String message){
-		MessageNotifier notifier = new MessageNotifier(getViewManager().getMainFrame());
-		notifier.notifyError(title, message);
-	}
 	
 	boolean isOpenedProject(){
 		try {
@@ -54,7 +48,7 @@ class ModelAPI {
 	}
 
 	void createClass(String className) {
-		if (className == null) throw new IllegalArgumentException("className is null.");
+		if (className == null)	throw new IllegalArgumentException("className is null.");
 		IPackage parent = getProject();
 		ITransactionManager transactionManager = getTransactionManager();
 		BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
@@ -73,6 +67,34 @@ class ModelAPI {
 			transactionManager.abortTransaction();
 			throw new IllegalStateException(e);
 		}
+	}
+	
+	void createInterface(String interfaceName) {
+		if (interfaceName == null) throw new IllegalArgumentException("interfaceName is null.");
+		IPackage parent = getProject();
+		ITransactionManager transactionManager = getTransactionManager();
+		BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+
+		String[] namespaces = interfaceName.split("\\.");
+		if (namespaces.length != 1) {
+			interfaceName = namespaces[namespaces.length - 1];
+			namespaces = Arrays.copyOfRange(namespaces, 0, namespaces.length - 1);
+			parent = createPackage(parent, namespaces);
+		}
+		try {
+			transactionManager.beginTransaction();
+			basicModelEditorFactory.createInterface(parent, interfaceName);
+			transactionManager.endTransaction();
+		} catch (InvalidEditingException e) {
+			transactionManager.abortTransaction();
+			throw new IllegalStateException(e);
+		}
+	}
+
+	void createPackage(String packageName) {
+		IModel project = getProject();
+		String[] namespaces = packageName.split("\\.");
+		createPackage(project, namespaces);
 	}
 
 	private IPackage createPackage(IPackage parent, String[] namespaces) {
@@ -179,4 +201,5 @@ class ModelAPI {
 	void setProjectAccessorForTest(ProjectAccessor projectAccessorForTest) {
 		this.projectAccessorForTest = projectAccessorForTest;
 	}
+
 }

@@ -1,7 +1,7 @@
 package com.change_vision.astah.quick.internal.command;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Commands.NullCommand;
 
 public class CommandsTest {
 	
@@ -129,7 +130,7 @@ public class CommandsTest {
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroUp");
 		commands.up();
 		Command current = commands.current();
-		assertThat(current,is(nullValue()));
+		assertThat(current,is(instanceOf(NullCommand.class)));
 		assertThat(commands.currentIndex,is(0));
 	}
 	
@@ -139,7 +140,7 @@ public class CommandsTest {
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroDown");
 		commands.down();
 		Command current = commands.current();
-		assertThat(current,is(nullValue()));
+		assertThat(current,is(instanceOf(NullCommand.class)));
 		assertThat(commands.currentIndex,is(0));
 	}
 
