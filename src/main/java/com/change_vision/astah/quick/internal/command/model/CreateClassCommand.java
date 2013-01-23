@@ -18,12 +18,11 @@ public class CreateClassCommand implements Command{
 
 	@Override
 	public void execute(String... args) {
-		if(args == null || args.length != 1){
-			return;
+		if(args == null || args.length == 0) throw new IllegalArgumentException("'create class' command needs argument.");
+		for (String className : args) {
+			logger.trace("create class '{}'",className);
+			api.createClass(className);
 		}
-		String className = args[0];
-		logger.trace("args '{}'",className);
-		api.createClass(className);
 	}
 	
 	@Override

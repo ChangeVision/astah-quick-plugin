@@ -44,6 +44,16 @@
 			<id>uk-central</id>
 			<url>http://uk.maven.org/maven2/</url>
 		</repository>
+		<repository>
+			<id>kompiro.org</id>
+			<url>http://kompiro.org/maven/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<reporting>
 		<plugins>
@@ -212,6 +222,7 @@
 						<!-- | each module can override these defaults in their osgi.bnd file -->
 						<_include>-osgi.bnd</_include>
 						<Embed-Dependency>*;scope=compile|runtime;type=!pom</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -260,6 +271,13 @@
 			<systemPath>${astahPath}/astah-api.jar</systemPath>
 		</dependency>
 		<dependency>
+			<groupId>com.change_vision.astah</groupId>
+			<artifactId>astah-pro</artifactId>
+			<version>${astah.version}</version>
+			<scope>system</scope>
+			<systemPath>${astahPath}/astah-pro.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout</artifactId>
 			<version>3.7.4</version>
@@ -279,6 +297,25 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.kompiro.notification</groupId>
+			<artifactId>ui</artifactId>
+			<version>0.0.7</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>android</artifactId>
+					<groupId>com.google.android</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>x86_64</artifactId>
+					<groupId>org.eclipse.swt.gtk.linux</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>x86</artifactId>
+					<groupId>org.eclipse.swt.gtk.linux</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

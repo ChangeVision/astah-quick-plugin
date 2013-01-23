@@ -22,8 +22,7 @@ import com.change_vision.astah.quick.internal.command.Commands;
 @SuppressWarnings("serial")
 public final class CommandField extends JTextField {
 
-	private final class CommandFieldDocumentListenr implements
-			DocumentListener {
+	private final class CommandFieldDocumentListenr implements DocumentListener {
 		private final CommandField field;
 
 		public CommandFieldDocumentListenr(CommandField commandField) {
@@ -54,24 +53,27 @@ public final class CommandField extends JTextField {
 
 		private void handleCommandList() {
 			String commandCandidateText = field.getText();
-			if(isCommandListVisible()){
-		        if(commandCandidateText == null || commandCandidateText.isEmpty()){
-		    		logger.trace("commandList:close");
-		            closeCommandList();
-		            return;
-		        }
+			if (isCommandListVisible()) {
+				if (commandCandidateText == null
+						|| commandCandidateText.isEmpty()) {
+					logger.trace("commandList:close");
+					closeCommandList();
+					return;
+				}
 			} else {
-		    	openCommandList(field,commandCandidateText);
-		    	return;
+				openCommandList(field, commandCandidateText);
+				return;
 			}
 		}
 
-		private void openCommandList(CommandField field, String commandCandidateText) {
-			Point location = (Point) field.quickWindow.getLocation().clone();
-			location.translate(0, 85);
-			logger.trace("commandList:location{}",location);
+		private void openCommandList(CommandField field,
+				String commandCandidateText) {
+			QuickWindow quickWindow = field.quickWindow;
+			Point location = (Point) quickWindow.getLocation().clone();
+			location.translate(0, quickWindow.getSize().height);
+			logger.trace("commandList:location{}", location);
 			field.commandList.setCommandCandidateText(commandCandidateText);
-			if(field.commandList.isVisible() == false) {
+			if (field.commandList.isVisible() == false) {
 				field.commandList.setLocation(location);
 				field.commandList.setAlwaysOnTop(true);
 				field.commandList.setVisible(true);
@@ -90,14 +92,14 @@ public final class CommandField extends JTextField {
 	private static final class ExecuteCommandAction extends AbstractAction {
 		private static final String SEPARATE_COMMAND_CHAR = " ";
 		private static final String KEY = "ENTER";
-        private final CommandField field;
+		private final CommandField field;
 
-		private ExecuteCommandAction(CommandField field){
+		private ExecuteCommandAction(CommandField field) {
 			super("execute-command");
 			this.field = field;
-	        InputMap inputMap = field.getInputMap();
-	        ActionMap actionMap = field.getActionMap();        
-	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			InputMap inputMap = field.getInputMap();
+			ActionMap actionMap = field.getActionMap();
+			inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
 			actionMap.put(KEY, this);
 		}
 
@@ -111,21 +113,28 @@ public final class CommandField extends JTextField {
 
 			field.quickWindow.close();
 			field.commandList.close();
-			
-			if (fieldText.startsWith(commandName) != false && fieldText.length() == commandName.length()) {
-				current.execute();
+
+			if (fieldText.startsWith(commandName) != false
+					&& fieldText.length() == commandName.length()) {
+				try {
+					current.execute();
+				} catch (Exception ex) {
+					field.quickWindow.notifyError("Alert", ex.getMessage());
+				}
 				return;
 			}
 			String[] splitedCommand = fieldText.split(SEPARATE_COMMAND_CHAR);
 			String[] args = null;
 			int commandRange = commandName.split(SEPARATE_COMMAND_CHAR).length;
-			if(splitedCommand.length > commandRange){
-				args = Arrays.copyOfRange(splitedCommand, commandRange, splitedCommand.length);
+			if (splitedCommand.length > commandRange) {
+				args = Arrays.copyOfRange(splitedCommand, commandRange,
+						splitedCommand.length);
 			}
-			logger.trace("commandList:execute commandName:'{}',args:'{}'",commandName,args);
+			logger.trace("commandList:execute commandName:'{}',args:'{}'",
+					commandName, args);
 			current.execute(args);
 		}
-		
+
 		private String getCommandName() {
 			final Commands commands = field.commands;
 			Command current = commands.current();
@@ -135,15 +144,15 @@ public final class CommandField extends JTextField {
 	}
 
 	private static final class UpCommandListAction extends AbstractAction {
-        private final CommandField field;
-        private static final String KEY ="UP";
-		
-		private UpCommandListAction(CommandField field){
+		private final CommandField field;
+		private static final String KEY = "UP";
+
+		private UpCommandListAction(CommandField field) {
 			super("up-command");
 			this.field = field;
-	        InputMap inputMap = field.getInputMap();
-	        ActionMap actionMap = field.getActionMap();        
-	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			InputMap inputMap = field.getInputMap();
+			ActionMap actionMap = field.getActionMap();
+			inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
 			actionMap.put(KEY, this);
 		}
 
@@ -153,17 +162,17 @@ public final class CommandField extends JTextField {
 			field.commandList.up();
 		}
 	}
-	
+
 	private static final class DownCommandListAction extends AbstractAction {
-        private final CommandField field;
-        private static final String KEY ="DOWN";
-		
-		private DownCommandListAction(CommandField field){
+		private final CommandField field;
+		private static final String KEY = "DOWN";
+
+		private DownCommandListAction(CommandField field) {
 			super("down-command");
 			this.field = field;
-	        InputMap inputMap = field.getInputMap();
-	        ActionMap actionMap = field.getActionMap();        
-	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			InputMap inputMap = field.getInputMap();
+			ActionMap actionMap = field.getActionMap();
+			inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
 			actionMap.put(KEY, this);
 		}
 
@@ -172,17 +181,18 @@ public final class CommandField extends JTextField {
 			logger.trace("commandList:down");
 			field.commandList.down();
 		}
-	}    
+	}
 
 	private static final class CommitCommandAction extends AbstractAction {
-        private final CommandField field;
-        private static final String KEY = "RIGHT";
+		private final CommandField field;
+		private static final String KEY = "RIGHT";
+
 		private CommitCommandAction(CommandField field) {
 			super("commit-command");
 			this.field = field;
-	        InputMap inputMap = field.getInputMap();
-	        ActionMap actionMap = field.getActionMap();        
-	        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
+			InputMap inputMap = field.getInputMap();
+			ActionMap actionMap = field.getActionMap();
+			inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
 			actionMap.put(KEY, this);
 		}
 
@@ -195,36 +205,39 @@ public final class CommandField extends JTextField {
 	}
 
 	/**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CommandField.class);
-    
-    private final CommandListWindow commandList;
+	 * Logger for this class
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(CommandField.class);
 
-    private final QuickWindow quickWindow;
+	private final CommandListWindow commandList;
+
+	private final QuickWindow quickWindow;
 
 	private final Commands commands;
-    
-    public CommandField(QuickWindow quickWindow, Commands commands) {
-    	this.quickWindow = quickWindow;
-    	this.commands = commands;
-    	this.commandList = new CommandListWindow(commands);
-        setFont(new Font("Dialog", Font.PLAIN, 32));
-        setColumns(16);
-        setEditable(true);
+
+	public CommandField(QuickWindow quickWindow, Commands commands) {
+		this.quickWindow = quickWindow;
+		this.commands = commands;
+		this.commandList = new CommandListWindow(commands);
+		this.quickWindow.addWindowListener(this.commandList.getWindowListener());
+		setFont(new Font("Dialog", Font.PLAIN, 32));
+		setColumns(16);
+		setEditable(true);
 		new ExecuteCommandAction(this);
 		new CommitCommandAction(this);
 		new UpCommandListAction(this);
 		new DownCommandListAction(this);
-		
-		getDocument().addDocumentListener(new CommandFieldDocumentListenr(this));
-    }
-    
-    public void reset() {
-        setText(null);
-        if(commandList != null){
-            commandList.setVisible(false);
-        }
-    }
-    
+
+		CommandFieldDocumentListenr listener = new CommandFieldDocumentListenr(this);
+		getDocument().addDocumentListener(listener);
+	}
+
+	public void reset() {
+		setText(null);
+		if (commandList != null) {
+			commandList.setVisible(false);
+		}
+	}
+
 }

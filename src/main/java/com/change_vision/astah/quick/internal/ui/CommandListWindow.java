@@ -1,5 +1,10 @@
 package com.change_vision.astah.quick.internal.ui;
 
+import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.JWindow;
 
 import org.slf4j.Logger;
@@ -20,7 +25,6 @@ public final class CommandListWindow extends JWindow {
 	public CommandListWindow(Commands commands){
         panel = new CommandWindowPanel(commands);
         setContentPane(panel);
-        pack();
     }
 
 	public void setCommandCandidateText(String commandCandidateText) {
@@ -40,6 +44,24 @@ public final class CommandListWindow extends JWindow {
 	public void close(){
 		logger.trace("close");
 		setVisible(false);
+	}
+	
+	public WindowListener getWindowListener(){
+		return new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				CommandListWindow.this.setPanelSize(e.getWindow().getSize());
+			}
+			@Override
+			public void windowClosing(WindowEvent e) {
+				CommandListWindow.this.close();
+			}
+		};
+	}
+
+	protected void setPanelSize(Dimension size) {
+		panel.setPreferredSize(new Dimension(size.width,200));
+        pack();
 	}
 
 }
