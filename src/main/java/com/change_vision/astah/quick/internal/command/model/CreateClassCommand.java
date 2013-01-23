@@ -19,6 +19,7 @@ public class CreateClassCommand implements Command{
 	@Override
 	public void execute(String... args) {
 		if(args == null || args.length != 1){
+			api.notifyErrorMessage("Alert", "'create class' command needs argument.");
 			return;
 		}
 		String className = args[0];

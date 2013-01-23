@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
+import com.change_vision.astah.quick.internal.ui.MessageNotifier;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
@@ -24,6 +25,11 @@ import com.change_vision.jude.api.inf.view.IViewManager;
 class ModelAPI {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
+	
+	void notifyErrorMessage(String title,String message){
+		MessageNotifier notifier = new MessageNotifier(getViewManager().getMainFrame());
+		notifier.notifyError(title, message);
+	}
 	
 	boolean isOpenedProject(){
 		try {
