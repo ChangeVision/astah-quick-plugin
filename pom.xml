@@ -271,6 +271,13 @@
 			<systemPath>${astahPath}/astah-api.jar</systemPath>
 		</dependency>
 		<dependency>
+			<groupId>com.change_vision.astah</groupId>
+			<artifactId>astah-pro</artifactId>
+			<version>${astah.version}</version>
+			<scope>system</scope>
+			<systemPath>${astahPath}/astah-pro.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout</artifactId>
 			<version>3.7.4</version>
