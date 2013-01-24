@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CommandIconDescription;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
@@ -32,6 +33,11 @@ public class Commands {
 		@Override
 		public boolean isEnable() {
 			return true;
+		}
+		
+		@Override
+		public CommandIconDescription getIconDescription() {
+			return new ResourceCommandIconDescription("/icons/glyphicons_207_remove_2.png");
 		}
 
 	}

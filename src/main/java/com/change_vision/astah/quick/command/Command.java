@@ -9,4 +9,7 @@ public interface Command {
 	public abstract String getDescription();
 	
 	public abstract boolean isEnable();
+	
+	public abstract CommandIconDescription getIconDescription();
+	
 }

@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.jude.api.inf.view.IconDescription;
 
 public class CreatePackageCommand implements Command{
 	
@@ -34,4 +37,10 @@ public class CreatePackageCommand implements Command{
 	public boolean isEnable() {
 		return api.isOpenedProject();
 	}
+	
+	@Override
+	public CommandIconDescription getIconDescription() {
+		return new AstahCommandIconDescription(IconDescription.UML_CLASS_PACKAGE);
+	}
+
 }

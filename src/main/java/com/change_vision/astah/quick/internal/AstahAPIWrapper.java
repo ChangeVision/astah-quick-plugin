@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
+import com.change_vision.jude.api.inf.view.IIconManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
 public class AstahAPIWrapper {
@@ -33,5 +34,9 @@ public class AstahAPIWrapper {
             throw new IllegalStateException("ProjectAccessor class is not found. It maybe classpath issue. Please check your classpath.");
         }
     }
+
+	public IIconManager getIconManager() {
+		return getViewManager().getIconManager();
+	}
 
 }
