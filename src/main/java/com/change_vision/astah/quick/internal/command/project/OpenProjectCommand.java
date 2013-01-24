@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
 public class OpenProjectCommand implements Command{
 	
@@ -54,5 +56,10 @@ public class OpenProjectCommand implements Command{
 	@Override
 	public boolean isEnable() {
 		return true;
+	}
+	
+	@Override
+	public CommandIconDescription getIconDescription() {
+		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png");
 	}
 }

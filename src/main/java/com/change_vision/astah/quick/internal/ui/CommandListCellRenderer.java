@@ -3,9 +3,16 @@ package com.change_vision.astah.quick.internal.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -55,6 +62,7 @@ final class CommandListCellRenderer implements ListCellRenderer {
 		title.setEnabled(list.isEnabled());
 		title.setFont(new Font("Dialog", Font.PLAIN, 20));
 		title.setComponentOrientation(list.getComponentOrientation());
+		title.setIcon(command.getIconDescription().getIcon());
 		return title;
 	}
 }

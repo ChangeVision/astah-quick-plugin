@@ -1,6 +1,8 @@
 package com.change_vision.astah.quick.internal.command.project;
 
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
 
 public class NewProjectCommand implements Command{
@@ -24,5 +26,10 @@ public class NewProjectCommand implements Command{
 	@Override
 	public boolean isEnable() {
 		return api.isClosedProject();
+	}
+	
+	@Override
+	public CommandIconDescription getIconDescription() {
+		return new ResourceCommandIconDescription("/icons/glyphicons_151_new_window.png");
 	}
 }
