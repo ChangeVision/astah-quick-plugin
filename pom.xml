@@ -15,6 +15,12 @@
 	<packaging>jar</packaging>
 	<name>%bundle.name</name>
 	<description>%bundle.description</description>
+	<scm>
+		<url>http://github.com/kompiro/astah-quick-plugin/tree/master</url>
+		<connection>scm:git:git@github.com:kompiro/astah-quick-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:kompiro/astah-quick-plugin.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>local_astah_repository</id>
