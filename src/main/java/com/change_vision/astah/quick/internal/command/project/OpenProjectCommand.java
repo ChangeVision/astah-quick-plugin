@@ -23,7 +23,7 @@ public class OpenProjectCommand implements Command{
 			String fileName = targetFile.getName();
 			boolean isAstaFile = fileName.endsWith(".asta");
 			boolean isJudeFile = fileName.endsWith(".jude");
-			return isAstaFile || isJudeFile;
+			return isAstaFile || isJudeFile || targetFile.isDirectory();
 		}
 	}
 
