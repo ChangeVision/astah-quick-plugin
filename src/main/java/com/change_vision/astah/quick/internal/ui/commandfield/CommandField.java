@@ -4,9 +4,6 @@ import java.awt.Font;
 
 import javax.swing.JTextField;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.ui.CommandListWindow;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
