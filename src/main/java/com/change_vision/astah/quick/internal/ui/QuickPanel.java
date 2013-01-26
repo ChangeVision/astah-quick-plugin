@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.change_vision.astah.quick.internal.command.Commands;
+import com.change_vision.astah.quick.internal.ui.commandfield.CommandField;
 
 import net.miginfocom.swing.MigLayout;
 
