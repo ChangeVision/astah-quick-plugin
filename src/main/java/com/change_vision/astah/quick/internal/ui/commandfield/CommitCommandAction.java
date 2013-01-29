@@ -14,15 +14,13 @@ import com.change_vision.astah.quick.internal.ui.CommandListWindow;
 final class CommitCommandAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private final CommandField field;
-	private Commands commands;
 	private CommandListWindow commandList;
 	private static final String KEY = "RIGHT";
 	private static final String TAB_KEY = "TAB";
 
-	CommitCommandAction(CommandField field,Commands commands, CommandListWindow commandList) {
+	CommitCommandAction(CommandField field, CommandListWindow commandList) {
 		super("commit-command");
 		this.field = field;
-		this.commands = commands;
 		this.commandList = commandList;
 		InputMap inputMap = field.getInputMap();
 		ActionMap actionMap = field.getActionMap();
@@ -34,6 +32,7 @@ final class CommitCommandAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Commands commands = commandList.getCommands();
 		Command current = commands.current();
 		field.setText(current.getCommandName());
 		commandList.setCommandCandidateText(current.getCommandName());

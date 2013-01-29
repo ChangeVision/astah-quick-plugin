@@ -13,19 +13,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.commandfield.CommandField;
-
 import net.miginfocom.swing.MigLayout;
+
+import com.change_vision.astah.quick.internal.ui.commandfield.CommandField;
 
 @SuppressWarnings("serial")
 public class QuickPanel extends JPanel {
 
     private CommandField commandField;
     private JButton closeButton;
-    private final Commands commands = new Commands();
 
-    public QuickPanel(QuickWindow quickWindow) {
+    public QuickPanel(QuickWindow quickWindow,CommandListWindow commandList) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
@@ -39,7 +37,7 @@ public class QuickPanel extends JPanel {
         JLabel astah = new JLabel(astahIcon);
         add(astah, "cell 0 0");
         
-        commandField = new CommandField(quickWindow,commands);
+        commandField = new CommandField(quickWindow,commandList);
         add(commandField, "cell 1 0,growx");
         closeButton = new JButton();
         add(closeButton, "cell 2 0");

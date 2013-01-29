@@ -27,16 +27,14 @@ final class ExecuteCommandAction extends AbstractAction {
 	private static final String SEPARATE_COMMAND_CHAR = " ";
 	private static final String KEY = "ENTER";
 	private final CommandField field;
-	private final Commands commands;
 
-	private QuickWindow quickWindow;
+	private final QuickWindow quickWindow;
 
-	private CommandListWindow commandList;
+	private final CommandListWindow commandList;
 
-	ExecuteCommandAction(CommandField field,Commands commands,QuickWindow quickWindow,CommandListWindow commandList) {
+	ExecuteCommandAction(CommandField field,QuickWindow quickWindow,CommandListWindow commandList) {
 		super("execute-command");
 		this.field = field;
-		this.commands = commands;
 		InputMap inputMap = field.getInputMap();
 		ActionMap actionMap = field.getActionMap();
 		inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
@@ -48,8 +46,9 @@ final class ExecuteCommandAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		logger.trace("execute");
+		Commands commands = commandList.getCommands();
 		Command current = commands.current();
-		String commandName = getCommandName();
+		String commandName = current.getCommandName();
 		String fieldText = field.getText();
 
 		quickWindow.close();
@@ -76,10 +75,5 @@ final class ExecuteCommandAction extends AbstractAction {
 		current.execute(args);
 	}
 
-	private String getCommandName() {
-		Command current = commands.current();
-		String commandName = current.getCommandName();
-		return commandName;
-	}
 }
 

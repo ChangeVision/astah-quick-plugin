@@ -22,7 +22,10 @@ public final class CommandListWindow extends JWindow {
 
     private CommandWindowPanel panel;
 
+	private Commands commands;
+
 	public CommandListWindow(Commands commands){
+		this.commands = commands;
         panel = new CommandWindowPanel(commands);
         setContentPane(panel);
     }
@@ -46,17 +49,8 @@ public final class CommandListWindow extends JWindow {
 		setVisible(false);
 	}
 	
-	public WindowListener getWindowListener(){
-		return new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				CommandListWindow.this.setPanelSize(e.getWindow().getSize());
-			}
-			@Override
-			public void windowClosing(WindowEvent e) {
-				CommandListWindow.this.close();
-			}
-		};
+	public Commands getCommands() {
+		return commands;
 	}
 
 	protected void setPanelSize(Dimension size) {

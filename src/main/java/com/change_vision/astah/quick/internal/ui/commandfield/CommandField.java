@@ -4,7 +4,6 @@ import java.awt.Font;
 
 import javax.swing.JTextField;
 
-import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.ui.CommandListWindow;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 
@@ -15,15 +14,14 @@ public final class CommandField extends JTextField {
 
 	private final QuickWindow quickWindow;
 
-	public CommandField(QuickWindow quickWindow, Commands commands) {
+	public CommandField(QuickWindow quickWindow, CommandListWindow commandList) {
 		this.quickWindow = quickWindow;
-		this.commandList = new CommandListWindow(commands);
-		this.quickWindow.addWindowListener(this.commandList.getWindowListener());
+		this.commandList = commandList;
 		setFont(new Font("Dialog", Font.PLAIN, 32));
 		setColumns(16);
 		setEditable(true);
-		new ExecuteCommandAction(this,commands,this.quickWindow,this.commandList);
-		new CommitCommandAction(this,commands,this.commandList);
+		new ExecuteCommandAction(this,this.quickWindow,this.commandList);
+		new CommitCommandAction(this,this.commandList);
 		new UpCommandListAction(this,this.commandList);
 		new DownCommandListAction(this,this.commandList);
 
