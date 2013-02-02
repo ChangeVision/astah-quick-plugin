@@ -12,6 +12,7 @@ import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
@@ -159,11 +160,24 @@ class ModelAPI {
 			return getProjectAccessor().findElements(new ModelFinder() {
 				@Override
 				public boolean isTarget(INamedElement element) {
+					if (not(isClass(element)) && not(isPackage(element))) return false;
 					String name = element.getName().toLowerCase();
 					boolean nameStarts = name.startsWith(searchKey.toLowerCase());
 					boolean alias1Starts = element.getAlias1().startsWith(searchKey);
 					boolean alias2Starts = element.getAlias2().startsWith(searchKey);
 					return nameStarts || alias1Starts || alias2Starts;
+				}
+				
+				private boolean not(boolean bool){
+					return ! bool;
+				}
+
+				private boolean isClass(INamedElement element) {
+					return element instanceof IClass;
+				}
+
+				private boolean isPackage(INamedElement element) {
+					return element instanceof IPackage;
 				}
 			});
 		} catch (ProjectNotFoundException e) {

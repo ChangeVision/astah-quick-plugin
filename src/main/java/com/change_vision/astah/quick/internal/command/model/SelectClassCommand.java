@@ -1,0 +1,47 @@
+package com.change_vision.astah.quick.internal.command.model;
+
+import static java.lang.String.format;
+
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.jude.api.inf.model.IClass;
+import com.change_vision.jude.api.inf.view.IconDescription;
+
+public class SelectClassCommand implements Command {
+
+	private final IClass foundModel;
+	private static final ModelAPI api = new ModelAPI();
+
+	public SelectClassCommand(IClass foundModel) {
+		this.foundModel = foundModel;
+	}
+
+	@Override
+	public String getCommandName() {
+		return foundModel.getName();
+	}
+
+	@Override
+	public void execute(String... args) {
+		api.showInStructureTree(foundModel);
+	}
+
+	@Override
+	public String getDescription() {
+		String fullName = foundModel.getFullName(".");
+		return format("Select class '%s'", fullName);
+	}
+
+	@Override
+	public boolean isEnable() {
+		return true;
+	}
+	
+	@Override
+	public CommandIconDescription getIconDescription() {
+		return new AstahCommandIconDescription(IconDescription.UML_CLASS_CLASS);
+	}
+
+
+}
