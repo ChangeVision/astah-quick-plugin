@@ -1,15 +1,7 @@
 package com.change_vision.astah.quick.command;
 
-public interface Command {
+public interface Command extends Candidate {
 
-	public abstract String getCommandName();
-	
 	public abstract void execute(String... args);
-	
-	public abstract String getDescription();
-	
-	public abstract boolean isEnable();
-	
-	public abstract CommandIconDescription getIconDescription();
-	
+
 }

@@ -16,8 +16,8 @@ import javax.swing.JScrollPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.command.Commands;
+import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.internal.command.Candidates;
 
 @SuppressWarnings("serial")
 public class CandidatesWindowPanel extends JPanel {
@@ -29,12 +29,12 @@ public class CandidatesWindowPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(CandidatesWindowPanel.class);
 
     private CandidatesList candidateList;
-	private Commands commands;
+	private Candidates candidates;
 
 	private JScrollPane scrollPane;
 
-    public CandidatesWindowPanel(Commands commands) {
-    	this.commands = commands;
+    public CandidatesWindowPanel(Candidates commands) {
+    	this.candidates = commands;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();
         scrollPane.setViewportView(candidateList);
@@ -60,23 +60,26 @@ public class CandidatesWindowPanel extends JPanel {
 	}
 
 	public void updateCandidateText(String commandCandidateText) {
-		commands.candidates(commandCandidateText);
-		candidateList.setListData(commands.getCommands());
-		candidateList.setSelectedIndex(0);
+		candidates.candidates(commandCandidateText);
+		Candidate[] candidatesData = candidates.getCandidates();
+		candidateList.setListData(candidatesData);
+		if(candidatesData.length > 0){
+			candidateList.setSelectedIndex(0);
+		}
 	}
 
 	public void up() {
-		commands.up();
-		Command command = commands.current();
+		candidates.up();
+		Candidate command = candidates.current();
 		logger.trace("up : current '{}'",command);
 		candidateList.setSelectedValue(command, true);
 	}
 
 	public void down() {
-		commands.down();
-		Command command = commands.current();
-		logger.trace("down : current '{}'",command);
-		candidateList.setSelectedValue(command, true);
+		candidates.down();
+		Candidate candidate = candidates.current();
+		logger.trace("down : current '{}'",candidate);
+		candidateList.setSelectedValue(candidate, true);
 	}
 
 }

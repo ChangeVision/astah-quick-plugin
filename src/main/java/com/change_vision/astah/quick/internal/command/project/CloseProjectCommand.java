@@ -1,7 +1,7 @@
 package com.change_vision.astah.quick.internal.command.project;
 
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.CommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
 public class CloseProjectCommand implements Command{
@@ -9,7 +9,7 @@ public class CloseProjectCommand implements Command{
 	private ProjectAPI api = new ProjectAPI();
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "close project";
 	}
 
@@ -30,8 +30,8 @@ public class CloseProjectCommand implements Command{
 	}
 	
 	@Override
-	public CommandIconDescription getIconDescription() {
+	public CandidateIconDescription getIconDescription() {
 		return new ResourceCommandIconDescription("/icons/glyphicons_207_remove_2.png");
 	}
-	
+
 }

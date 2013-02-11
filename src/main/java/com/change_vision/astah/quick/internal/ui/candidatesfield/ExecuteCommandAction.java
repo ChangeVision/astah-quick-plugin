@@ -11,8 +11,10 @@ import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.command.Commands;
+import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
@@ -30,9 +32,9 @@ final class ExecuteCommandAction extends AbstractAction {
 
 	private final QuickWindow quickWindow;
 
-	private final CandidatesListWindow commandList;
+	private final CandidatesListWindow candidatesList;
 
-	ExecuteCommandAction(CandidatesField field,QuickWindow quickWindow,CandidatesListWindow commandList) {
+	ExecuteCommandAction(CandidatesField field,QuickWindow quickWindow,CandidatesListWindow candidatesList) {
 		super("execute-command");
 		this.field = field;
 		InputMap inputMap = field.getInputMap();
@@ -40,24 +42,27 @@ final class ExecuteCommandAction extends AbstractAction {
 		inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
 		actionMap.put(KEY, this);
 		this.quickWindow = quickWindow;
-		this.commandList = commandList;
+		this.candidatesList = candidatesList;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		logger.trace("execute");
-		Commands commands = commandList.getCommands();
-		Command current = commands.current();
-		String commandName = current.getCommandName();
+		Candidates candidates = candidatesList.getCandidates();
+		Command command = candidates.currentCommand();
+		String commandName = command.getName();
 		String fieldText = field.getText();
+		Candidate candidate = candidates.current();
 
 		quickWindow.close();
-		commandList.close();
-
+		if(command instanceof CandidatesProvider){
+			((CandidatesProvider)command).execute(candidate);
+			return;
+		}
 		if (fieldText.startsWith(commandName) != false
 				&& fieldText.length() == commandName.length()) {
 			try {
-				current.execute();
+				command.execute();
 			} catch (Exception ex) {
 				quickWindow.notifyError("Alert", ex.getMessage());
 			}
@@ -72,8 +77,11 @@ final class ExecuteCommandAction extends AbstractAction {
 		}
 		logger.trace("commandList:execute commandName:'{}',args:'{}'",
 				commandName, args);
-		current.execute(args);
-	}
+		try {
+			command.execute(args);
+		} catch (Exception ex) {
+			quickWindow.notifyError("Alert", ex.getMessage());
+		}	}
 
 }
 

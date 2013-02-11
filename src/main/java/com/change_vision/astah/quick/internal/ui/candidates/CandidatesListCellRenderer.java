@@ -6,13 +6,14 @@ import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 
 final class CandidatesListCellRenderer implements ListCellRenderer {
 	@Override
@@ -32,12 +33,12 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
 			panel.setForeground(Color.DARK_GRAY.darker());
 		}
 
-		if (value instanceof Command) {
-			Command command = (Command) value;
-			JLabel title = createTitleLabel(list, command);
+		if (value instanceof Candidate) {
+			Candidate candidate = (Candidate) value;
+			JLabel title = createTitleLabel(list, candidate);
 			panel.add(title);
 			JLabel description = new JLabel();
-			description.setText(command.getDescription());
+			description.setText(candidate.getDescription());
 			if (isSelected) {
 				title.setForeground(Color.lightGray.brighter());
 				description.setForeground(Color.lightGray.brighter());
@@ -50,14 +51,17 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
 		return panel;
 	}
 
-	private JLabel createTitleLabel(JList list, Command command) {
+	private JLabel createTitleLabel(JList list, Candidate candidate) {
 		JLabel title = new JLabel();
-		title.setText(command.getCommandName());
+		title.setText(candidate.getName());
 		title.setEnabled(list.isEnabled());
 		title.setFont(new Font("Dialog", Font.PLAIN, 20));
 		title.setComponentOrientation(list.getComponentOrientation());
-		CommandIconDescription iconDescription = command.getIconDescription();
-		title.setIcon(iconDescription.getIcon());
+		CandidateIconDescription iconDescription = candidate.getIconDescription();
+		Icon icon = iconDescription.getIcon();
+		if(icon != null){
+			title.setIcon(icon);
+		}
 		return title;
 	}
 }

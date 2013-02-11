@@ -8,7 +8,7 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.command.Commands;
+import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 final class CommitCommandAction extends AbstractAction {
@@ -32,9 +32,11 @@ final class CommitCommandAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Commands commands = commandList.getCommands();
-		Command current = commands.current();
-		field.setText(current.getCommandName());
-		commandList.setCandidateText(current.getCommandName());
+		Candidates commands = commandList.getCandidates();
+		if(commands.isCommitted()) return;
+		Command current = commands.currentCommand();
+		field.setText(current.getName());
+		commandList.setCandidateText(current.getName());
 	}
+
 }

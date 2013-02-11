@@ -3,7 +3,7 @@ package com.change_vision.astah.quick.internal.command.model;
 import static java.lang.String.format;
 
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -18,7 +18,7 @@ public class SelectClassCommand implements Command {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return foundModel.getName();
 	}
 
@@ -39,9 +39,8 @@ public class SelectClassCommand implements Command {
 	}
 	
 	@Override
-	public CommandIconDescription getIconDescription() {
+	public CandidateIconDescription getIconDescription() {
 		return new AstahCommandIconDescription(IconDescription.UML_CLASS_CLASS);
 	}
-
 
 }

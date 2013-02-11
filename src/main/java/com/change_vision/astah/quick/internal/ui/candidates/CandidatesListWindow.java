@@ -7,7 +7,7 @@ import javax.swing.JWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.change_vision.astah.quick.internal.command.Commands;
+import com.change_vision.astah.quick.internal.command.Candidates;
 
 @SuppressWarnings("serial")
 public final class CandidatesListWindow extends JWindow {
@@ -19,16 +19,16 @@ public final class CandidatesListWindow extends JWindow {
 
     private CandidatesWindowPanel panel;
 
-	private Commands commands;
+	private Candidates candidates;
 
-	public CandidatesListWindow(Commands commands){
-		this.commands = commands;
+	public CandidatesListWindow(Candidates commands){
+		this.candidates = commands;
         panel = new CandidatesWindowPanel(commands);
         setContentPane(panel);
     }
 
-	public void setCandidateText(String commandCandidateText) {
-		panel.updateCandidateText(commandCandidateText);
+	public void setCandidateText(String candidateText) {
+		panel.updateCandidateText(candidateText);
 	}
 
 	public void up() {
@@ -46,13 +46,23 @@ public final class CandidatesListWindow extends JWindow {
 		setVisible(false);
 	}
 	
-	public Commands getCommands() {
-		return commands;
+	public Candidates getCandidates() {
+		return candidates;
 	}
 
 	public void setPanelSize(Dimension size) {
 		panel.setPreferredSize(new Dimension(size.width,200));
         pack();
+	}
+
+	public void open() {
+		logger.trace("open");
+		setVisible(true);
+	}
+	
+	@Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
 	}
 
 }

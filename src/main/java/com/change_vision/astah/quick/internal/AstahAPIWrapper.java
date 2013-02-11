@@ -35,8 +35,16 @@ public class AstahAPIWrapper {
         }
     }
 
+	public boolean isOpenedProject(){
+		return getProjectAccessor().hasProject();
+	}
+    
 	public IIconManager getIconManager() {
 		return getViewManager().getIconManager();
+	}
+
+	public boolean isClosedProject() {
+		return isOpenedProject() == false;
 	}
 
 }

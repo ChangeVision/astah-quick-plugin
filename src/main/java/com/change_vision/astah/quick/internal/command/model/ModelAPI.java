@@ -29,14 +29,7 @@ class ModelAPI {
 	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 	
 	boolean isOpenedProject(){
-		try {
-			String projectPath = getProjectAccessor().getProjectPath();
-			logger.trace("isOpenedProject project path : '{}'",projectPath);
-			return projectPath != null;
-		} catch (ProjectNotFoundException e) {
-			logger.trace("isOpenedProject project not found.'{}'",e.getMessage());
-			return false;
-		}
+		return wrapper.isOpenedProject();
 	}
 	
 	private ProjectAccessor getProjectAccessor(){
@@ -181,14 +174,7 @@ class ModelAPI {
 	}
 	
 	private boolean isClosedProject(){
-		try {
-			String projectPath = getProjectAccessor().getProjectPath();
-			logger.trace("isClosedProject project path : '{}'",projectPath);
-			return projectPath == null;
-		} catch (ProjectNotFoundException e) {
-			logger.info("isClosedProject project not found.'{}'",e.getMessage());
-			return true;
-		}
+		return wrapper.isClosedProject();
 	}
 
 	void showInStructureTree(INamedElement model) {

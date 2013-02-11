@@ -9,15 +9,14 @@ import javax.swing.KeyStroke;
 
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
-final class UpCommandListAction extends AbstractAction {
-
+final class DownCandidatesListAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private CandidatesListWindow commandList;
-	private static final String KEY = "UP";
+	private static final String KEY = "DOWN";
+	private final CandidatesListWindow candidatesList;
 
-	UpCommandListAction(CandidatesField field,CandidatesListWindow commandList) {
-		super("up-command");
-		this.commandList = commandList;
+	DownCandidatesListAction(CandidatesField field,CandidatesListWindow candidatesList) {
+		super("down-command");
+		this.candidatesList = candidatesList;
 		InputMap inputMap = field.getInputMap();
 		ActionMap actionMap = field.getActionMap();
 		inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
@@ -26,6 +25,6 @@ final class UpCommandListAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		commandList.up();
+		candidatesList.down();
 	}
 }
