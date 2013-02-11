@@ -8,7 +8,7 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandCommitted;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting.NullCommand;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
 
 public class Candidates {
 
@@ -34,7 +34,7 @@ public class Candidates {
 				(state instanceof CommandSelecting) &&
 				candidates.length == 1 &&
 				candidates[0] instanceof Command &&
-				!(candidates[0] instanceof NullCommand)){
+				!(candidates[0] instanceof NullCandidate)){
 			state = new CommandCommitted((Command)candidates[0]);
 		}
 	}
