@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui;
+package com.change_vision.astah.quick.internal.ui.candidates;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -14,7 +14,7 @@ import javax.swing.ListCellRenderer;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.CommandIconDescription;
 
-final class CommandListCellRenderer implements ListCellRenderer {
+final class CandidatesListCellRenderer implements ListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {

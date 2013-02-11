@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui;
+package com.change_vision.astah.quick.internal.ui.candidates;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
@@ -20,23 +20,23 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
-public class CommandWindowPanel extends JPanel {
+public class CandidatesWindowPanel extends JPanel {
 
 
 	/**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(CommandWindowPanel.class);
+    private static final Logger logger = LoggerFactory.getLogger(CandidatesWindowPanel.class);
 
-    private CommandList candidateList;
+    private CandidatesList candidateList;
 	private Commands commands;
 
 	private JScrollPane scrollPane;
 
-    public CommandWindowPanel(Commands commands) {
+    public CandidatesWindowPanel(Commands commands) {
     	this.commands = commands;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
-        candidateList = new CommandList();
+        candidateList = new CandidatesList();
         scrollPane.setViewportView(candidateList);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         setLayout(new BorderLayout());

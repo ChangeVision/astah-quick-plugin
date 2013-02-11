@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.commandfield;
+package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.event.ActionEvent;
 
@@ -7,15 +7,15 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import com.change_vision.astah.quick.internal.ui.CommandListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 final class UpCommandListAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
-	private CommandListWindow commandList;
+	private CandidatesListWindow commandList;
 	private static final String KEY = "UP";
 
-	UpCommandListAction(CommandField field,CommandListWindow commandList) {
+	UpCommandListAction(CandidatesField field,CandidatesListWindow commandList) {
 		super("up-command");
 		this.commandList = commandList;
 		InputMap inputMap = field.getInputMap();

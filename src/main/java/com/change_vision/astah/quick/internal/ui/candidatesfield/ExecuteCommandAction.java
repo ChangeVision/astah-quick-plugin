@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.commandfield;
+package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.CommandListWindow;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 final class ExecuteCommandAction extends AbstractAction {
 	/**
@@ -26,13 +26,13 @@ final class ExecuteCommandAction extends AbstractAction {
 
 	private static final String SEPARATE_COMMAND_CHAR = " ";
 	private static final String KEY = "ENTER";
-	private final CommandField field;
+	private final CandidatesField field;
 
 	private final QuickWindow quickWindow;
 
-	private final CommandListWindow commandList;
+	private final CandidatesListWindow commandList;
 
-	ExecuteCommandAction(CommandField field,QuickWindow quickWindow,CommandListWindow commandList) {
+	ExecuteCommandAction(CandidatesField field,QuickWindow quickWindow,CandidatesListWindow commandList) {
 		super("execute-command");
 		this.field = field;
 		InputMap inputMap = field.getInputMap();

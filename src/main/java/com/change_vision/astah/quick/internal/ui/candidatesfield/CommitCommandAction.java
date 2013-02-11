@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.commandfield;
+package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.event.ActionEvent;
 
@@ -9,16 +9,16 @@ import javax.swing.KeyStroke;
 
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.CommandListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 final class CommitCommandAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private final CommandField field;
-	private CommandListWindow commandList;
+	private final CandidatesField field;
+	private CandidatesListWindow commandList;
 	private static final String KEY = "RIGHT";
 	private static final String TAB_KEY = "TAB";
 
-	CommitCommandAction(CommandField field, CommandListWindow commandList) {
+	CommitCommandAction(CandidatesField field, CandidatesListWindow commandList) {
 		super("commit-command");
 		this.field = field;
 		this.commandList = commandList;
@@ -35,6 +35,6 @@ final class CommitCommandAction extends AbstractAction {
 		Commands commands = commandList.getCommands();
 		Command current = commands.current();
 		field.setText(current.getCommandName());
-		commandList.setCommandCandidateText(current.getCommandName());
+		commandList.setCandidateText(current.getCommandName());
 	}
 }

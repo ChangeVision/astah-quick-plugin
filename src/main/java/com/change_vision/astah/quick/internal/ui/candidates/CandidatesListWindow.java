@@ -1,9 +1,6 @@
-package com.change_vision.astah.quick.internal.ui;
+package com.change_vision.astah.quick.internal.ui.candidates;
 
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JWindow;
 
@@ -13,24 +10,24 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.command.Commands;
 
 @SuppressWarnings("serial")
-public final class CommandListWindow extends JWindow {
+public final class CandidatesListWindow extends JWindow {
 
 	/**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(CommandListWindow.class);
+    private static final Logger logger = LoggerFactory.getLogger(CandidatesListWindow.class);
 
-    private CommandWindowPanel panel;
+    private CandidatesWindowPanel panel;
 
 	private Commands commands;
 
-	public CommandListWindow(Commands commands){
+	public CandidatesListWindow(Commands commands){
 		this.commands = commands;
-        panel = new CommandWindowPanel(commands);
+        panel = new CandidatesWindowPanel(commands);
         setContentPane(panel);
     }
 
-	public void setCommandCandidateText(String commandCandidateText) {
+	public void setCandidateText(String commandCandidateText) {
 		panel.updateCandidateText(commandCandidateText);
 	}
 
@@ -53,7 +50,7 @@ public final class CommandListWindow extends JWindow {
 		return commands;
 	}
 
-	protected void setPanelSize(Dimension size) {
+	public void setPanelSize(Dimension size) {
 		panel.setPreferredSize(new Dimension(size.width,200));
         pack();
 	}
