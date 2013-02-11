@@ -62,6 +62,7 @@ public class CandidatesWindowPanel extends JPanel {
 	public void updateCandidateText(String commandCandidateText) {
 		candidates.candidates(commandCandidateText);
 		Candidate[] candidatesData = candidates.getCandidates();
+		
 		candidateList.setListData(candidatesData);
 		if(candidatesData.length > 0){
 			candidateList.setSelectedIndex(0);

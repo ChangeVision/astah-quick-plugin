@@ -1,6 +1,7 @@
 package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -14,9 +15,8 @@ import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow
 final class CommitCommandAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private final CandidatesField field;
-	private CandidatesListWindow commandList;
-	private static final String KEY = "RIGHT";
-	private static final String TAB_KEY = "TAB";
+	private final CandidatesListWindow commandList;
+	private static final String RIGHT = "RIGHT";
 
 	CommitCommandAction(CandidatesField field, CandidatesListWindow commandList) {
 		super("commit-command");
@@ -24,10 +24,8 @@ final class CommitCommandAction extends AbstractAction {
 		this.commandList = commandList;
 		InputMap inputMap = field.getInputMap();
 		ActionMap actionMap = field.getActionMap();
-		inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
-		actionMap.put(KEY, this);
-		inputMap.put(KeyStroke.getKeyStroke(TAB_KEY), TAB_KEY);
-		actionMap.put(TAB_KEY, this);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,KeyEvent.CTRL_DOWN_MASK), RIGHT);
+		actionMap.put(RIGHT, this);
 	}
 
 	@Override

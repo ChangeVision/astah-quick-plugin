@@ -58,18 +58,17 @@ public class CommandSelecting implements CandidateState {
 		allCommands.addAll(DiagramCommands.commands());
 	}
 
-	private Command[] commands;
-	int currentIndex;
+	private CandidatesSelector<Command> selector = new CandidatesSelector<Command>();
 	
 	public CommandSelecting(){
-		this.commands = allCommands.toArray(new Command[]{});
+		selector.setCandidates(allCommands.toArray(new Command[]{}));
 	}
 
 	@Override
 	public void candidates(String searchKey) {
 		logger.trace("candidates key:{}",searchKey);
-		if (searchKey == null) {
-			this.commands = allCommands.toArray(new Command[]{});
+		if (searchKey == null || searchKey.isEmpty()) {
+			selector.setCandidates(allCommands.toArray(new Command[]{}));
 			return;
 		}
 		List<Command> candidates = new ArrayList<Command>();
@@ -90,8 +89,7 @@ public class CommandSelecting implements CandidateState {
 		if (candidates.size() == 0) {
 			candidates.add(new NullCommand());
 		}
-		this.commands = candidates.toArray(new Command[]{});
-		this.currentIndex = 0;
+		selector.setCandidates(candidates.toArray(new Command[]{}));
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
@@ -99,36 +97,24 @@ public class CommandSelecting implements CandidateState {
 	}
 	
 	@Override
+	public Candidate[] getCandidates() {
+		return selector.getCandidates();
+	}
+	
+	@Override
 	public void up() {
-		if(commands.length == 0) return;
-		int oldValue = currentIndex;
-		currentIndex--;
-		if(currentIndex < 0){
-			currentIndex = commands.length - 1;
-		}
-		firePropertyChange("currentIndex", oldValue, currentIndex);
+		selector.up();
 	}
 
 	@Override
 	public Command current() {
-		if(commands.length == 0) return new NullCommand();
-		return commands[currentIndex];
+		return selector.current();
 	}
 
 	@Override
 	public void down() {
-		int oldValue = currentIndex;
-		currentIndex++;
-		if(currentIndex >= commands.length){
-			currentIndex = 0;
-		}
-		firePropertyChange("currentIndex", oldValue, currentIndex);
+		selector.down();
 	}
-	
-    public void firePropertyChange(String propertyName, Object oldValue,
-            Object newValue) {
-		logger.trace("{}: old:'{}' new:'{}'",new Object[]{propertyName,oldValue,newValue});
-    }
     
 	@TestForMethod
 	static void add(Command command) {
@@ -138,11 +124,6 @@ public class CommandSelecting implements CandidateState {
 	@TestForMethod
 	static void clear() {
 		allCommands.clear();
-	}
-
-	@Override
-	public Candidate[] getCandidates() {
-		return this.commands;
 	}
 	
 	@Override

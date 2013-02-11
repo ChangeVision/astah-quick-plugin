@@ -41,64 +41,48 @@ public class CommandCommitted implements CandidateState {
 	}
 
 	private Command committed;
-	private int currentIndex;
-	private Candidate[] candidates;
+	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 
 	public CommandCommitted(Command committed) {
 		this.committed = committed; 
+		candidates(committed.getName());
 	}
 
 	@Override
 	public void candidates(String searchKey) {
 		logger.trace("candidates:{}",searchKey);
+		Candidate[] candidates;
 		if (committed instanceof CandidatesProvider) {
 			CandidatesProvider provider = (CandidatesProvider) committed;
 			provider.candidate(searchKey);
-			this.candidates = provider.getCandidates();
+			candidates = provider.getCandidates();
 		} else {
-			this.candidates = new Candidate[]{
+			candidates = new Candidate[]{
 					committed
 			};
 		}
-		this.currentIndex = 0;
+		selector.setCandidates(candidates);
 	}
 	
 	@Override
 	public Candidate[] getCandidates() {
-		if (this.candidates == null) {
-			candidates(committed.getName());
-		}
-		return this.candidates;
+		return this.selector.getCandidates();
 	}
 	
+	@Override
 	public void up() {
-		if(candidates.length == 0) return;
-		int oldValue = currentIndex;
-		currentIndex--;
-		if(currentIndex < 0){
-			currentIndex = candidates.length - 1;
-		}
-		firePropertyChange("currentIndex", oldValue, currentIndex);
+		selector.up();
 	}
 
+	@Override
 	public Candidate current() {
-		if(candidates.length == 0) return new NullCandidate();
-		return candidates[currentIndex];
+		return selector.current();
 	}
 
+	@Override
 	public void down() {
-		int oldValue = currentIndex;
-		currentIndex++;
-		if(currentIndex >= candidates.length){
-			currentIndex = 0;
-		}
-		firePropertyChange("currentIndex", oldValue, currentIndex);
+		selector.down();
 	}
-	
-    public void firePropertyChange(String propertyName, Object oldValue,
-            Object newValue) {
-		logger.trace("{}: old:'{}' new:'{}'",new Object[]{propertyName,oldValue,newValue});
-    }
     
     @Override
     public Command currentCommand() {

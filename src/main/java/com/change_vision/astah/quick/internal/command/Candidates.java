@@ -11,7 +11,6 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSe
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting.NullCommand;
 
 public class Candidates {
-    public  static final String COMMIT_COMMAND = "COMMIT";
 
 	/**
      * Logger for this class
@@ -24,40 +23,40 @@ public class Candidates {
 	public void candidates(String searchKey) {
 		logger.trace("candidate searchKey:'{}'",searchKey);
 		if(
-				(this.state instanceof CommandCommitted) &&
-				this.state.currentCommand().getName().length() > searchKey.length()
+				(state instanceof CommandCommitted) &&
+				state.currentCommand().getName().length() > searchKey.length()
 				){
-			this.state = new CommandSelecting();
+			state = new CommandSelecting();
 		}
-		this.state.candidates(searchKey);
-		Candidate[] candidates = this.state.getCandidates();
+		state.candidates(searchKey);
+		Candidate[] candidates = state.getCandidates();
 		if(
-				(this.state instanceof CommandSelecting) &&
+				(state instanceof CommandSelecting) &&
 				candidates.length == 1 &&
 				candidates[0] instanceof Command &&
 				!(candidates[0] instanceof NullCommand)){
-			this.state = new CommandCommitted((Command)candidates[0]);
+			state = new CommandCommitted((Command)candidates[0]);
 		}
 	}
 	
 	public Command currentCommand(){
-		return this.state.currentCommand();
+		return state.currentCommand();
 	}
 	
 	public Candidate[] getCandidates() {
-		return this.state.getCandidates();
+		return state.getCandidates();
 	}
 
 	public void up() {
-		this.state.up();
+		state.up();
 	}
 
 	public Candidate current() {
-		return this.state.current();
+		return state.current();
 	}
 
 	public void down() {
-		this.state.down();
+		state.down();
 	}
 
 	public void setCandidateState(CandidateState state) {
@@ -65,6 +64,6 @@ public class Candidates {
 	}
 
 	public boolean isCommitted() {
-		return this.state instanceof CommandCommitted;
+		return state instanceof CommandCommitted;
 	}
 }
