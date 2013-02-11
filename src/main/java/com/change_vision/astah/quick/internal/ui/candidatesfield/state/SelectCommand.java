@@ -14,12 +14,12 @@ import com.change_vision.astah.quick.internal.command.model.ModelCommands;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
-public class CommandSelecting implements CandidateState {
+public class SelectCommand implements CandidateState {
 
 	/**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(CommandSelecting.class);
+    private static final Logger logger = LoggerFactory.getLogger(SelectCommand.class);
 
 	private static final List<Command> allCommands = new ArrayList<Command>();
 	
@@ -31,7 +31,7 @@ public class CommandSelecting implements CandidateState {
 
 	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 	
-	public CommandSelecting(){
+	public SelectCommand(){
 		selector.setCandidates(allCommands.toArray(new Candidate[]{}));
 	}
 

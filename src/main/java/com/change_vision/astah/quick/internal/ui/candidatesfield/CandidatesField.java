@@ -12,7 +12,7 @@ import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
 @SuppressWarnings("serial")
 public final class CandidatesField extends JTextField {
@@ -68,7 +68,7 @@ public final class CandidatesField extends JTextField {
 	private void closeCandidatesList() {
 		logger.trace("closeCandidatesList");
 		Candidates commands = candidatesList.getCandidates();
-		commands.setCandidateState(new CommandSelecting());
+		commands.setCandidateState(new SelectCommand());
 		setText(null);
 		candidatesList.close();
 	}

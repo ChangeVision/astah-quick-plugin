@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandCommitted;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArgument;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
 
 public class Candidates {
@@ -17,25 +17,25 @@ public class Candidates {
      */
     private static final Logger logger = LoggerFactory.getLogger(Candidates.class);
 
-	private CandidateState state = new CommandSelecting();
+	private CandidateState state = new SelectCommand();
 
 
 	public void candidates(String searchKey) {
 		logger.trace("candidate searchKey:'{}'",searchKey);
 		if(
-				(state instanceof CommandCommitted) &&
+				(state instanceof SelectArgument) &&
 				state.currentCommand().getName().length() > searchKey.length()
 				){
-			state = new CommandSelecting();
+			state = new SelectCommand();
 		}
 		state.candidates(searchKey);
 		Candidate[] candidates = state.getCandidates();
 		if(
-				(state instanceof CommandSelecting) &&
+				(state instanceof SelectCommand) &&
 				candidates.length == 1 &&
 				candidates[0] instanceof Command &&
 				!(candidates[0] instanceof NullCandidate)){
-			state = new CommandCommitted((Command)candidates[0]);
+			state = new SelectArgument((Command)candidates[0]);
 		}
 	}
 	
@@ -64,6 +64,6 @@ public class Candidates {
 	}
 
 	public boolean isCommitted() {
-		return state instanceof CommandCommitted;
+		return state instanceof SelectArgument;
 	}
 }

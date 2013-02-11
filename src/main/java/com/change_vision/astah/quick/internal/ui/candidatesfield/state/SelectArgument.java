@@ -7,17 +7,17 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
 
-public class CommandCommitted implements CandidateState {
+public class SelectArgument implements CandidateState {
 	
 	/**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(CommandCommitted.class);
+    private static final Logger logger = LoggerFactory.getLogger(SelectArgument.class);
 
 	private Command committed;
 	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 
-	public CommandCommitted(Command committed) {
+	public SelectArgument(Command committed) {
 		this.committed = committed; 
 		candidates(committed.getName());
 	}

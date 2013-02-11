@@ -29,7 +29,7 @@ public class CommandSelectingTest {
 	
 	@Before
 	public void before(){
-		CommandSelecting.clear();
+		SelectCommand.clear();
 		MockitoAnnotations.initMocks(this);
 		createCommand("new project", newProjectCommand);		
 		createCommand("create class", createClassCommand);		
@@ -38,7 +38,7 @@ public class CommandSelectingTest {
 
 	@Test
 	public void candidatesWithNull() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates(null);
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(allCommands));		
@@ -46,7 +46,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void candidatesWithEmpty() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(allCommands));
@@ -54,7 +54,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void candidatesWithNew() throws Throwable{
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("new");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(1));
@@ -62,7 +62,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void candidatesWithCreate() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("create");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(2));		
@@ -70,7 +70,7 @@ public class CommandSelectingTest {
 
 	@Test
 	public void current() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		Candidate current = commands.current();
 		assertThat(current.getName(),is(newProjectCommand.getName()));
@@ -78,7 +78,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void down() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		commands.down();
 		Candidate current = commands.current();
@@ -87,7 +87,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void downAndCandidates() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		commands.down();
 		commands.candidates("");
@@ -98,7 +98,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void rotateWhenUp() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		commands.up();
 		Candidate current = commands.current();
@@ -107,7 +107,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void downAndUp() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		commands.down();
 		commands.up();
@@ -117,7 +117,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void rotateWhenUpAndDown() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("");
 		commands.up();
 		commands.down();
@@ -127,7 +127,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void notHappenedExceptionsWhenCandidatesAreZeroAndUp() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroUp");
 		commands.up();
 		Candidate current = commands.current();
@@ -136,7 +136,7 @@ public class CommandSelectingTest {
 	
 	@Test
 	public void notHappenedExceptionsWhenCandidatesAreZeroAndDown() throws Exception {
-		CommandSelecting commands = new CommandSelecting();
+		SelectCommand commands = new SelectCommand();
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroDown");
 		commands.down();
 		Candidate current = commands.current();
@@ -146,7 +146,7 @@ public class CommandSelectingTest {
 	private void createCommand(String commandName, Command command) {
 		when(command.getName()).thenReturn(commandName);
 		when(command.isEnable()).thenReturn(true);
-		CommandSelecting.add(command);
+		SelectCommand.add(command);
 		allCommands++;
 	}
 
