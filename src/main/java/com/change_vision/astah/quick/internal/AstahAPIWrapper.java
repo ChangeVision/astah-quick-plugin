@@ -16,7 +16,7 @@ public class AstahAPIWrapper {
         return frame;
     }
 
-    private IViewManager getViewManager(){
+    public IViewManager getViewManager(){
         ProjectAccessor projectAccessor = getProjectAccessor();
         IViewManager viewManager;
         try {
@@ -27,7 +27,7 @@ public class AstahAPIWrapper {
         return viewManager;
     }
 
-    private ProjectAccessor getProjectAccessor() {
+    public ProjectAccessor getProjectAccessor() {
         try {
             return ProjectAccessorFactory.getProjectAccessor();
         } catch (ClassNotFoundException e) {

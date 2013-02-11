@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
@@ -18,13 +19,14 @@ import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
-import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
 class ModelAPI {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
+	
+	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 	
 	boolean isOpenedProject(){
 		try {
@@ -38,14 +40,7 @@ class ModelAPI {
 	}
 	
 	private ProjectAccessor getProjectAccessor(){
-		if (projectAccessorForTest != null) {
-			return projectAccessorForTest;
-		}
-		try {
-			return ProjectAccessorFactory.getProjectAccessor();
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("It maybe occurred by class path issue.");
-		}
+		return wrapper.getProjectAccessor();
 	}
 
 	void createClass(String className) {
@@ -209,11 +204,9 @@ class ModelAPI {
 		}
 	}
 	
-	private ProjectAccessor projectAccessorForTest;
-	
 	@TestForMethod
-	void setProjectAccessorForTest(ProjectAccessor projectAccessorForTest) {
-		this.projectAccessorForTest = projectAccessorForTest;
+	public void setWrapper(AstahAPIWrapper wrapper) {
+		this.wrapper = wrapper;
 	}
 
 }
