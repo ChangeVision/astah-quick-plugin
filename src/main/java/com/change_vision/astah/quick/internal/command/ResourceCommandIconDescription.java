@@ -9,9 +9,9 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 
-public class ResourceCommandIconDescription implements CommandIconDescription {
+public class ResourceCommandIconDescription implements CandidateIconDescription {
 	
 	private String path;
 

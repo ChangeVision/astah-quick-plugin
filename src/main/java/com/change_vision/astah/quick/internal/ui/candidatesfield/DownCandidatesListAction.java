@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.commandfield;
+package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.event.ActionEvent;
 
@@ -7,16 +7,16 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import com.change_vision.astah.quick.internal.ui.CommandListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
-final class DownCommandListAction extends AbstractAction {
+final class DownCandidatesListAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final String KEY = "DOWN";
-	private final CommandListWindow commandList;
+	private final CandidatesListWindow candidatesList;
 
-	DownCommandListAction(CommandField field,CommandListWindow commandList) {
+	DownCandidatesListAction(CandidatesField field,CandidatesListWindow candidatesList) {
 		super("down-command");
-		this.commandList = commandList;
+		this.candidatesList = candidatesList;
 		InputMap inputMap = field.getInputMap();
 		ActionMap actionMap = field.getActionMap();
 		inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
@@ -25,6 +25,6 @@ final class DownCommandListAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		commandList.down();
+		candidatesList.down();
 	}
 }

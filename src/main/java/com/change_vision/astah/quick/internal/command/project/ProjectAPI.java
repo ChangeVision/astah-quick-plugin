@@ -8,15 +8,16 @@ import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
-import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
-import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
 class ProjectAPI {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectAPI.class);
+	
+	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 	
 	void createProject(){
 		try {
@@ -31,14 +32,7 @@ class ProjectAPI {
 	}
 	
 	boolean isOpenedProject(){
-		try {
-			String projectPath = getProjectAccessor().getProjectPath();
-			logger.trace("isOpenedProject project path : '{}'",projectPath);
-			return projectPath != null;
-		} catch (ProjectNotFoundException e) {
-			logger.trace("isOpenedProject project not found.'{}'",e.getMessage());
-			return false;
-		}
+		return wrapper.isOpenedProject();
 	}
 	
 	boolean isClosedProject(){
@@ -59,11 +53,7 @@ class ProjectAPI {
 	}
 
 	private ProjectAccessor getProjectAccessor(){
-		try {
-			return ProjectAccessorFactory.getProjectAccessor();
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("It maybe occurred by class path issue.");
-		}
+		return wrapper.getProjectAccessor();
 	}
 
 	void openProject(File file) {

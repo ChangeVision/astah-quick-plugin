@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
 public class OpenProjectCommand implements Command{
@@ -30,7 +30,7 @@ public class OpenProjectCommand implements Command{
 	private ProjectAPI api = new ProjectAPI();
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "open project";
 	}
 
@@ -59,7 +59,7 @@ public class OpenProjectCommand implements Command{
 	}
 	
 	@Override
-	public CommandIconDescription getIconDescription() {
+	public CandidateIconDescription getIconDescription() {
 		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png");
 	}
 }

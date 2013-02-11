@@ -1,7 +1,7 @@
 package com.change_vision.astah.quick.internal.command.project;
 
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.CommandIconDescription;
+import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
 
@@ -9,7 +9,7 @@ public class NewProjectCommand implements Command{
 	
 	private ProjectAPI api = new ProjectAPI();
 	
-	public String getCommandName(){
+	public String getName(){
 		return "new project";
 	}
 	
@@ -29,7 +29,7 @@ public class NewProjectCommand implements Command{
 	}
 	
 	@Override
-	public CommandIconDescription getIconDescription() {
+	public CandidateIconDescription getIconDescription() {
 		return new ResourceCommandIconDescription("/icons/glyphicons_151_new_window.png");
 	}
 }
