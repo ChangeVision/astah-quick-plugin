@@ -4,15 +4,16 @@ import static java.lang.String.format;
 
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
-import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
-import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.jude.api.inf.model.IPackage;
+import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class SelectModelCommand implements Command {
+public class SelectPackageCommand implements Command {
 
-	private final INamedElement foundModel;
+	private final IPackage foundModel;
 	private static final ModelAPI api = new ModelAPI();
 
-	public SelectModelCommand(INamedElement foundModel) {
+	public SelectPackageCommand(IPackage foundModel) {
 		this.foundModel = foundModel;
 	}
 
@@ -29,7 +30,7 @@ public class SelectModelCommand implements Command {
 	@Override
 	public String getDescription() {
 		String fullName = foundModel.getFullName(".");
-		return format("%s", fullName);
+		return format("Select package '%s'", fullName);
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class SelectModelCommand implements Command {
 	
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_027_search.png");
+		return new AstahCommandIconDescription(IconDescription.UML_CLASS_PACKAGE);
 	}
 
 

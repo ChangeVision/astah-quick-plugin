@@ -13,19 +13,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.commandfield.CommandField;
-
 import net.miginfocom.swing.MigLayout;
+
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
 @SuppressWarnings("serial")
 public class QuickPanel extends JPanel {
 
-    private CommandField commandField;
+    private CandidatesField candidatesField;
     private JButton closeButton;
-    private final Commands commands = new Commands();
 
-    public QuickPanel(QuickWindow quickWindow) {
+    public QuickPanel(QuickWindow quickWindow,CandidatesListWindow candidatesList) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
@@ -39,8 +39,8 @@ public class QuickPanel extends JPanel {
         JLabel astah = new JLabel(astahIcon);
         add(astah, "cell 0 0");
         
-        commandField = new CommandField(quickWindow,commands);
-        add(commandField, "cell 1 0,growx");
+        candidatesField = new CandidatesField(quickWindow,candidatesList);
+        add(candidatesField, "cell 1 0,growx");
         closeButton = new JButton();
         add(closeButton, "cell 2 0");
     }
@@ -50,7 +50,7 @@ public class QuickPanel extends JPanel {
     }
     
     public void reset(){
-        commandField.reset();
+        candidatesField.setWindowState(CandidateWindowState.Wait);
     }
 
 }

@@ -11,11 +11,16 @@ import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 
+import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
     
     private QuickPanel quickPanel;
     private MessageNotifier notifier;
+    private CandidatesListWindow candidatesList;
+	private Candidates commands;
 
     public QuickWindow(JFrame parent){
         super(parent);
@@ -24,7 +29,9 @@ public class QuickWindow extends JWindow {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        quickPanel = new QuickPanel(this);
+        this.commands = new Candidates();
+        this.candidatesList = new CandidatesListWindow(commands);
+        quickPanel = new QuickPanel(this,this.candidatesList);
         quickPanel.setCloseAction(closeAction);
         add(quickPanel);
         setAlwaysOnTop(true);
@@ -40,12 +47,14 @@ public class QuickWindow extends JWindow {
     }
 
     public void close() {
+    	candidatesList.close();
         setVisible(false);
         quickPanel.reset();
     }
 
     public void open() {
         setVisible(true);
+		candidatesList.setPanelSize(getSize());
     }
 
 }

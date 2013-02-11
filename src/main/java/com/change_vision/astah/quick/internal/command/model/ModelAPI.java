@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
@@ -12,12 +13,12 @@ import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
-import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
@@ -25,26 +26,14 @@ class ModelAPI {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
 	
+	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
+	
 	boolean isOpenedProject(){
-		try {
-			String projectPath = getProjectAccessor().getProjectPath();
-			logger.trace("isOpenedProject project path : '{}'",projectPath);
-			return projectPath != null;
-		} catch (ProjectNotFoundException e) {
-			logger.trace("isOpenedProject project not found.'{}'",e.getMessage());
-			return false;
-		}
+		return wrapper.isOpenedProject();
 	}
 	
 	private ProjectAccessor getProjectAccessor(){
-		if (projectAccessorForTest != null) {
-			return projectAccessorForTest;
-		}
-		try {
-			return ProjectAccessorFactory.getProjectAccessor();
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("It maybe occurred by class path issue.");
-		}
+		return wrapper.getProjectAccessor();
 	}
 
 	void createClass(String className) {
@@ -159,11 +148,24 @@ class ModelAPI {
 			return getProjectAccessor().findElements(new ModelFinder() {
 				@Override
 				public boolean isTarget(INamedElement element) {
+					if (not(isClass(element)) && not(isPackage(element))) return false;
 					String name = element.getName().toLowerCase();
 					boolean nameStarts = name.startsWith(searchKey.toLowerCase());
 					boolean alias1Starts = element.getAlias1().startsWith(searchKey);
 					boolean alias2Starts = element.getAlias2().startsWith(searchKey);
 					return nameStarts || alias1Starts || alias2Starts;
+				}
+				
+				private boolean not(boolean bool){
+					return ! bool;
+				}
+
+				private boolean isClass(INamedElement element) {
+					return element instanceof IClass;
+				}
+
+				private boolean isPackage(INamedElement element) {
+					return element instanceof IPackage;
 				}
 			});
 		} catch (ProjectNotFoundException e) {
@@ -172,14 +174,7 @@ class ModelAPI {
 	}
 	
 	private boolean isClosedProject(){
-		try {
-			String projectPath = getProjectAccessor().getProjectPath();
-			logger.trace("isClosedProject project path : '{}'",projectPath);
-			return projectPath == null;
-		} catch (ProjectNotFoundException e) {
-			logger.info("isClosedProject project not found.'{}'",e.getMessage());
-			return true;
-		}
+		return wrapper.isClosedProject();
 	}
 
 	void showInStructureTree(INamedElement model) {
@@ -195,11 +190,9 @@ class ModelAPI {
 		}
 	}
 	
-	private ProjectAccessor projectAccessorForTest;
-	
 	@TestForMethod
-	void setProjectAccessorForTest(ProjectAccessor projectAccessorForTest) {
-		this.projectAccessorForTest = projectAccessorForTest;
+	public void setWrapper(AstahAPIWrapper wrapper) {
+		this.wrapper = wrapper;
 	}
 
 }

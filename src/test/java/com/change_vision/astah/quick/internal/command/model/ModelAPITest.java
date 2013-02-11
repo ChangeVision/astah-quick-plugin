@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
@@ -22,6 +23,9 @@ public class ModelAPITest {
 	
 	@Mock
 	private ProjectAccessor prjAccessor;
+	
+	@Mock
+	private AstahAPIWrapper wrapper;
 
 	@Mock
 	private ITransactionManager transactionManager;
@@ -48,7 +52,8 @@ public class ModelAPITest {
 	public void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		api = new ModelAPI();
-		api.setProjectAccessorForTest(prjAccessor);
+		api.setWrapper(wrapper);
+		when(wrapper.getProjectAccessor()).thenReturn(prjAccessor);
 		when(prjAccessor.getTransactionManager()).thenReturn(transactionManager);
 		when(prjAccessor.getModelEditorFactory()).thenReturn(modelEditorFactory);
 		when(modelEditorFactory.getBasicModelEditor()).thenReturn(basicModelEditor);

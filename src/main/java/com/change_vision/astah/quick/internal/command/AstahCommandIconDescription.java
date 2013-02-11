@@ -2,12 +2,11 @@ package com.change_vision.astah.quick.internal.command;
 
 import javax.swing.Icon;
 
-import com.change_vision.astah.quick.command.CommandIconDescription;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.jude.api.inf.view.IIconManager;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class AstahCommandIconDescription implements CommandIconDescription {
+public class AstahCommandIconDescription implements com.change_vision.astah.quick.command.CandidateIconDescription {
 	
 	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 	private IconDescription description;
