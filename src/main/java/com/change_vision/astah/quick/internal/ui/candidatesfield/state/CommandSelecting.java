@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
-import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
-import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.diagram.DiagramCommands;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
@@ -25,43 +23,16 @@ public class CommandSelecting implements CandidateState {
 
 	private static final List<Command> allCommands = new ArrayList<Command>();
 	
-	public class NullCommand implements Command {
-
-		@Override
-		public String getName() {
-			return "Not Found";
-		}
-
-		@Override
-		public void execute(String... args) {
-		}
-
-		@Override
-		public String getDescription() {
-			return "Candidate commands are not found.";
-		}
-
-		@Override
-		public boolean isEnable() {
-			return true;
-		}
-		
-		@Override
-		public CandidateIconDescription getIconDescription() {
-			return new ResourceCommandIconDescription("/icons/glyphicons_207_remove_2.png");
-		}
-	}
-	
 	static{
 		allCommands.addAll(ModelCommands.commands());
 		allCommands.addAll(ProjectCommands.commands());
 		allCommands.addAll(DiagramCommands.commands());
 	}
 
-	private CandidatesSelector<Command> selector = new CandidatesSelector<Command>();
+	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 	
 	public CommandSelecting(){
-		selector.setCandidates(allCommands.toArray(new Command[]{}));
+		selector.setCandidates(allCommands.toArray(new Candidate[]{}));
 	}
 
 	@Override
@@ -71,7 +42,7 @@ public class CommandSelecting implements CandidateState {
 			selector.setCandidates(allCommands.toArray(new Command[]{}));
 			return;
 		}
-		List<Command> candidates = new ArrayList<Command>();
+		List<Candidate> candidates = new ArrayList<Candidate>();
 		for (Command command : allCommands) {
 			String commandName = command.getName();
 			if (command.isEnable() &&
@@ -87,9 +58,9 @@ public class CommandSelecting implements CandidateState {
 		}
 
 		if (candidates.size() == 0) {
-			candidates.add(new NullCommand());
+			candidates.add(new NullCandidate());
 		}
-		selector.setCandidates(candidates.toArray(new Command[]{}));
+		selector.setCandidates(candidates.toArray(new Candidate[]{}));
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
@@ -107,7 +78,7 @@ public class CommandSelecting implements CandidateState {
 	}
 
 	@Override
-	public Command current() {
+	public Candidate current() {
 		return selector.current();
 	}
 
@@ -128,7 +99,7 @@ public class CommandSelecting implements CandidateState {
 	
 	@Override
 	public Command currentCommand() {
-		return current();
+		return (Command) current();
 	}
 
 }

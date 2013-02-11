@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CommandSelecting.NullCommand;
 
 public class CommandSelectingTest {
 
@@ -73,8 +72,8 @@ public class CommandSelectingTest {
 	public void current() throws Exception {
 		CommandSelecting commands = new CommandSelecting();
 		commands.candidates("");
-		Command current = commands.current();
-		assertThat(current,is(newProjectCommand));
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(newProjectCommand.getName()));
 	}
 	
 	@Test
@@ -82,8 +81,8 @@ public class CommandSelectingTest {
 		CommandSelecting commands = new CommandSelecting();
 		commands.candidates("");
 		commands.down();
-		Command current = commands.current();
-		assertThat(current,is(createClassCommand));
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(createClassCommand.getName()));
 	}
 	
 	@Test
@@ -92,8 +91,8 @@ public class CommandSelectingTest {
 		commands.candidates("");
 		commands.down();
 		commands.candidates("");
-		Command current = commands.current();
-		assertThat(current,is(newProjectCommand));
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(newProjectCommand.getName()));
 	}
 
 	
@@ -102,8 +101,8 @@ public class CommandSelectingTest {
 		CommandSelecting commands = new CommandSelecting();
 		commands.candidates("");
 		commands.up();
-		Command current = commands.current();
-		assertThat(current,is(createPackageCommand));		
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(createPackageCommand.getName()));		
 	}
 	
 	@Test
@@ -112,8 +111,8 @@ public class CommandSelectingTest {
 		commands.candidates("");
 		commands.down();
 		commands.up();
-		Command current = commands.current();
-		assertThat(current,is(newProjectCommand));
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(newProjectCommand.getName()));
 	}
 	
 	@Test
@@ -122,8 +121,8 @@ public class CommandSelectingTest {
 		commands.candidates("");
 		commands.up();
 		commands.down();
-		Command current = commands.current();
-		assertThat(current,is(newProjectCommand));				
+		Candidate current = commands.current();
+		assertThat(current.getName(),is(newProjectCommand.getName()));				
 	}
 	
 	@Test
@@ -131,9 +130,8 @@ public class CommandSelectingTest {
 		CommandSelecting commands = new CommandSelecting();
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroUp");
 		commands.up();
-		Command current = commands.current();
-		assertThat(current,is(instanceOf(NullCommand.class)));
-		assertThat(commands.currentIndex,is(0));
+		Candidate current = commands.current();
+		assertThat(current,is(instanceOf(NullCandidate.class)));
 	}
 	
 	@Test
@@ -141,9 +139,8 @@ public class CommandSelectingTest {
 		CommandSelecting commands = new CommandSelecting();
 		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroDown");
 		commands.down();
-		Command current = commands.current();
-		assertThat(current,is(instanceOf(NullCommand.class)));
-		assertThat(commands.currentIndex,is(0));
+		Candidate current = commands.current();
+		assertThat(current,is(instanceOf(NullCandidate.class)));
 	}
 
 	private void createCommand(String commandName, Command command) {
