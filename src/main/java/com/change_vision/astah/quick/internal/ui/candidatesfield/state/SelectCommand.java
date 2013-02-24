@@ -11,8 +11,8 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.diagram.DiagramCommands;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
+import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
-import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class SelectCommand implements CandidateState {
 
@@ -31,14 +31,16 @@ public class SelectCommand implements CandidateState {
 
 	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 	
+	private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
+	
 	public SelectCommand(){
 		selector.setCandidates(allCommands.toArray(new Candidate[]{}));
 	}
 
 	@Override
-	public void candidates(String searchKey) {
-		logger.trace("candidates key:{}",searchKey);
-		if (searchKey == null || searchKey.isEmpty()) {
+	public void filter(String key) {
+		logger.trace("key:{}",key);
+		if (key == null || key.isEmpty()) {
 			selector.setCandidates(allCommands.toArray(new Command[]{}));
 			return;
 		}
@@ -46,16 +48,14 @@ public class SelectCommand implements CandidateState {
 		for (Command command : allCommands) {
 			String commandName = command.getName();
 			if (command.isEnable() &&
-				isCandidate(searchKey, commandName)
+				isCandidate(key, commandName)
 					) {
 				candidates.add(command);
 			}
 		}
-		INamedElement[] foundModels = ModelCommands.find(searchKey);
-		for (INamedElement foundModel : foundModels) {
-			Command selectCommand = ModelCommands.createSelectCommand(foundModel);
-			candidates.add(selectCommand);
-		}
+		logger.trace("command candidates:{}",candidates);
+		List<Candidate> selectCommands = commandFactory.create(key);
+		candidates.addAll(selectCommands);
 
 		if (candidates.size() == 0) {
 			candidates.add(new NullCandidate());
@@ -95,6 +95,10 @@ public class SelectCommand implements CandidateState {
 	@TestForMethod
 	static void clear() {
 		allCommands.clear();
+	}
+	
+	static List<Command> getAllCommands(){
+		return allCommands;
 	}
 	
 	@Override

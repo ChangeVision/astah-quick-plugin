@@ -19,11 +19,11 @@ public class SelectArgument implements CandidateState {
 
 	public SelectArgument(Command committed) {
 		this.committed = committed; 
-		candidates(committed.getName());
+		filter(committed.getName());
 	}
 
 	@Override
-	public void candidates(String searchKey) {
+	public void filter(String searchKey) {
 		logger.trace("candidates:{}",searchKey);
 		Candidate[] candidates;
 		if (committed instanceof CandidatesProvider) {

@@ -5,7 +5,7 @@ import com.change_vision.astah.quick.command.Command;
 
 public interface CandidateState {
 
-	void candidates(String searchKey);
+	void filter(String key);
 
 	Candidate[] getCandidates();
 

@@ -39,7 +39,7 @@ public class CommandSelectingTest {
 	@Test
 	public void candidatesWithNull() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates(null);
+		commands.filter(null);
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(allCommands));		
 	}
@@ -47,7 +47,7 @@ public class CommandSelectingTest {
 	@Test
 	public void candidatesWithEmpty() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(allCommands));
 	}
@@ -55,7 +55,7 @@ public class CommandSelectingTest {
 	@Test
 	public void candidatesWithNew() throws Throwable{
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("new");
+		commands.filter("new");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(1));
 	}
@@ -63,7 +63,7 @@ public class CommandSelectingTest {
 	@Test
 	public void candidatesWithCreate() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("create");
+		commands.filter("create");
 		Candidate[] candidates = commands.getCandidates();
 		assertThat(candidates.length, is(2));		
 	}
@@ -71,7 +71,7 @@ public class CommandSelectingTest {
 	@Test
 	public void current() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		Candidate current = commands.current();
 		assertThat(current.getName(),is(newProjectCommand.getName()));
 	}
@@ -79,7 +79,7 @@ public class CommandSelectingTest {
 	@Test
 	public void down() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		commands.down();
 		Candidate current = commands.current();
 		assertThat(current.getName(),is(createClassCommand.getName()));
@@ -88,9 +88,9 @@ public class CommandSelectingTest {
 	@Test
 	public void downAndCandidates() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		commands.down();
-		commands.candidates("");
+		commands.filter("");
 		Candidate current = commands.current();
 		assertThat(current.getName(),is(newProjectCommand.getName()));
 	}
@@ -99,7 +99,7 @@ public class CommandSelectingTest {
 	@Test
 	public void rotateWhenUp() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		commands.up();
 		Candidate current = commands.current();
 		assertThat(current.getName(),is(createPackageCommand.getName()));		
@@ -108,7 +108,7 @@ public class CommandSelectingTest {
 	@Test
 	public void downAndUp() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		commands.down();
 		commands.up();
 		Candidate current = commands.current();
@@ -118,7 +118,7 @@ public class CommandSelectingTest {
 	@Test
 	public void rotateWhenUpAndDown() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("");
+		commands.filter("");
 		commands.up();
 		commands.down();
 		Candidate current = commands.current();
@@ -128,7 +128,7 @@ public class CommandSelectingTest {
 	@Test
 	public void notHappenedExceptionsWhenCandidatesAreZeroAndUp() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroUp");
+		commands.filter("notHappenedExceptionsWhenCandidatesAreZeroUp");
 		commands.up();
 		Candidate current = commands.current();
 		assertThat(current,is(instanceOf(NullCandidate.class)));
@@ -137,7 +137,7 @@ public class CommandSelectingTest {
 	@Test
 	public void notHappenedExceptionsWhenCandidatesAreZeroAndDown() throws Exception {
 		SelectCommand commands = new SelectCommand();
-		commands.candidates("notHappenedExceptionsWhenCandidatesAreZeroDown");
+		commands.filter("notHappenedExceptionsWhenCandidatesAreZeroDown");
 		commands.down();
 		Candidate current = commands.current();
 		assertThat(current,is(instanceOf(NullCandidate.class)));

@@ -59,10 +59,5 @@ public final class CandidatesListWindow extends JWindow {
 		logger.trace("open");
 		setVisible(true);
 	}
-	
-	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-	}
 
 }
