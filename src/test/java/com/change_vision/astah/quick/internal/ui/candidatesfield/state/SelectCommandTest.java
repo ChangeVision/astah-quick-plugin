@@ -1,25 +1,81 @@
 package com.change_vision.astah.quick.internal.ui.candidatesfield.state;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
 
 public class SelectCommandTest {
 
 	private SelectCommand state;
 	
+	@Mock
+	private SelectModelCommandFactory commandFactory;
+
+	@Mock
+	private Command closeProjectCommand;
+
+	@Mock
+	private Command createClassCommand;
+
+	@Mock
+	private Command createPackageCommand;	
+	
+	@Mock
+	private Command notEnabledCommand;
+	
+	@Mock
+	private Command foundClassModelCommand;
+
+	@Mock
+	private Command foundPackageModelCommand;
+	
+	private List<Command> allCommands;
+
 	@Before
 	public void before() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		
 		state = new SelectCommand();
+		state.clear();
+		state.setCommandFactory(commandFactory);
+		
+		createMockCommand(closeProjectCommand, "close project", true);
+		createMockCommand(createClassCommand, "create class", true);
+		createMockCommand(createPackageCommand, "create package", true);
+		createMockCommand(notEnabledCommand, "not enabled", false);
+		createMockCommand(foundClassModelCommand, "Class", true);
+		createMockCommand(foundPackageModelCommand, "Class Package", true);
+		
+		state.add(closeProjectCommand);
+		state.add(createClassCommand);
+		state.add(createPackageCommand);
+		state.add(notEnabledCommand);
+		
+		allCommands = new ArrayList<Command>();
+
+		allCommands.add(closeProjectCommand);
+		allCommands.add(createClassCommand);
+		allCommands.add(createPackageCommand);
+		allCommands.add(notEnabledCommand);
+	}
+
+	private Command createMockCommand(Command target, String commandName,
+			boolean enable) {
+		when(target.getName()).thenReturn(commandName);
+		when(target.isEnable()).thenReturn(enable);
+		return target;
 	}
 
 	@Test
@@ -27,7 +83,6 @@ public class SelectCommandTest {
 		state.filter(null);
 		
 		Candidate[] candidates = state.getCandidates();
-		List<Command> allCommands = SelectCommand.getAllCommands();
 		Candidate[] expected = allCommands.toArray(new Candidate[0]);
 		assertThat(candidates,is(expected));
 	}
@@ -37,9 +92,16 @@ public class SelectCommandTest {
 		state.filter("");
 		
 		Candidate[] candidates = state.getCandidates();
-		List<Command> allCommands = SelectCommand.getAllCommands();
-		Candidate[] expected = allCommands.toArray(new Candidate[0]);
-		assertThat(candidates,is(expected));		
+		assertThat(candidates.length,is(4));		
+	}
+	
+	
+	@Test
+	public void filterWithC() throws Exception {
+		state.filter("c");
+		
+		Candidate[] candidates = state.getCandidates();
+		assertThat(candidates.length,is(3));		
 	}
 
 	@Test
@@ -47,10 +109,34 @@ public class SelectCommandTest {
 		state.filter("create");
 		
 		Candidate[] candidates = state.getCandidates();
-		for (Candidate candidate : candidates) {
-			assertThat(candidate,is(instanceOf(Command.class)));
-			String name = candidate.getName();
-			assertThat(name,is(startsWith("create")));
-		}
+		assertThat(candidates.length,is(2));
+	}
+	
+	@Test
+	public void filterWithSpeficiedCommand() throws Exception {
+		state.filter("create class");
+		
+		Candidate[] candidates = state.getCandidates();
+		assertThat(candidates.length,is(1));
+		assertThat(candidates[0].getName(),is("create class"));
+
+		state.filter("create package");
+		
+		candidates = state.getCandidates();
+		assertThat(candidates.length,is(1));
+		assertThat(candidates[0].getName(),is("create package"));
+	}
+	
+	@Test
+	public void filterWithFoundModels() throws Exception {
+		ArrayList<Candidate> created = new ArrayList<Candidate>();
+		created.add(foundClassModelCommand);
+		created.add(foundPackageModelCommand);
+		when(commandFactory.create("Cla")).thenReturn(created);
+		
+		state.filter("Cla");
+		Candidate[] candidates = state.getCandidates();
+		assertThat(candidates.length,is(2));
+		assertThat(candidates[0].getName(),is("Class"));
 	}
 }

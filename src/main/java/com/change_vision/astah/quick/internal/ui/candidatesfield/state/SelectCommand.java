@@ -88,17 +88,18 @@ public class SelectCommand implements CandidateState {
 	}
     
 	@TestForMethod
-	static void add(Command command) {
+	void add(Command command) {
 		allCommands.add(command);
 	}
 
 	@TestForMethod
-	static void clear() {
+	void clear() {
 		allCommands.clear();
 	}
 	
-	static List<Command> getAllCommands(){
-		return allCommands;
+	@TestForMethod
+	void setCommandFactory(SelectModelCommandFactory commandFactory) {
+		this.commandFactory = commandFactory;
 	}
 	
 	@Override
