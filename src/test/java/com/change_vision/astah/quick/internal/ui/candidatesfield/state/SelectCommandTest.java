@@ -80,49 +80,43 @@ public class SelectCommandTest {
 
 	@Test
 	public void filterWithNull() {
-		state.filter(null);
+		Candidate[] candidates = state.filter(null);
 		
-		Candidate[] candidates = state.getCandidates();
 		Candidate[] expected = allCommands.toArray(new Candidate[0]);
 		assertThat(candidates,is(expected));
 	}
 	
 	@Test
 	public void filterWithEmpty() throws Exception {
-		state.filter("");
+		Candidate[] candidates = state.filter("");
 		
-		Candidate[] candidates = state.getCandidates();
 		assertThat(candidates.length,is(4));		
 	}
 	
 	
 	@Test
 	public void filterWithC() throws Exception {
-		state.filter("c");
+		Candidate[] candidates = state.filter("c");
 		
-		Candidate[] candidates = state.getCandidates();
 		assertThat(candidates.length,is(3));		
 	}
 
 	@Test
 	public void filterWithCreate() throws Exception {
-		state.filter("create");
+		Candidate[] candidates = state.filter("create");
 		
-		Candidate[] candidates = state.getCandidates();
 		assertThat(candidates.length,is(2));
 	}
 	
 	@Test
 	public void filterWithSpeficiedCommand() throws Exception {
-		state.filter("create class");
+		Candidate[] candidates = state.filter("create class");
 		
-		Candidate[] candidates = state.getCandidates();
 		assertThat(candidates.length,is(1));
 		assertThat(candidates[0].getName(),is("create class"));
 
-		state.filter("create package");
+		candidates = state.filter("create package");
 		
-		candidates = state.getCandidates();
 		assertThat(candidates.length,is(1));
 		assertThat(candidates[0].getName(),is("create package"));
 	}
@@ -134,8 +128,7 @@ public class SelectCommandTest {
 		created.add(foundPackageModelCommand);
 		when(commandFactory.create("Cla")).thenReturn(created);
 		
-		state.filter("Cla");
-		Candidate[] candidates = state.getCandidates();
+		Candidate[] candidates = state.filter("Cla");
 		assertThat(candidates.length,is(2));
 		assertThat(candidates[0].getName(),is("Class"));
 	}

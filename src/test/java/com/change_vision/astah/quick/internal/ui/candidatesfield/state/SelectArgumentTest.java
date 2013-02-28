@@ -37,8 +37,7 @@ public class SelectArgumentTest {
 	@Test
 	public void filterCommitted() {
 		SelectArgument argument = new SelectArgument(committed);
-		argument.filter("committed command");
-		Candidate[] candidates = argument.getCandidates();
+		Candidate[] candidates = argument.filter("committed command");
 		assertThat(candidates.length,is(1));
 	}
 	

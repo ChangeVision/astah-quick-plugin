@@ -29,20 +29,16 @@ public class SelectCommand implements CandidateState {
 		allCommands.addAll(DiagramCommands.commands());
 	}
 
-	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
-	
 	private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
 	
 	public SelectCommand(){
-		selector.setCandidates(allCommands.toArray(new Candidate[]{}));
 	}
 
 	@Override
-	public void filter(String key) {
+	public Candidate[] filter(String key) {
 		logger.trace("key:{}",key);
 		if (key == null || key.isEmpty()) {
-			selector.setCandidates(allCommands.toArray(new Command[]{}));
-			return;
+			return allCommands.toArray(new Candidate[]{});
 		}
 		List<Candidate> candidates = new ArrayList<Candidate>();
 		for (Command command : allCommands) {
@@ -60,31 +56,11 @@ public class SelectCommand implements CandidateState {
 		if (candidates.size() == 0) {
 			candidates.add(new NullCandidate());
 		}
-		selector.setCandidates(candidates.toArray(new Candidate[]{}));
+		return candidates.toArray(new Candidate[]{});
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
 		return commandName.startsWith(searchKey) || searchKey.startsWith(commandName);
-	}
-	
-	@Override
-	public Candidate[] getCandidates() {
-		return selector.getCandidates();
-	}
-	
-	@Override
-	public void up() {
-		selector.up();
-	}
-
-	@Override
-	public Candidate current() {
-		return selector.current();
-	}
-
-	@Override
-	public void down() {
-		selector.down();
 	}
     
 	@TestForMethod
@@ -100,11 +76,6 @@ public class SelectCommand implements CandidateState {
 	@TestForMethod
 	void setCommandFactory(SelectModelCommandFactory commandFactory) {
 		this.commandFactory = commandFactory;
-	}
-	
-	@Override
-	public Command currentCommand() {
-		return (Command) current();
 	}
 
 }

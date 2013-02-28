@@ -15,7 +15,7 @@ public class CandidatesSelector<T extends Candidate> {
 	private int currentIndex;
 	private T[] candidates;
 	
-	void up() {
+	public void up() {
 		if(candidates.length == 0) return;
 		int oldValue = currentIndex;
 		currentIndex--;
@@ -26,12 +26,12 @@ public class CandidatesSelector<T extends Candidate> {
 	}
 
 	@SuppressWarnings("unchecked")
-	T current() {
+	public T current() {
 		if(candidates.length == 0) return (T) new NullCandidate();
 		return candidates[currentIndex];
 	}
 
-	void down() {
+	public void down() {
 		int oldValue = currentIndex;
 		currentIndex++;
 		if(currentIndex >= candidates.length){
@@ -45,7 +45,7 @@ public class CandidatesSelector<T extends Candidate> {
 		logger.trace("{}: old:'{}' new:'{}'",new Object[]{propertyName,oldValue,newValue});
     }
 
-	void setCandidates(T[] candidates) {
+	public void setCandidates(T[] candidates) {
 		this.candidates = candidates;
 		this.currentIndex = 0;
 	}

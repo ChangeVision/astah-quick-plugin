@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidatesSelector;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArgument;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
@@ -26,6 +27,8 @@ public class Candidates {
 	
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
+
 	public void filter(String key) {
 		if (key == null) throw new IllegalArgumentException("key is null.");
 		logger.trace("key:'{}'",key);
@@ -33,8 +36,8 @@ public class Candidates {
 			SelectCommand newState = new SelectCommand();
 			setState(newState);
 		}
-		state.filter(key);
-		Candidate[] candidates = state.getCandidates();
+		Candidate[] candidates = state.filter(key);
+		selector.setCandidates(candidates);
 		if(isChangedToArgumentState(candidates)){
 			Command committed = (Command)candidates[0];
 			SelectArgument newState = new SelectArgument(committed);
@@ -51,8 +54,12 @@ public class Candidates {
 	}
 
 	private boolean isChangedToCommandState(String searchKey) {
-		return (state instanceof SelectArgument) &&
-		state.currentCommand().getName().length() > searchKey.length();
+		boolean isSelectArgument = state instanceof SelectArgument;
+		if (!isSelectArgument) {
+			return false;
+		}
+		SelectArgument argument = (SelectArgument) state;
+		return argument.currentCommand().getName().length() > searchKey.length();
 	}
 	
 	public void setState(CandidateState newState) {
@@ -66,23 +73,26 @@ public class Candidates {
 	}
 	
 	public Command currentCommand(){
-		return state.currentCommand();
+		if (state instanceof SelectCommand) {
+			return (Command) selector.current();
+		}
+		return ((SelectArgument) state).currentCommand();
 	}
 	
 	public Candidate[] getCandidates() {
-		return state.getCandidates();
+		return selector.getCandidates();
 	}
 
 	public void up() {
-		state.up();
+		selector.up();
 	}
 
 	public Candidate current() {
-		return state.current();
+		return selector.current();
 	}
 
 	public void down() {
-		state.down();
+		selector.down();
 	}
 	
 	public boolean isCommitted() {
