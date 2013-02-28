@@ -16,6 +16,8 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(OpenQuickWindowEventDispatcher.class);
+    
+    private final AstahAPIWrapper wrapper = new AstahAPIWrapper();
 
     private QuickWindow window;
 
@@ -39,7 +41,6 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     }
 
     private void createQuickWindow() {
-        AstahAPIWrapper wrapper = new AstahAPIWrapper();
         JFrame frame = wrapper.getMainFrame();
         window = new QuickWindow(frame);
     }

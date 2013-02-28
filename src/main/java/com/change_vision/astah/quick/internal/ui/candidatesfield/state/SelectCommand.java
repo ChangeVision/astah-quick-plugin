@@ -11,8 +11,8 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.diagram.DiagramCommands;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
+import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
-import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class SelectCommand implements CandidateState {
 
@@ -29,77 +29,53 @@ public class SelectCommand implements CandidateState {
 		allCommands.addAll(DiagramCommands.commands());
 	}
 
-	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
+	private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
 	
 	public SelectCommand(){
-		selector.setCandidates(allCommands.toArray(new Candidate[]{}));
 	}
 
 	@Override
-	public void candidates(String searchKey) {
-		logger.trace("candidates key:{}",searchKey);
-		if (searchKey == null || searchKey.isEmpty()) {
-			selector.setCandidates(allCommands.toArray(new Command[]{}));
-			return;
+	public Candidate[] filter(String key) {
+		logger.trace("key:{}",key);
+		if (key == null || key.isEmpty()) {
+			return allCommands.toArray(new Candidate[]{});
 		}
 		List<Candidate> candidates = new ArrayList<Candidate>();
 		for (Command command : allCommands) {
 			String commandName = command.getName();
 			if (command.isEnable() &&
-				isCandidate(searchKey, commandName)
+				isCandidate(key, commandName)
 					) {
 				candidates.add(command);
 			}
 		}
-		INamedElement[] foundModels = ModelCommands.find(searchKey);
-		for (INamedElement foundModel : foundModels) {
-			Command selectCommand = ModelCommands.createSelectCommand(foundModel);
-			candidates.add(selectCommand);
-		}
+		logger.trace("command candidates:{}",candidates);
+		List<Candidate> selectCommands = commandFactory.create(key);
+		candidates.addAll(selectCommands);
 
 		if (candidates.size() == 0) {
 			candidates.add(new NullCandidate());
 		}
-		selector.setCandidates(candidates.toArray(new Candidate[]{}));
+		return candidates.toArray(new Candidate[]{});
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
 		return commandName.startsWith(searchKey) || searchKey.startsWith(commandName);
 	}
-	
-	@Override
-	public Candidate[] getCandidates() {
-		return selector.getCandidates();
-	}
-	
-	@Override
-	public void up() {
-		selector.up();
-	}
-
-	@Override
-	public Candidate current() {
-		return selector.current();
-	}
-
-	@Override
-	public void down() {
-		selector.down();
-	}
     
 	@TestForMethod
-	static void add(Command command) {
+	void add(Command command) {
 		allCommands.add(command);
 	}
 
 	@TestForMethod
-	static void clear() {
+	void clear() {
 		allCommands.clear();
 	}
 	
-	@Override
-	public Command currentCommand() {
-		return (Command) current();
+	@TestForMethod
+	void setCommandFactory(SelectModelCommandFactory commandFactory) {
+		this.commandFactory = commandFactory;
 	}
 
 }

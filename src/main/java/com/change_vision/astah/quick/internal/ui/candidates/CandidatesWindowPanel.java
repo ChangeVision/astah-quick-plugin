@@ -60,7 +60,7 @@ public class CandidatesWindowPanel extends JPanel {
 	}
 
 	public void updateCandidateText(String commandCandidateText) {
-		candidates.candidates(commandCandidateText);
+		candidates.filter(commandCandidateText);
 		Candidate[] candidatesData = candidates.getCandidates();
 		
 		candidateList.setListData(candidatesData);

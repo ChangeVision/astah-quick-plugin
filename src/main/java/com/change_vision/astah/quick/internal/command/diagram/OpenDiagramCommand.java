@@ -55,8 +55,6 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 		
 	}
 
-	private DiagramCandidate[] candidates;
-
 	@Override
 	public String getName() {
 		return "open diagram";
@@ -79,9 +77,14 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 
 	@Override
 	public void execute(String... args) {
-		DiagramCandidate diagramCandidate = this.candidates[1];
-		IDiagram diagram = diagramCandidate.getDiagram();
-		api.open(diagram );
+		for (String diagramName : args) {
+			IDiagram[] diagrams = api.find(diagramName);
+			if (diagrams != null) {
+				for (IDiagram diagram : diagrams) {
+					api.open(diagram);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -92,42 +95,17 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 	}
 
 	@Override
-	public Candidate[] getCandidates() {
-		if(this.candidates == null) {
-			candidate(getName());
-		}
-		return this.candidates;
-	}
-
-	@Override
-	public void candidate(String searchKey) {
+	public Candidate[] candidate(String searchKey) {
 		logger.trace("searchKey:{}",searchKey);
 		searchKey = searchKey.substring(getName().length()).trim();
-		IDiagram[] found = api.find(searchKey);
-		this.candidates = new DiagramCandidate[found.length + 1];
-		this.candidates[0] = new DiagramCandidate(null) {
-			@Override
-			public String getName() {
-				return OpenDiagramCommand.this.getName();
-			}
-			@Override
-			public CandidateIconDescription getIconDescription() {
-				return OpenDiagramCommand.this.getIconDescription();
-			}
-			@Override
-			public String getDescription() {
-				return OpenDiagramCommand.this.getDescription();
-			}
-		};
+		IDiagram[] found = api.find(searchKey.trim());
+		Candidate[] candidates = new DiagramCandidate[found.length];
+
 		for (int i = 0; i < found.length; i++) {
 			IDiagram diagram = found[i];
-			this.candidates[i + 1] = new DiagramCandidate(diagram);
+			candidates[i] = new DiagramCandidate(diagram);
 		}
-	}
-
-	@Override
-	public void reset() {
-		this.candidates = null;
+		return candidates;
 	}
 
 }

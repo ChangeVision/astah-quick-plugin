@@ -15,50 +15,27 @@ public class SelectArgument implements CandidateState {
     private static final Logger logger = LoggerFactory.getLogger(SelectArgument.class);
 
 	private Command committed;
-	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
 
 	public SelectArgument(Command committed) {
 		this.committed = committed; 
-		candidates(committed.getName());
+		filter(committed.getName());
 	}
 
 	@Override
-	public void candidates(String searchKey) {
+	public Candidate[] filter(String searchKey) {
 		logger.trace("candidates:{}",searchKey);
 		Candidate[] candidates;
 		if (committed instanceof CandidatesProvider) {
 			CandidatesProvider provider = (CandidatesProvider) committed;
-			provider.candidate(searchKey);
-			candidates = provider.getCandidates();
+			candidates = provider.candidate(searchKey);
 		} else {
 			candidates = new Candidate[]{
 					committed
 			};
 		}
-		selector.setCandidates(candidates);
-	}
-	
-	@Override
-	public Candidate[] getCandidates() {
-		return this.selector.getCandidates();
-	}
-	
-	@Override
-	public void up() {
-		selector.up();
+		return candidates;
 	}
 
-	@Override
-	public Candidate current() {
-		return selector.current();
-	}
-
-	@Override
-	public void down() {
-		selector.down();
-	}
-    
-    @Override
     public Command currentCommand() {
     	return committed;
     }

@@ -81,7 +81,8 @@ final class ExecuteCommandAction extends AbstractAction {
 			command.execute(args);
 		} catch (Exception ex) {
 			quickWindow.notifyError("Alert", ex.getMessage());
-		}	}
+		}
+	}
 
 }
 

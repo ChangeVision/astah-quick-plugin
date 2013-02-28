@@ -2,6 +2,8 @@ package com.change_vision.astah.quick.internal.ui.candidatesfield;
 
 import java.awt.Font;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JTextField;
 
@@ -15,7 +17,7 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.Candidate
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
 @SuppressWarnings("serial")
-public final class CandidatesField extends JTextField {
+public final class CandidatesField extends JTextField implements PropertyChangeListener {
 
 	/**
      * Logger for this class
@@ -32,6 +34,7 @@ public final class CandidatesField extends JTextField {
 		setFont(new Font("Dialog", Font.PLAIN, 32));
 		setColumns(16);
 		setEditable(true);
+		candidatesList.getCandidates().addPropertyChangeListener(this);
 		new ExecuteCommandAction(this,this.quickWindow,this.candidatesList);
 		new CommitCommandAction(this,this.candidatesList);
 		new UpCandidatesListAction(this,this.candidatesList);
@@ -47,6 +50,12 @@ public final class CandidatesField extends JTextField {
 			openCandidatesList();
 			break;
 		case Wait:
+			closeCandidatesList();
+			break;
+		case ArgumentInputing:
+			openCandidatesList();
+			break;
+		case ArgumentWait:
 			closeCandidatesList();
 			break;
 		default:
@@ -68,9 +77,16 @@ public final class CandidatesField extends JTextField {
 	private void closeCandidatesList() {
 		logger.trace("closeCandidatesList");
 		Candidates commands = candidatesList.getCandidates();
-		commands.setCandidateState(new SelectCommand());
+		commands.setState(new SelectCommand());
 		setText(null);
 		candidatesList.close();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(Candidates.PROP_STATE)) {
+			evt.getOldValue();
+		}
 	}
 	
 }
