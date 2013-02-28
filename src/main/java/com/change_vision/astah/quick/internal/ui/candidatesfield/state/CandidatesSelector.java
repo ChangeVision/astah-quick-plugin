@@ -13,7 +13,8 @@ public class CandidatesSelector<T extends Candidate> {
     private static final Logger logger = LoggerFactory.getLogger(CandidatesSelector.class);
 	
 	private int currentIndex;
-	private T[] candidates;
+	@SuppressWarnings("unchecked")
+	private T[] candidates = (T[]) new Candidate[]{};
 	
 	public void up() {
 		if(candidates.length == 0) return;
