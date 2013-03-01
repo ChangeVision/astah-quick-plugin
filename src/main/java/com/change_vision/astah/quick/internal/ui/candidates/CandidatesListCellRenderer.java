@@ -58,10 +58,12 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
 		title.setFont(new Font("Dialog", Font.PLAIN, 20));
 		title.setComponentOrientation(list.getComponentOrientation());
 		CandidateIconDescription iconDescription = candidate.getIconDescription();
-		Icon icon = iconDescription.getIcon();
-		if(icon != null){
-			title.setIcon(icon);
-		}
+		if (iconDescription != null) {
+		    Icon icon = iconDescription.getIcon();
+		    if(icon != null){
+		        title.setIcon(icon);
+		    }
+        }
 		return title;
 	}
 }

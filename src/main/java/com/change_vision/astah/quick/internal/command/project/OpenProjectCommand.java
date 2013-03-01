@@ -6,11 +6,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 
-import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.CandidatesProvider;
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class OpenProjectCommand implements Command{
+public class OpenProjectCommand implements Command , CandidatesProvider{
 	
 	private final class AstahFileFilter extends FileFilter {
 		@Override
@@ -36,7 +40,11 @@ public class OpenProjectCommand implements Command{
 
 	@Override
 	public void execute(String... args) {
-		JFrame mainFrame = api.getMainFrame();
+		openProjectByFileChooser();
+	}
+
+    protected void openProjectByFileChooser() {
+        JFrame mainFrame = api.getMainFrame();
 
 		JFileChooser filechooser = new JFileChooser();
 		filechooser.setAcceptAllFileFilterUsed(false);
@@ -46,7 +54,7 @@ public class OpenProjectCommand implements Command{
 			File file = filechooser.getSelectedFile();
 			api.openProject(file);
 		}
-	}
+    }
 
 	@Override
 	public String getDescription() {
@@ -62,4 +70,54 @@ public class OpenProjectCommand implements Command{
 	public CandidateIconDescription getIconDescription() {
 		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png");
 	}
+
+    @Override
+    public Candidate[] candidate(String searchKey) {
+        File[] recentFiles = api.getRecentFiles();
+        Candidate[] candidates = new Candidate[recentFiles.length + 1];
+        candidates[0] = new Candidate() {
+            
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+            
+            @Override
+            public String getName() {
+                return "Open file chooser";
+            }
+            
+            @Override
+            public CandidateIconDescription getIconDescription() {
+                return new AstahCommandIconDescription(IconDescription.PROJECT);
+            }
+            
+            @Override
+            public String getDescription() {
+                return "specified by file chooser";
+            }
+        };
+        for (int i = 0; i < recentFiles.length; i++) {
+            File file = recentFiles[i];
+            candidates[i + 1] = new FileCandidate(file);
+        }
+        return candidates;
+    }
+
+    @Override
+    public void execute(Candidate candidate) {
+        if (candidate == null) {
+            openProjectByFileChooser();
+            return;
+        }
+        if (candidate instanceof FileCandidate) {
+            FileCandidate fileCandidate = (FileCandidate) candidate;
+            File file = fileCandidate.getFile();
+            if (file != null) {
+                api.openProject(file);
+                return;
+            }
+        }
+        openProjectByFileChooser();
+    }
 }
