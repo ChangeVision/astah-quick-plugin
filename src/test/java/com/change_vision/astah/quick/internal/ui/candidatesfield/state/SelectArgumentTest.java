@@ -45,7 +45,7 @@ public class SelectArgumentTest {
 	public void filterProviderCommand() throws Exception {
 		SelectArgument argument = new SelectArgument(providerCommand);
 		argument.filter("provider command hoge");		
-		verify(providerCommand).candidate("provider command hoge");
+		verify(providerCommand).candidate("hoge");
 	}
 
 }
