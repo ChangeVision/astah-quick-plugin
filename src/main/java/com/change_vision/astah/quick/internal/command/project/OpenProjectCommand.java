@@ -54,7 +54,7 @@ public class OpenProjectCommand implements Command{
 	}
 	
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return true;
 	}
 	

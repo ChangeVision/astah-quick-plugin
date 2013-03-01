@@ -25,7 +25,7 @@ public class CloseProjectCommand implements Command{
 	}
 	
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return api.isOpenedProject();
 	}
 	

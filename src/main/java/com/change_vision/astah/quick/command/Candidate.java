@@ -6,7 +6,7 @@ public interface Candidate {
 	
 	public abstract String getDescription();
 	
-	public abstract boolean isEnable();
+	public abstract boolean isEnabled();
 	
 	public abstract CandidateIconDescription getIconDescription();
 

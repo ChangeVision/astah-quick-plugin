@@ -19,7 +19,7 @@ public class CloseCurrentDiagramCommand implements Command{
     }
 
     @Override
-    public boolean isEnable() {
+    public boolean isEnabled() {
         return api.isOpenedProject() && api.isOpenDiagrams();
     }
 

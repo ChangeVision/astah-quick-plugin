@@ -43,7 +43,7 @@ public class SelectCommand implements CandidateState {
 		List<Candidate> candidates = new ArrayList<Candidate>();
 		for (Command command : allCommands) {
 			String commandName = command.getName();
-			if (command.isEnable() &&
+			if (command.isEnabled() &&
 				isCandidate(key, commandName)
 					) {
 				candidates.add(command);

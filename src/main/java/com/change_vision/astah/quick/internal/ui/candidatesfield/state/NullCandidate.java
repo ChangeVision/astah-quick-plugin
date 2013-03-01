@@ -17,7 +17,7 @@ public class NullCandidate implements Candidate {
 	}
 
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return true;
 	}
 

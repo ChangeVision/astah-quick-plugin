@@ -74,7 +74,7 @@ public class SelectCommandTest {
 	private Command createMockCommand(Command target, String commandName,
 			boolean enable) {
 		when(target.getName()).thenReturn(commandName);
-		when(target.isEnable()).thenReturn(enable);
+		when(target.isEnabled()).thenReturn(enable);
 		return target;
 	}
 

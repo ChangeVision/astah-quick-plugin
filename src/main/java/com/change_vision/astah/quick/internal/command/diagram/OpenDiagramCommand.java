@@ -40,7 +40,7 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 		}
 
 		@Override
-		public boolean isEnable() {
+		public boolean isEnabled() {
 			return true;
 		}
 
@@ -66,7 +66,7 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 	}
 
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return api.isOpenedProject();
 	}
 

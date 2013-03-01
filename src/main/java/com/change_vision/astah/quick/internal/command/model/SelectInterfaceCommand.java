@@ -34,7 +34,7 @@ public class SelectInterfaceCommand implements Command {
 	}
 
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return true;
 	}
 	
