@@ -1,6 +1,7 @@
 package com.change_vision.astah.quick.internal.command.diagram;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -32,6 +33,8 @@ public class DiagramAPITest {
 
     @Mock
     private ProjectAccessor projectAccessor;
+
+    private IDiagram[] diagrams;
     
     @Before
     public void before() throws Exception {
@@ -39,6 +42,7 @@ public class DiagramAPITest {
         api = new DiagramAPI(wrapper);
         when(wrapper.getDiagramViewManager()).thenReturn(diagramViewManager);
         when(wrapper.getProjectAccessor()).thenReturn(projectAccessor);
+        diagrams = new IDiagram[]{diagram};
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -59,9 +63,9 @@ public class DiagramAPITest {
     
     @Test
     public void findWithName() throws Exception {
-        when(projectAccessor.findElements((ModelFinder)any())).thenReturn(new IDiagram[]{diagram});
-        IDiagram[] diagrams = api.find("Class");
-        assertThat(diagrams.length,is(1));
+        when(projectAccessor.findElements((ModelFinder)any())).thenReturn(diagrams);
+        IDiagram[] foundDiagrams = api.find("Class");
+        assertThat(foundDiagrams.length,is(1));
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -87,6 +91,20 @@ public class DiagramAPITest {
         assertThat(api.isOpenDiagrams(),is(false));
         when(diagramViewManager.getCurrentDiagram()).thenReturn(diagram);
         assertThat(api.isOpenDiagrams(),is(true));
+    }
+    
+    @Test
+    public void openDiagrams() throws Exception {
+        when(diagramViewManager.getOpenDiagrams()).thenReturn(diagrams);
+        IDiagram[] actual = api.openDiagrams();
+        assertThat(actual.length,is(1));
+    }
+    
+    @Test
+    public void getCurrentDiagram() throws Exception {
+        when(diagramViewManager.getCurrentDiagram()).thenReturn(diagram);
+        IDiagram diagram = api.getCurrentDiagram();
+        assertThat(diagram,is(notNullValue()));
     }
 
 }

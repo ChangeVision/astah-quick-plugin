@@ -11,7 +11,7 @@ public class DiagramCommands {
 	
 	static {
 		commands.add(new OpenDiagramCommand());
-        commands.add(new CloseCurrentDiagramCommand());
+        commands.add(new CloseDiagramCommand());
 	}
 	
 	public static List<Command> commands(){

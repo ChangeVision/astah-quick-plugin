@@ -7,10 +7,8 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
-import com.change_vision.jude.api.inf.view.IconDescription;
 
 public class OpenDiagramCommand implements Command, CandidatesProvider {
 
@@ -21,40 +19,6 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 
 	private static final DiagramAPI api = new DiagramAPI();
 	
-	private class DiagramCandidate implements Candidate{
-		
-		private IDiagram diagram;
-
-		private DiagramCandidate(IDiagram diagram){
-			this.diagram = diagram;
-		}
-
-		@Override
-		public String getName() {
-			return diagram.getName();
-		}
-
-		@Override
-		public String getDescription() {
-			return diagram.getFullName(".");
-		}
-
-		@Override
-		public boolean isEnabled() {
-			return true;
-		}
-
-		@Override
-		public CandidateIconDescription getIconDescription() {
-			return new AstahCommandIconDescription(IconDescription.UML_DGM_CLASS);
-		}
-
-		public IDiagram getDiagram() {
-			return this.diagram;
-		}
-		
-	}
-
 	@Override
 	public String getName() {
 		return "open diagram";
