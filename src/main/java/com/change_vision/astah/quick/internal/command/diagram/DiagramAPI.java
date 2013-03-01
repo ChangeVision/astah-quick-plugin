@@ -73,9 +73,22 @@ class DiagramAPI {
 		return wrapper.isOpenedProject();
 	}
 
-    public void close(IDiagram diagram) {
+    void close(IDiagram diagram) {
         if (diagram == null) throw new IllegalArgumentException("diagram is null");
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         diagramViewManager.close(diagram);
+    }
+    
+    
+
+    boolean isOpenDiagrams() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        IDiagram currentDiagram = diagramViewManager.getCurrentDiagram();
+        return currentDiagram != null;
+    }
+
+    void closeCurrentDiagram() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        diagramViewManager.closeCurrentDiagramEditor();
     }
 }

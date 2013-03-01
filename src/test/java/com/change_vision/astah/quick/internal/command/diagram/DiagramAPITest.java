@@ -74,5 +74,19 @@ public class DiagramAPITest {
         api.close(diagram);
         verify(diagramViewManager).close(diagram);
     }
+    
+    @Test
+    public void closeCurrentDiagram() throws Exception {
+        api.closeCurrentDiagram();
+        verify(diagramViewManager).closeCurrentDiagramEditor();
+    }
+    
+    @Test
+    public void isOpenDiagrams() throws Exception {
+        when(diagramViewManager.getCurrentDiagram()).thenReturn(null);
+        assertThat(api.isOpenDiagrams(),is(false));
+        when(diagramViewManager.getCurrentDiagram()).thenReturn(diagram);
+        assertThat(api.isOpenDiagrams(),is(true));
+    }
 
 }
