@@ -18,95 +18,114 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArg
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
 public class CandidatesTest {
-	
-	private Candidates candidates;
 
-	@Mock
+    private Candidates candidates;
+
+    @Mock
     private SelectCommandFactory commandFactory;
-    
+
     @Mock
     private Command one;
-    
+
     @Mock
     private Command two;
-    
 
-	@Before
-	public void before() throws Exception {
-	    MockitoAnnotations.initMocks(this);
-	    
-	    SelectCommand commandState = new SelectCommand();
-	    commandState.clear();
+    @Before
+    public void before() throws Exception {
+        MockitoAnnotations.initMocks(this);
+
+        SelectCommand commandState = new SelectCommand();
+        commandState.clear();
         when(commandFactory.create()).thenReturn(commandState);
-	    
-	    when(one.getName()).thenReturn("new project");
-	    when(one.isEnabled()).thenReturn(true);
+
+        when(one.getName()).thenReturn("new project");
+        when(one.isEnabled()).thenReturn(true);
         when(two.getName()).thenReturn("new diagram");
         when(two.isEnabled()).thenReturn(true);
         commandState.add(one);
         commandState.add(two);
-        
-	    candidates = new Candidates();
-		candidates.setCommandFactory(commandFactory);
-	}
 
-	@Test
-	public void initStateIsSelectCommand() {
-		CandidateState state = candidates.getState();
-		assertThat(state,is(instanceOf(SelectCommand.class)));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void filterWithNull() throws Exception {
-		candidates.filter(null);
-	}
-	
-	@Test
+        candidates = new Candidates();
+        candidates.setCommandFactory(commandFactory);
+    }
+
+    @Test
+    public void initStateIsSelectCommand() {
+        CandidateState state = candidates.getState();
+        assertThat(state, is(instanceOf(SelectCommand.class)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void filterWithNull() throws Exception {
+        candidates.filter(null);
+    }
+
+    @Test
     public void filterWithEmpty() throws Exception {
         candidates.filter("");
         Candidate[] actual = candidates.getCandidates();
         System.out.println(actual.length);
         CandidateState next = candidates.getState();
-        assertThat(next,is(instanceOf(SelectCommand.class)));
+        assertThat(next, is(instanceOf(SelectCommand.class)));
     }
-	
-	@Test
+
+    @Test
     public void filterWithFoundSomeCommand() throws Exception {
         candidates.filter("new");
         Candidate[] actual = candidates.getCandidates();
-        assertThat(actual.length,is(2));
+        assertThat(actual.length, is(2));
         CandidateState next = candidates.getState();
-        assertThat(next,is(instanceOf(SelectCommand.class)));
+        assertThat(next, is(instanceOf(SelectCommand.class)));
     }
-	
-	@Test
+
+    @Test
     public void filterWitnFoundOnlyOneCommand() throws Exception {
         candidates.filter("new project");
         Candidate[] actual = candidates.getCandidates();
-        assertThat(actual.length,is(1));
+        assertThat(actual.length, is(1));
         CandidateState next = candidates.getState();
-        assertThat(next,is(instanceOf(SelectArgument.class)));
+        assertThat(next, is(instanceOf(SelectArgument.class)));
     }
-	
-	@Test
+
+    @Test
     public void changeStateWhenRemoveTheNameString() throws Exception {
         candidates.filter("new project");
         candidates.filter("new");
         Candidate[] actual = candidates.getCandidates();
+        assertThat(actual.length, is(2));
+        CandidateState next = candidates.getState();
+        assertThat(next, is(instanceOf(SelectCommand.class)));
+    }
+
+    @Test
+    public void changeStateWhenResetTargetCommandName() throws Exception {
+        candidates.filter("new project");
+        candidates.filter("new");
+        candidates.filter("new diagram");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual.length, is(1));
+        CandidateState next = candidates.getState();
+        assertThat(next, is(instanceOf(SelectArgument.class)));
+    }
+
+    @Test
+    public void changeStateWhenPasteIncludeSpaceNameString() throws Exception {
+        candidates.filter("new project");
+        candidates.filter("new           ");
+        Candidate[] actual = candidates.getCandidates();
         assertThat(actual.length,is(2));
         CandidateState next = candidates.getState();
         assertThat(next,is(instanceOf(SelectCommand.class)));
     }
-	
-	   @Test
-	    public void changeStateWhenResetTargetCommandName() throws Exception {
-	        candidates.filter("new project");
-	        candidates.filter("new");
-            candidates.filter("new diagram");
-	        Candidate[] actual = candidates.getCandidates();
-	        assertThat(actual.length,is(1));
-	        CandidateState next = candidates.getState();
-	        assertThat(next,is(instanceOf(SelectArgument.class)));
-	    }
+    
 
+    @Test
+    public void changeStateWhenPasteIncludeTabNameString() throws Exception {
+        candidates.filter("new project");
+        candidates.filter("new\t\t\t");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual.length,is(2));
+        CandidateState next = candidates.getState();
+        assertThat(next,is(instanceOf(SelectCommand.class)));
+    }
 }

@@ -41,12 +41,13 @@ public class Candidates {
 
 	public void filter(String key) {
 		if (key == null) throw new IllegalArgumentException("key is null.");
-		logger.trace("key:'{}'",key);
-		if(isChangedToCommandState(key)){
+		String searchKey = key.trim();
+		logger.trace("key:'{}'",searchKey);
+		if(isChangedToCommandState(searchKey)){
 			SelectCommand newState = commandFactory.create();
 			setState(newState);
 		}
-		Candidate[] candidates = state.filter(key);
+		Candidate[] candidates = state.filter(searchKey);
 		logger.trace("candidates:'{}'",candidates);
 		selector.setCandidates(candidates);
 		if(isChangedToArgumentState(candidates)){
@@ -70,7 +71,9 @@ public class Candidates {
 			return false;
 		}
 		SelectArgument argument = (SelectArgument) state;
-		return argument.currentCommand().getName().length() > searchKey.length();
+		Command currentCommand = argument.currentCommand();
+        String commandName = currentCommand.getName();
+        return commandName.length() > searchKey.length();
 	}
 	
 	public void setState(CandidateState newState) {
