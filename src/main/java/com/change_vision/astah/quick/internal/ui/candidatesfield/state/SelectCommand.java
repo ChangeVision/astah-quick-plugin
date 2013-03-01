@@ -58,7 +58,7 @@ public class SelectCommand implements CandidateState {
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
-		return commandName.startsWith(searchKey) || (searchKey.length() > commandName.length() && searchKey.startsWith(commandName));
+		return commandName.startsWith(searchKey);
 	}
     
 	@TestForMethod

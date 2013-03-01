@@ -99,7 +99,6 @@ public class SelectCommandTest {
 		assertThat(candidates.length,is(4));		
 	}
 	
-	
 	@Test
 	public void filterWithC() throws Exception {
 		Candidate[] candidates = state.filter("c");
