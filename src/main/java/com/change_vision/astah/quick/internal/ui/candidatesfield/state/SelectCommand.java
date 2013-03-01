@@ -21,17 +21,15 @@ public class SelectCommand implements CandidateState {
      */
     private static final Logger logger = LoggerFactory.getLogger(SelectCommand.class);
 
-	private static final List<Command> allCommands = new ArrayList<Command>();
+	private final List<Command> allCommands = new ArrayList<Command>();
 	
 	static{
-		allCommands.addAll(ModelCommands.commands());
-		allCommands.addAll(ProjectCommands.commands());
-		allCommands.addAll(DiagramCommands.commands());
 	}
 
 	private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
 	
 	public SelectCommand(){
+        initCommands();
 	}
 
 	@Override
@@ -60,20 +58,27 @@ public class SelectCommand implements CandidateState {
 	}
 
 	private boolean isCandidate(String searchKey, String commandName) {
-		return commandName.startsWith(searchKey) || searchKey.startsWith(commandName);
+		return commandName.startsWith(searchKey) || (searchKey.length() > commandName.length() && searchKey.startsWith(commandName));
 	}
     
 	@TestForMethod
-	void add(Command command) {
+	public void add(Command command) {
 		allCommands.add(command);
 	}
 
 	@TestForMethod
-	void clear() {
+	public void clear() {
 		allCommands.clear();
 	}
 	
 	@TestForMethod
+	public void initCommands() {
+        allCommands.addAll(ModelCommands.commands());
+    	allCommands.addAll(ProjectCommands.commands());
+    	allCommands.addAll(DiagramCommands.commands());
+    }
+
+    @TestForMethod
 	void setCommandFactory(SelectModelCommandFactory commandFactory) {
 		this.commandFactory = commandFactory;
 	}

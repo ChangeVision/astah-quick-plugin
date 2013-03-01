@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -70,6 +71,11 @@ public class SelectCommandTest {
 		allCommands.add(createPackageCommand);
 		allCommands.add(notEnabledCommand);
 	}
+	
+	@After
+    public void after() throws Exception {
+        state.initCommands();
+    }
 
 	private Command createMockCommand(Command target, String commandName,
 			boolean enable) {
