@@ -24,6 +24,7 @@ public class QuickPanel extends JPanel {
 
     private CandidatesField candidatesField;
     private JButton closeButton;
+    private HelpField helpField;
 
     public QuickPanel(QuickWindow quickWindow,CandidatesListWindow candidatesList) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
@@ -43,6 +44,8 @@ public class QuickPanel extends JPanel {
         add(candidatesField, "cell 1 0,growx");
         closeButton = new JButton();
         add(closeButton, "cell 2 0");
+        helpField = new HelpField();
+        add(helpField, "cell 1 1,growx");
     }
     
     public void setCloseAction(Action action){
