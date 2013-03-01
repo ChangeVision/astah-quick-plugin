@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
-import com.change_vision.jude.api.inf.model.IPackage;
 
 public class ModelCommands {
 
@@ -28,20 +26,5 @@ public class ModelCommands {
 		return api.find(searchKey);
 	}
 
-	public static Command createSelectCommand(INamedElement foundModel) {
-		if (foundModel instanceof IClass) {
-			IClass classModel = (IClass)foundModel;
-			boolean isInterface = classModel.hasStereotype("interface");
-			if (isInterface) {
-				return new SelectInterfaceCommand(classModel);
-			}
-			return new SelectClassCommand(classModel);
-		}
-		if (foundModel instanceof IPackage) {
-			IPackage packageModel = (IPackage)foundModel;
-			return new SelectPackageCommand(packageModel);
-		}
-		return new SelectModelCommand(foundModel);
-	}
 }
 
