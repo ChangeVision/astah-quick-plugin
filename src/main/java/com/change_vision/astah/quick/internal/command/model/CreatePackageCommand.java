@@ -34,7 +34,7 @@ public class CreatePackageCommand implements Command{
 	}
 	
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return api.isOpenedProject();
 	}
 	

@@ -8,13 +8,20 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidatesSelector;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArgument;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
 
 public class Candidates {
+    
+    class SelectCommandFactory {
+        SelectCommand create(){
+            return new SelectCommand();
+        }
+    }
 
 	public static final String PROP_STATE = "state";
 
@@ -23,20 +30,25 @@ public class Candidates {
      */
     private static final Logger logger = LoggerFactory.getLogger(Candidates.class);
 
-	private CandidateState state = new SelectCommand();
+    private SelectCommandFactory commandFactory = new SelectCommandFactory();
+
+    private CandidateState state = commandFactory.create();
 	
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
+	
 
 	public void filter(String key) {
 		if (key == null) throw new IllegalArgumentException("key is null.");
-		logger.trace("key:'{}'",key);
-		if(isChangedToCommandState(key)){
-			SelectCommand newState = new SelectCommand();
+		String searchKey = key.trim();
+		logger.trace("key:'{}'",searchKey);
+		if(isChangedToCommandState(searchKey)){
+			SelectCommand newState = commandFactory.create();
 			setState(newState);
 		}
-		Candidate[] candidates = state.filter(key);
+		Candidate[] candidates = state.filter(searchKey);
+		logger.trace("candidates:'{}'",candidates);
 		selector.setCandidates(candidates);
 		if(isChangedToArgumentState(candidates)){
 			Command committed = (Command)candidates[0];
@@ -59,7 +71,9 @@ public class Candidates {
 			return false;
 		}
 		SelectArgument argument = (SelectArgument) state;
-		return argument.currentCommand().getName().length() > searchKey.length();
+		Command currentCommand = argument.currentCommand();
+        String commandName = currentCommand.getName();
+        return commandName.length() > searchKey.length();
 	}
 	
 	public void setState(CandidateState newState) {
@@ -110,5 +124,11 @@ public class Candidates {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		support.removePropertyChangeListener(listener);
 	}
+	
+	@TestForMethod
+	void setCommandFactory(SelectCommandFactory commandFactory) {
+        this.commandFactory = commandFactory;
+        this.state = commandFactory.create();
+    }
 
 }

@@ -40,7 +40,7 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 		}
 
 		@Override
-		public boolean isEnable() {
+		public boolean isEnabled() {
 			return true;
 		}
 
@@ -66,7 +66,7 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 	}
 
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return api.isOpenedProject();
 	}
 
@@ -97,8 +97,7 @@ public class OpenDiagramCommand implements Command, CandidatesProvider {
 	@Override
 	public Candidate[] candidate(String searchKey) {
 		logger.trace("searchKey:{}",searchKey);
-		searchKey = searchKey.substring(getName().length()).trim();
-		IDiagram[] found = api.find(searchKey.trim());
+		IDiagram[] found = api.find(searchKey);
 		Candidate[] candidates = new DiagramCandidate[found.length];
 
 		for (int i = 0; i < found.length; i++) {
