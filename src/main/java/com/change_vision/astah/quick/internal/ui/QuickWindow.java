@@ -1,8 +1,8 @@
 package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import javax.swing.InputMap;
@@ -36,10 +36,6 @@ public class QuickWindow extends JWindow {
         add(quickPanel);
         setAlwaysOnTop(true);
         pack();
-        Point centerPoint = (Point )GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint().clone();
-        Dimension size = getSize();
-        centerPoint.translate( - size.width / 2,  - size.height / 2);
-        setLocation(centerPoint);
     }
     
     public void notifyError(String title,String message){
@@ -53,6 +49,12 @@ public class QuickWindow extends JWindow {
     }
 
     public void open() {
+        Rectangle parentBounds = getParent().getBounds();
+		Point centerPoint = new Point();
+		centerPoint.setLocation(parentBounds.getCenterX(), parentBounds.getCenterY());
+        Dimension size = getSize();
+        centerPoint.translate( - size.width / 2,  - size.height / 2);
+        setLocation(centerPoint);
         setVisible(true);
 		candidatesList.setPanelSize(getSize());
     }
