@@ -51,7 +51,7 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 	}
 	
 	@Override
-	public void execute(Candidate... candidates) {
+	public void execute(Candidate[] candidates) {
 	    for (Candidate candidate : candidates) {
 	        DiagramCandidate diagramCandidate = (DiagramCandidate)candidate;
 	        IDiagram diagram = diagramCandidate.getDiagram();

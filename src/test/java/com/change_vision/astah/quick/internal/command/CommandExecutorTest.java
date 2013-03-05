@@ -3,6 +3,7 @@ package com.change_vision.astah.quick.internal.command;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +11,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 
 public class CommandExecutorTest {
+
+    private static final String COMMAND_SEPARATOR = " ";
+
+    private static final String CANDIDATE_ONE_NAME = "one";
+
+    private static final String CANDIDATE_TWO_NAME = "two";
+
+    private static final String COMMAND_NAME = "create command";
 
     private CommandExecutor executor;
 
@@ -23,6 +33,9 @@ public class CommandExecutorTest {
     
     @Mock
     private CandidateSupportCommand candidateCommand;
+
+    @Mock
+    private CandidateAndArgumentSupportCommand candidateAndArgumentCommand;
 
     @Mock
     private Candidate one;
@@ -34,6 +47,11 @@ public class CommandExecutorTest {
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
         executor = new CommandExecutor();
+        when(command.getName()).thenReturn(COMMAND_NAME);
+        when(candidateCommand.getName()).thenReturn(COMMAND_NAME);
+        when(candidateAndArgumentCommand.getName()).thenReturn(COMMAND_NAME);
+        when(one.getName()).thenReturn(CANDIDATE_ONE_NAME);
+        when(two.getName()).thenReturn(CANDIDATE_TWO_NAME);
     }
     
     @Test
@@ -46,7 +64,7 @@ public class CommandExecutorTest {
     
     @Test(expected=UncommitedCommandExcepition.class)
     public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition {
-        executor.execute();
+        executor.execute("");
     }
 
     @Test
@@ -63,25 +81,40 @@ public class CommandExecutorTest {
     @Test
     public void callExecuteWhenArgumentIsNull() throws Exception {
         executor.commit(command);
-        executor.execute();
-        verify(command).execute();
+        executor.execute(COMMAND_NAME);
+        verify(command).execute(new String[]{});
+    }
+    
+    @Test
+    public void callExecuteWhenArgumentIsString() throws Exception {
+        executor.commit(command);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
+        verify(command).execute("hoge");
     }
     
     @Test
     public void callExecuteWhenAnArgumentIsSet() throws Exception {
         executor.commit(candidateCommand);
         executor.add(one);
-        executor.execute();
-        verify(candidateCommand).execute(one);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME);
+        verify(candidateCommand).execute(new Candidate[]{one});
     }
-    
+
+    @Test
+    public void callExecuteWhenAnArgumentAndStringIsSet() throws Exception {
+        executor.commit(candidateAndArgumentCommand);
+        executor.add(one);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME + COMMAND_SEPARATOR + "hoge");
+        verify(candidateAndArgumentCommand).execute(new Candidate[]{one}, new String[]{"hoge"});
+    }
+
     @Test
     public void callExecuteWhenSomergumentIsSet() throws Exception {
         executor.commit(candidateCommand);
         executor.add(one);
         executor.add(two);
-        executor.execute();
-        verify(candidateCommand).execute(one,two);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME + COMMAND_SEPARATOR + CANDIDATE_TWO_NAME);
+        verify(candidateCommand).execute(new Candidate[]{one,two});
     }
     
     @Test

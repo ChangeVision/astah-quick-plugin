@@ -58,9 +58,10 @@ final class ExecuteCommandAction extends AbstractAction {
         quickWindow.close();
         if (command instanceof CandidateSupportCommand) {
             if (command.getClass().isInstance(candidate)) {
-                candidate = null;
+                ((CandidateSupportCommand) command).execute();
+                return;
             }
-            ((CandidateSupportCommand) command).execute(candidate);
+            ((CandidateSupportCommand) command).execute(new Candidate[]{candidate});
             return;
         }
         if (fieldText.startsWith(commandName) != false

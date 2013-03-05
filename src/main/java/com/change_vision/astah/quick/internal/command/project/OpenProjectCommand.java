@@ -104,7 +104,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
     }
 
     @Override
-    public void execute(Candidate... candidates) {
+    public void execute(Candidate[] candidates) {
         if (candidates == null) {
             openProjectByFileChooser();
             return;
