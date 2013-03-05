@@ -8,8 +8,10 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
+import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 final class CommitCommandAction extends AbstractAction {
@@ -30,15 +32,29 @@ final class CommitCommandAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Candidates commands = commandList.getCandidates();
-        Command current = commands.currentCommand();
-        String commandName = current.getName();
-        if (commands.isCommitted()) {
-            setCommandNameToFieldOrMoveEndPosition(commandName);
+        commitCandidate();
+    }
+
+    private void commitCandidate() {
+        Candidates candidates = commandList.getCandidates();
+        Candidate candidate = candidates.current();
+        CommandExecutor executor = this.field.getExecutor();
+        if (executor.isCommited()) {
+            executor.add(candidate);
+            postCommit(candidate);
             return;
         }
-        field.setText(commandName);
-        commandList.setCandidateText(commandName);
+        if (candidate instanceof Command) {
+            Command command = (Command) candidate;
+            executor.commit(command);
+            postCommit(candidate);
+        }
+    }
+
+    private void postCommit(Candidate candidate) {
+        String candidateName = candidate.getName();
+        field.setText(candidateName);
+        commandList.setCandidateText(candidateName);
     }
 
     protected void setCommandNameToFieldOrMoveEndPosition(String commandName) {
@@ -50,5 +66,4 @@ final class CommitCommandAction extends AbstractAction {
             this.field.setText(commandName);
         }
     }
-
 }

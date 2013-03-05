@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -28,6 +29,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
 	private final QuickWindow quickWindow;
 	
+    private final CommandExecutor executor;
+	
 	public CandidatesField(QuickWindow quickWindow, CandidatesListWindow candidatesList) {
 		this.quickWindow = quickWindow;
 		this.candidatesList = candidatesList;
@@ -35,7 +38,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 		setColumns(16);
 		setEditable(true);
 		candidatesList.getCandidates().addPropertyChangeListener(this);
-		new ExecuteCommandAction(this,this.quickWindow,this.candidatesList);
+        this.executor = new CommandExecutor();
+		new CommitOrExecuteCommandAction(this,this.quickWindow,this.candidatesList);
 		new CommitCommandAction(this,this.candidatesList);
 		new UpCandidatesListAction(this,this.candidatesList);
 		new DownCandidatesListAction(this,this.candidatesList);
@@ -88,5 +92,9 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 			evt.getOldValue();
 		}
 	}
+
+    public CommandExecutor getExecutor() {
+        return this.executor;
+    }
 	
 }

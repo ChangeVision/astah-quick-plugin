@@ -33,6 +33,10 @@ public class CommandExecutor {
         this.candidates.add(candidate);
     }
 
+    public boolean remove(Candidate candidate) {
+        return candidates.remove(candidate);
+    }
+
     public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
@@ -95,10 +99,6 @@ public class CommandExecutor {
 
     private boolean isUncommited() {
         return command == null;
-    }
-
-    public boolean remove(Candidate candidate) {
-        return candidates.remove(candidate);
     }
 
 }

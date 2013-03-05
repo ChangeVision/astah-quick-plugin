@@ -17,11 +17,11 @@ import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
     
-    private QuickPanel quickPanel;
-    private MessageNotifier notifier;
-    private CandidatesListWindow candidatesList;
-	private Candidates commands;
-
+    private final QuickPanel quickPanel;
+    private final MessageNotifier notifier;
+    private final CandidatesListWindow candidatesList;
+	private final Candidates candidates;
+    
     public QuickWindow(JFrame parent){
         super(parent);
         this.notifier = new MessageNotifier(parent);
@@ -29,10 +29,10 @@ public class QuickWindow extends JWindow {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        this.commands = new Candidates();
-        this.candidatesList = new CandidatesListWindow(commands);
-        quickPanel = new QuickPanel(this,this.candidatesList);
-        quickPanel.setCloseAction(closeAction);
+        this.candidates = new Candidates();
+        this.candidatesList = new CandidatesListWindow(candidates);
+        this.quickPanel = new QuickPanel(this,this.candidatesList);
+        this.quickPanel.setCloseAction(closeAction);
         add(quickPanel);
         setAlwaysOnTop(true);
         pack();
