@@ -14,6 +14,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 
 public class CommandExecutorTest {
@@ -63,7 +64,7 @@ public class CommandExecutorTest {
     }
     
     @Test(expected=UncommitedCommandExcepition.class)
-    public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition {
+    public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition, ExecuteCommandException {
         executor.execute("");
     }
 

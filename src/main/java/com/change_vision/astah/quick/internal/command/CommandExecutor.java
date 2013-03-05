@@ -8,6 +8,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 
 public class CommandExecutor {
@@ -32,9 +33,14 @@ public class CommandExecutor {
         this.candidates.add(candidate);
     }
 
-    public void execute(String candidateText) throws UncommitedCommandExcepition{
+    public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
+        doExcecute(candidateText);
+        command = null;
+    }
+
+    private void doExcecute(String candidateText) throws ExecuteCommandException {
         if (candidates.isEmpty()) {
             executeByArguments(candidateText);
             return;
@@ -49,14 +55,14 @@ public class CommandExecutor {
         }
     }
 
-    private void executreByCandidates() {
+    private void executreByCandidates() throws ExecuteCommandException {
         Candidate[] arguments = candidates.toArray(new Candidate[]{});
 
         CandidateSupportCommand candidateCommand = (CandidateSupportCommand) command;
         candidateCommand.execute(arguments);
     }
 
-    private void executeByCandidatesAndArguments(String candidateText) {
+    private void executeByCandidatesAndArguments(String candidateText) throws ExecuteCommandException{
         Candidate[] candidateArguments = candidates.toArray(new Candidate[]{});
         
         String commandName = command.getName();
@@ -69,7 +75,7 @@ public class CommandExecutor {
         argumentCommand.execute(candidateArguments,args);
     }
 
-    private void executeByArguments(String candidateText) {
+    private void executeByArguments(String candidateText) throws ExecuteCommandException {
         String commandName = command.getName();
         String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
         String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
