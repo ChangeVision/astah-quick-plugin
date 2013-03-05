@@ -25,9 +25,11 @@
 	</appender>
 
 
-	<root level="${rootLevel:-OFF}">
+	<root level="TRACE">
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
+		<logger name="com.change_vision" level="${rootLevel:-OFF}">
+			<appender-ref ref="FILE" />
+		</logger>
 	</root>
 
 </configuration>
