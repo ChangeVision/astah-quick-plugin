@@ -55,15 +55,17 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
     }
 
     @Override
-    public void execute(Candidate candidate) {
-        if (candidate == null || candidate instanceof CloseDiagramCommand) {
+    public void execute(Candidate... candidates) {
+        if (candidates == null) {
             api.closeCurrentDiagram();
             return;
         }
-        if (candidate instanceof DiagramCandidate) {
-            DiagramCandidate diagramCandidate = (DiagramCandidate) candidate;
-            IDiagram diagram = diagramCandidate.getDiagram();
-            api.close(diagram);
+        for (Candidate candidate : candidates) {
+            if (candidate instanceof DiagramCandidate) {
+                DiagramCandidate diagramCandidate = (DiagramCandidate) candidate;
+                IDiagram diagram = diagramCandidate.getDiagram();
+                api.close(diagram);
+            }
         }
     }
 

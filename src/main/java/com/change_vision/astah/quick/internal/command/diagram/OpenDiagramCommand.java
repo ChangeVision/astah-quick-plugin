@@ -51,10 +51,12 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 	}
 	
 	@Override
-	public void execute(Candidate candidate) {
-		DiagramCandidate diagramCandidate = (DiagramCandidate)candidate;
-		IDiagram diagram = diagramCandidate.getDiagram();
-		api.open(diagram);
+	public void execute(Candidate... candidates) {
+	    for (Candidate candidate : candidates) {
+	        DiagramCandidate diagramCandidate = (DiagramCandidate)candidate;
+	        IDiagram diagram = diagramCandidate.getDiagram();
+	        api.open(diagram);
+        }
 	}
 
 	@Override

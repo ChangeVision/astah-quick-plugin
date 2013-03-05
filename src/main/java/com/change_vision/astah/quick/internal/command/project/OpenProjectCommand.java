@@ -104,17 +104,20 @@ public class OpenProjectCommand implements CandidateSupportCommand {
     }
 
     @Override
-    public void execute(Candidate candidate) {
-        if (candidate == null) {
+    public void execute(Candidate... candidates) {
+        if (candidates == null) {
             openProjectByFileChooser();
             return;
         }
-        if (candidate instanceof FileCandidate) {
-            FileCandidate fileCandidate = (FileCandidate) candidate;
-            File file = fileCandidate.getFile();
-            if (file != null) {
-                api.openProject(file);
-                return;
+        // TODO Should this command supports multiple candidates?
+        for (Candidate candidate : candidates) {
+            if (candidate instanceof FileCandidate) {
+                FileCandidate fileCandidate = (FileCandidate) candidate;
+                File file = fileCandidate.getFile();
+                if (file != null) {
+                    api.openProject(file);
+                    return;
+                }
             }
         }
         openProjectByFileChooser();

@@ -25,7 +25,10 @@ public class CommandExecutorTest {
     private CandidateSupportCommand candidateCommand;
 
     @Mock
-    private Candidate candidate;
+    private Candidate one;
+
+    @Mock
+    private Candidate two;
 
     @Before
     public void before() throws Exception {
@@ -67,10 +70,19 @@ public class CommandExecutorTest {
     @Test
     public void callExecuteWhenAnArgumentIsSet() throws Exception {
         executor.commit(candidateCommand);
-        executor.add(candidate);
+        executor.add(one);
         executor.execute();
-        verify(candidateCommand).execute(candidate);
+        verify(candidateCommand).execute(one);
     }
     
+    @Test
+    public void callExecuteWhenSomergumentIsSet() throws Exception {
+        executor.commit(candidateCommand);
+        executor.add(one);
+        executor.add(two);
+        executor.execute();
+        verify(candidateCommand).execute(one,two);
+    }
 
+    
 }

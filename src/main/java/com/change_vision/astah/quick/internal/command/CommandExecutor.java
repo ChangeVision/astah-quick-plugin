@@ -1,5 +1,8 @@
 package com.change_vision.astah.quick.internal.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
@@ -8,7 +11,7 @@ import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepiti
 public class CommandExecutor {
 
     private Command command;
-    private Candidate candidate;
+    private List<Candidate> candidates = new ArrayList<Candidate>();
 
     public Command getCommand() {
         return command;
@@ -22,24 +25,24 @@ public class CommandExecutor {
         return command != null;
     }
 
+    public void add(Candidate candidate) {
+        this.candidates.add(candidate);
+    }
+
     public void execute() throws UncommitedCommandExcepition{
         if (isUncommited()) throw new UncommitedCommandExcepition();
-        if (candidate == null) {
-            command.execute(new String[]{});
+        if (candidates.isEmpty()) {
+            command.execute();
             return;
         }
         if (command instanceof CandidateSupportCommand) {
             CandidateSupportCommand candidateCommand = (CandidateSupportCommand) command;
-            candidateCommand.execute(candidate);
+            candidateCommand.execute(candidates.toArray(new Candidate[]{}));
         }
     }
 
     private boolean isUncommited() {
         return command == null;
-    }
-
-    public void add(Candidate candidate) {
-        this.candidate = candidate;
     }
 
 }
