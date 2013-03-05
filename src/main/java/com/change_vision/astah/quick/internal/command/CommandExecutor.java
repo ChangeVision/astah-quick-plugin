@@ -45,4 +45,8 @@ public class CommandExecutor {
         return command == null;
     }
 
+    public boolean remove(Candidate candidate) {
+        return candidates.remove(candidate);
+    }
+
 }

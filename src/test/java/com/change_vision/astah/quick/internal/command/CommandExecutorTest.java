@@ -64,7 +64,7 @@ public class CommandExecutorTest {
     public void callExecuteWhenArgumentIsNull() throws Exception {
         executor.commit(command);
         executor.execute();
-        verify(command).execute(new String[]{});
+        verify(command).execute();
     }
     
     @Test
@@ -82,6 +82,13 @@ public class CommandExecutorTest {
         executor.add(two);
         executor.execute();
         verify(candidateCommand).execute(one,two);
+    }
+    
+    @Test
+    public void removeArgument() throws Exception {
+        executor.add(one);
+        boolean removed = executor.remove(one);
+        assertThat(removed,is(true));
     }
 
     
