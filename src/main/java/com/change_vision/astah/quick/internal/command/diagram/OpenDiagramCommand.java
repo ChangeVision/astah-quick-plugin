@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
-import com.change_vision.astah.quick.command.CandidatesProvider;
-import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 
-public class OpenDiagramCommand implements Command, CandidatesProvider {
+public class OpenDiagramCommand implements CandidateSupportCommand {
 
 	/**
      * Logger for this class

@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
-import com.change_vision.astah.quick.command.CandidatesProvider;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
@@ -56,11 +56,11 @@ final class ExecuteCommandAction extends AbstractAction {
         Candidate candidate = candidates.current();
 
         quickWindow.close();
-        if (command instanceof CandidatesProvider) {
+        if (command instanceof CandidateSupportCommand) {
             if (command.getClass().isInstance(candidate)) {
                 candidate = null;
             }
-            ((CandidatesProvider) command).execute(candidate);
+            ((CandidateSupportCommand) command).execute(candidate);
             return;
         }
         if (fieldText.startsWith(commandName) != false

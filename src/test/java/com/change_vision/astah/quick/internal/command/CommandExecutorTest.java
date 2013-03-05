@@ -10,14 +10,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 
 public class CommandExecutorTest {
 
     private CommandExecutor executor;
+
     @Mock
     private Command command;
+    
+    @Mock
+    private CandidateSupportCommand candidateCommand;
 
     @Mock
     private Candidate candidate;
@@ -59,6 +64,13 @@ public class CommandExecutorTest {
         verify(command).execute(new String[]{});
     }
     
+    @Test
+    public void callExecuteWhenAnArgumentIsSet() throws Exception {
+        executor.commit(candidateCommand);
+        executor.add(candidate);
+        executor.execute();
+        verify(candidateCommand).execute(candidate);
+    }
     
 
 }
