@@ -36,36 +36,55 @@ public class CommandExecutor {
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
         if (candidates.isEmpty()) {
-            String commandName = command.getName();
-            String[] args = new String[]{};
-            if (!candidateText.equals(commandName)) {
-                String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
-                String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
-                args = Arrays.copyOfRange(candidateWords, commandWords.length, candidateWords.length);
-            }
-            command.execute(args);
+            executeByArguments(candidateText);
             return;
         }
         if (command instanceof CandidateAndArgumentSupportCommand) {
-            CandidateAndArgumentSupportCommand argumentCommand = (CandidateAndArgumentSupportCommand) command;
-            Candidate[] candidateArguments = candidates.toArray(new Candidate[]{});
-            String commandName = command.getName();
-            String[] args = new String[]{};
-            if (!candidateText.equals(commandName)) {
-                String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
-                String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
-                int commitedLength = commandWords.length + candidates.size();
-                args = Arrays.copyOfRange(candidateWords, commitedLength, candidateWords.length);
-            }
-            argumentCommand.execute(candidateArguments,args);
+            executeByCandidatesAndArguments(candidateText);
             return;
         }
         if (command instanceof CandidateSupportCommand) {
-            CandidateSupportCommand candidateCommand = (CandidateSupportCommand) command;
-            Candidate[] arguments = candidates.toArray(new Candidate[]{});
-            candidateCommand.execute(arguments);
+            executreByCandidates();
             return;
         }
+    }
+
+    private void executreByCandidates() {
+        Candidate[] arguments = candidates.toArray(new Candidate[]{});
+
+        CandidateSupportCommand candidateCommand = (CandidateSupportCommand) command;
+        candidateCommand.execute(arguments);
+    }
+
+    private void executeByCandidatesAndArguments(String candidateText) {
+        Candidate[] candidateArguments = candidates.toArray(new Candidate[]{});
+        
+        String commandName = command.getName();
+        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
+        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
+        int commitedLength = commandWords.length + candidates.size();
+        String[] args = calcArgs(candidateText, commandName, candidateWords, commitedLength);
+
+        CandidateAndArgumentSupportCommand argumentCommand = (CandidateAndArgumentSupportCommand) command;
+        argumentCommand.execute(candidateArguments,args);
+    }
+
+    private void executeByArguments(String candidateText) {
+        String commandName = command.getName();
+        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
+        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
+        int commitedLength = commandWords.length;
+        String[] args = calcArgs(candidateText, commandName, candidateWords, commitedLength);
+        command.execute(args);
+    }
+
+    private String[] calcArgs(String candidateText, String commandName, String[] candidateWords,
+            int commitedLength) {
+        String[] args = new String[]{};
+        if (!candidateText.equals(commandName)) {
+            args = Arrays.copyOfRange(candidateWords, commitedLength, candidateWords.length);
+        }
+        return args;
     }
 
     private boolean isUncommited() {
