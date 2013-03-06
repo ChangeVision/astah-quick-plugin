@@ -36,7 +36,14 @@ public class Candidates {
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    private CandidatesSelector<Candidate> selector = new CandidatesSelector<Candidate>();
+    private CandidatesSelector<Candidate> selector;
+
+    private CommandExecutor executor;
+    
+    public Candidates(CommandExecutor executor) {
+        this.executor = executor;
+        this.selector = new CandidatesSelector<Candidate>(executor);
+    }
 
     public void filter(String key) {
         if (key == null) throw new IllegalArgumentException("key is null.");
@@ -64,7 +71,7 @@ public class Candidates {
 
     private boolean isChangedToCommandState(String searchKey) {
         boolean isSelectArgument = state instanceof SelectArgument;
-        if (!isSelectArgument) {
+        if (!isSelectArgument || this.executor.isCommited()) {
             return false;
         }
         SelectArgument argument = (SelectArgument) state;

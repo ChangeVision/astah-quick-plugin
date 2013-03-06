@@ -2,7 +2,7 @@ package com.change_vision.astah.quick.internal.ui.candidatesfield.state;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 
 public class CandidatesSelectorTest {
 	
@@ -22,10 +23,13 @@ public class CandidatesSelectorTest {
 	@Mock
 	private Candidate two;
 
+    @Mock
+    private CommandExecutor executor;
+
 	@Before
 	public void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		selector = new CandidatesSelector<Candidate>();
+		selector = new CandidatesSelector<Candidate>(executor);
 		
 		when(one.getName()).thenReturn("one");
 		when(one.getName()).thenReturn("two");

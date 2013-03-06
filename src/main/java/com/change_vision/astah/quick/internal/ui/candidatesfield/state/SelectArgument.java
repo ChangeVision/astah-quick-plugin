@@ -26,13 +26,9 @@ public class SelectArgument implements CandidateState {
         Candidate[] candidates;
         if (committed instanceof CandidatesProvider) {
             CandidatesProvider provider = (CandidatesProvider) committed;
-            String key = searchKey.trim();
-            String commandName = committed.getName();
-            key = key.substring(commandName.length());
-            key = key.trim();
-            candidates = provider.candidate(key);
+            candidates = provider.candidate(searchKey);
         } else {
-            candidates = new Candidate[] { committed };
+            candidates = new Candidate[] {};
         }
         return candidates;
     }

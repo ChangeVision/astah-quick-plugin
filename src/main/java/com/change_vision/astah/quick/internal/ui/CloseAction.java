@@ -21,5 +21,6 @@ public final class CloseAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         window.close();
+        window.reset();
     }
 }

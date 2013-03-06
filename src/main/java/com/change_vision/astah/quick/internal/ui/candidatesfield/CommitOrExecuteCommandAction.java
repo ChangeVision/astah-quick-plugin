@@ -13,10 +13,13 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.annotations.Immidiate;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
 final class CommitOrExecuteCommandAction extends AbstractAction {
     /**
@@ -56,38 +59,48 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
             commitCandidate();
             return;
         }
-        executeComamnd();
+        executeCommand();
     }
 
     private void commitCandidate() {
         Candidates candidates = candidatesList.getCandidates();
         Candidate candidate = candidates.current();
+        if (candidate instanceof ValidState) {
+            executeCommand();
+            return;
+        }
         if (executor.isCommited()) {
             executor.add(candidate);
-            String candidateName = candidate.getName();
-            String text = field.getText();
-            field.setText(text +  candidateName);
-            candidatesList.setCandidateText("");
-            candidatesList.close();
+            field.setText(executor.getCommandText());
+            this.candidatesList.close();
             return;
         }
         if (candidate instanceof Command) {
             Command command = (Command) candidate;
+            if (isImmidiateCommand(command)) {
+                executor.commit(command);
+                executeCommand();
+                return;
+            }
             executor.commit(command);
-            String candidateName = candidate.getName();
-            field.setText(candidateName);
-            candidatesList.setCandidateText(candidateName);
-            candidatesList.close();
+            field.setWindowState(CandidateWindowState.ArgumentWait);
+            field.setText(executor.getCommandText());
         }
     }
 
-    private void executeComamnd() {
+    private boolean isImmidiateCommand(Command command) {
+        return command.getClass().isAnnotationPresent(Immidiate.class);
+    }
+
+    private void executeCommand() {
         String candidateText = field.getText();
+        quickWindow.close();
         try {
             executor.execute(candidateText);
         } catch (ExecuteCommandException e) {
             quickWindow.notifyError("Alert", e.getMessage());
         }
+        quickWindow.reset();
     }
 
 }

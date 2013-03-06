@@ -10,6 +10,7 @@ import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 
 public class CommandExecutor {
 
@@ -41,7 +42,7 @@ public class CommandExecutor {
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
         doExcecute(candidateText);
-        command = null;
+        reset();
     }
 
     private void doExcecute(String candidateText) throws ExecuteCommandException {
@@ -99,6 +100,66 @@ public class CommandExecutor {
 
     private boolean isUncommited() {
         return command == null;
+    }
+
+    public String getCommandText() {
+        if (isUncommited()) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder(command.getName());
+        for (Candidate candidate : candidates) {
+            builder.append(SEPARATE_COMMAND_CHAR);
+            builder.append(candidate.getName());
+        }
+        return builder.toString();
+    }
+
+    public String getCandidateText(String candidateText) {
+        if (isUncommited()) {
+            return candidateText;
+        }
+        String commandName = command.getName();
+        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
+        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
+        if (candidateWords.length > commandWords.length) {
+            StringBuilder builder = new StringBuilder();
+            boolean first = true;
+            for(int i = commandWords.length; i < candidateWords.length; i++){
+                builder.append(candidateWords[i]);
+                if (first == false) {
+                    builder.append(SEPARATE_COMMAND_CHAR);
+                }
+                first = false;
+            }
+            return builder.toString();
+        }
+        return candidateText;
+    }
+
+    public void reset() {
+        this.command = null;
+        this.candidates.clear();
+    }
+    
+    @TestForMethod
+    List<Candidate> getCandidates() {
+        return candidates;
+    }
+
+    public boolean isValid() {
+        return isCommited();
+    }
+
+    public Candidate removeCandidate() {
+        if (candidates.size() == 0) {
+            if (isCommited()) {
+                Command old = this.command;
+                this.command = null;
+                return old;
+            }
+            return null;
+        }
+        return candidates.remove(candidates.size() - 1);
     }
 
 }

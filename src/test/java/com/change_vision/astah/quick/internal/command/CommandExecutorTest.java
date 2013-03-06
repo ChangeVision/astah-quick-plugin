@@ -61,8 +61,35 @@ public class CommandExecutorTest {
         assertThat(actual,is(nullValue()));
         boolean commited = executor.isCommited();
         assertThat(commited,is(false));
+
+        String commandText = executor.getCommandText();
+        assertThat(commandText,is(""));
+        String candidateText = executor.getCandidateText(commandText);
+        assertThat(candidateText,is(""));
+        Candidate removed = executor.removeCandidate();
+        assertThat(removed,is(nullValue()));
     }
     
+    @Test
+    public void candidateTextWhenUncommitted() throws Exception {
+        String candidateText = executor.getCandidateText("hoge");
+        assertThat(candidateText,is("hoge"));
+    }
+
+    @Test
+    public void candidateTextWhenCommitted() throws Exception {
+        executor.commit(command);
+        String candidateText = executor.getCandidateText(COMMAND_NAME);
+        assertThat(candidateText,is(COMMAND_NAME));
+    }
+
+    @Test
+    public void candidateTextAfterCommitted() throws Exception {
+        executor.commit(command);
+        String candidateText = executor.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
+        assertThat(candidateText,is("hoge"));
+    }
+
     @Test(expected=UncommitedCommandExcepition.class)
     public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition, ExecuteCommandException {
         executor.execute("");
@@ -77,6 +104,14 @@ public class CommandExecutorTest {
         assertThat(actual,is(notNullValue()));
         boolean commited = executor.isCommited();
         assertThat(commited,is(true));
+        assertThat(executor.getCommandText(),is(COMMAND_NAME));
+    }
+    
+    @Test
+    public void addArgument() throws Exception {
+        executor.commit(candidateCommand);
+        executor.add(one);
+        assertThat(executor.getCommandText(),is(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME));
     }
     
     @Test
@@ -119,11 +154,35 @@ public class CommandExecutorTest {
     }
     
     @Test
-    public void removeArgument() throws Exception {
-        executor.add(one);
-        boolean removed = executor.remove(one);
-        assertThat(removed,is(true));
+    public void removeCandidateCommand() throws Exception {
+        executor.commit(candidateCommand);
+        Candidate removed = executor.removeCandidate();
+        assertThat(removed,is(notNullValue()));
     }
 
+    @Test
+    public void removeCandidateArgument() throws Exception {
+        executor.commit(candidateCommand);
+        executor.add(one);
+        Candidate removed = executor.removeCandidate();
+        assertThat(removed,is(one));
+    }
     
+    @Test
+    public void resetWithCommand() throws Exception {
+        executor.commit(candidateCommand);
+        assertThat(executor.isCommited(),is(true));
+        executor.reset();
+        assertThat(executor.isCommited(),is(false));
+    }
+    
+    @Test
+    public void resetWithCandidates() throws Exception {
+        executor.commit(candidateCommand);
+        executor.add(one);
+        assertThat(executor.getCandidates().size(),is(1));
+        executor.reset();
+        assertThat(executor.getCandidates().size(),is(0));
+    }
+
 }
