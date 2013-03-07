@@ -8,13 +8,12 @@ import javax.swing.filechooser.FileFilter;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
-import com.change_vision.astah.quick.command.CandidatesProvider;
-import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class OpenProjectCommand implements Command , CandidatesProvider{
+public class OpenProjectCommand implements CandidateSupportCommand {
 	
 	private final class AstahFileFilter extends FileFilter {
 		@Override
@@ -105,17 +104,20 @@ public class OpenProjectCommand implements Command , CandidatesProvider{
     }
 
     @Override
-    public void execute(Candidate candidate) {
-        if (candidate == null) {
+    public void execute(Candidate[] candidates) {
+        if (candidates == null) {
             openProjectByFileChooser();
             return;
         }
-        if (candidate instanceof FileCandidate) {
-            FileCandidate fileCandidate = (FileCandidate) candidate;
-            File file = fileCandidate.getFile();
-            if (file != null) {
-                api.openProject(file);
-                return;
+        // TODO Should this command supports multiple candidates?
+        for (Candidate candidate : candidates) {
+            if (candidate instanceof FileCandidate) {
+                FileCandidate fileCandidate = (FileCandidate) candidate;
+                File file = fileCandidate.getFile();
+                if (file != null) {
+                    api.openProject(file);
+                    return;
+                }
             }
         }
         openProjectByFileChooser();

@@ -3,6 +3,7 @@ package com.change_vision.astah.quick.internal.ui.candidatesfield;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
@@ -19,36 +20,47 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		changeInputField();
 		handleCandidatesList();
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		changeInputField();
 		handleCandidatesList();
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		changeInputField();
-		handleCandidatesList();
-	}
-
-	private void changeInputField() {
-		candidatesList.setCandidateText(field.getText());
+        CommandExecutor executor = field.getExecutor();
+        String commandText = executor.getCommandText();
+        String text = field.getText();
+        if (text.length() != 0 && commandText.length() > text.length()) {
+            executor.removeCandidate();
+        }
+        String candidateText = field.getCandidateText();
+        candidatesList.setCandidateText(candidateText);
 	}
 
 	private void handleCandidatesList() {
-		String candidateText = field.getText();
+		String candidateText = field.getCandidateText();
 		candidatesList.setCandidateText(candidateText);
-		boolean isEmptyText = candidateText == null
-				|| candidateText.isEmpty();
-		if (isEmptyText) {
-			field.setWindowState(CandidateWindowState.Wait);
+		String text = field.getText();
+		if (isNullOrEmpty(candidateText)) {
+		    if (isNullOrEmpty(text)) {
+                field.setWindowState(CandidateWindowState.Wait);
+            }else {
+                field.setWindowState(CandidateWindowState.ArgumentWait);
+            }
 		} else {
-			field.setWindowState(CandidateWindowState.Inputing);
+            if (isNullOrEmpty(text)) {
+                field.setWindowState(CandidateWindowState.Inputing);
+            }else {
+                field.setWindowState(CandidateWindowState.ArgumentInputing);
+            }
 		}
 	}
+
+    private boolean isNullOrEmpty(String string) {
+        return string == null	|| string.isEmpty();
+    }
 
 }

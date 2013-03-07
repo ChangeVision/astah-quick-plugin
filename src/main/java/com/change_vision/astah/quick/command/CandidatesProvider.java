@@ -4,6 +4,4 @@ public interface CandidatesProvider {
 
 	public abstract Candidate[] candidate(String searchKey);
 	
-	public abstract void execute(Candidate candidate);
-
 }

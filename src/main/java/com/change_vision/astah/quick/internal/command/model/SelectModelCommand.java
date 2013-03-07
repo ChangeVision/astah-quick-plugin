@@ -2,11 +2,13 @@ package com.change_vision.astah.quick.internal.command.model;
 
 import static java.lang.String.format;
 
-import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.annotations.Immidiate;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
+@Immidiate
 public class SelectModelCommand implements Command {
 
 	private final INamedElement foundModel;

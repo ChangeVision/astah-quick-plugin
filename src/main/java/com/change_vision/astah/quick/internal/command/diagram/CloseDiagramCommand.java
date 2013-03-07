@@ -2,12 +2,11 @@ package com.change_vision.astah.quick.internal.command.diagram;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
-import com.change_vision.astah.quick.command.CandidatesProvider;
-import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 
-public class CloseDiagramCommand implements Command,CandidatesProvider{
+public class CloseDiagramCommand implements CandidateSupportCommand{
     
     private DiagramAPI api = new DiagramAPI();
 
@@ -56,15 +55,17 @@ public class CloseDiagramCommand implements Command,CandidatesProvider{
     }
 
     @Override
-    public void execute(Candidate candidate) {
-        if (candidate == null || candidate instanceof CloseDiagramCommand) {
+    public void execute(Candidate... candidates) {
+        if (candidates == null) {
             api.closeCurrentDiagram();
             return;
         }
-        if (candidate instanceof DiagramCandidate) {
-            DiagramCandidate diagramCandidate = (DiagramCandidate) candidate;
-            IDiagram diagram = diagramCandidate.getDiagram();
-            api.close(diagram);
+        for (Candidate candidate : candidates) {
+            if (candidate instanceof DiagramCandidate) {
+                DiagramCandidate diagramCandidate = (DiagramCandidate) candidate;
+                IDiagram diagram = diagramCandidate.getDiagram();
+                api.close(diagram);
+            }
         }
     }
 
