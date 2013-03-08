@@ -52,7 +52,7 @@ public class SelectCommand implements CandidateState {
 		candidates.addAll(selectCommands);
 
 		if (candidates.size() == 0) {
-			candidates.add(new NullCandidate());
+			candidates.add(new NotFound());
 		}
 		return candidates.toArray(new Candidate[]{});
 	}

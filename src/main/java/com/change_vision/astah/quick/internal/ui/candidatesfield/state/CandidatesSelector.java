@@ -39,7 +39,7 @@ public class CandidatesSelector<T extends Candidate> {
 		    if (this.executor.isValid()) {
                 return (T) new ValidState();
             }
-		    return (T) new NullCandidate();
+		    return (T) new NotFound();
 		}
 		return candidates[currentIndex];
 	}

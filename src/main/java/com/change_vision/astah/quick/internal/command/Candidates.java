@@ -11,7 +11,7 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidatesSelector;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NullCandidate;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArgument;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
@@ -66,7 +66,7 @@ public class Candidates {
     private boolean isChangedToArgumentState(Candidate[] candidates) {
         boolean isCurrentCommandState = state instanceof SelectCommand;
         return isCurrentCommandState && candidates.length == 1 && candidates[0] instanceof Command
-                && !(candidates[0] instanceof NullCandidate);
+                && !(candidates[0] instanceof NotFound);
     }
 
     private boolean isChangedToCommandState(String searchKey) {

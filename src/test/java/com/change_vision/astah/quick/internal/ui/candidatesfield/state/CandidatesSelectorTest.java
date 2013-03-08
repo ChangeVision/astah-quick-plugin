@@ -40,7 +40,7 @@ public class CandidatesSelectorTest {
 		selector.up();
 		selector.down();
 		Candidate current = selector.current();
-		assertThat(current,is(instanceOf(NullCandidate.class)));
+		assertThat(current,is(instanceOf(NotFound.class)));
 	}
 	
 	@Test
