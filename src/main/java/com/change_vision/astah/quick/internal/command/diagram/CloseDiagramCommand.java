@@ -55,7 +55,7 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
     }
 
     @Override
-    public void execute(Candidate... candidates) {
+    public void execute(Candidate[] candidates) {
         if (candidates == null) {
             api.closeCurrentDiagram();
             return;
