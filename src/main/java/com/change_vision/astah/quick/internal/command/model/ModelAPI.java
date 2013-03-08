@@ -22,7 +22,7 @@ import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
-class ModelAPI {
+public class ModelAPI {
 
 	private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
 	

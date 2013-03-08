@@ -79,7 +79,7 @@ public class Candidates {
             return false;
         }
         Command committed = (Command) candidates[0];
-        String commandName = committed.getName();
+        String commandName = committed.getName().toLowerCase();
         boolean isCommittedByKey = key.startsWith(commandName);
         return isCurrentCommandState && isFoundOnlyOneCommand && (isCommittedByKey || executor.isCommited());
     }

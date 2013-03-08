@@ -16,6 +16,8 @@ import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
+import com.change_vision.astah.quick.internal.command.model.ModelAPI;
+import com.change_vision.astah.quick.internal.command.model.SelectModelCommand;
 
 public class CommandExecutorTest {
 
@@ -37,12 +39,18 @@ public class CommandExecutorTest {
 
     @Mock
     private CandidateAndArgumentSupportCommand candidateAndArgumentCommand;
+    
+    @Mock
+    private SelectModelCommand selectModelCommand;
 
     @Mock
     private Candidate one;
 
     @Mock
     private Candidate two;
+
+    @Mock
+    private ModelAPI api;
 
     @Before
     public void before() throws Exception {
@@ -53,6 +61,7 @@ public class CommandExecutorTest {
         when(candidateAndArgumentCommand.getName()).thenReturn(COMMAND_NAME);
         when(one.getName()).thenReturn(CANDIDATE_ONE_NAME);
         when(two.getName()).thenReturn(CANDIDATE_TWO_NAME);
+        when(selectModelCommand.getName()).thenReturn("Flight Engine");
     }
     
     @Test
@@ -158,6 +167,13 @@ public class CommandExecutorTest {
         executor.add(two);
         executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME + COMMAND_SEPARATOR + CANDIDATE_TWO_NAME);
         verify(candidateCommand).execute(new Candidate[]{one,two});
+    }
+    
+    @Test
+    public void callExecuteWhenFrightEngineSet() throws Exception {
+        executor.commit(selectModelCommand);
+        executor.execute("F");
+        verify(selectModelCommand).execute();
     }
     
     @Test

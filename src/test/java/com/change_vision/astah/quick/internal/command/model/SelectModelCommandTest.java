@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.annotations.LooseName;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class SelectModelCommandTest {
@@ -16,6 +17,7 @@ public class SelectModelCommandTest {
         SelectModelCommand command = new SelectModelCommand(foundModel );
         Class<? extends SelectModelCommand> clazz = command.getClass();
         assertThat(clazz.isAnnotationPresent(Immediate.class),is(true));
+        assertThat(clazz.isAnnotationPresent(LooseName.class),is(true));
     }
 
 }
