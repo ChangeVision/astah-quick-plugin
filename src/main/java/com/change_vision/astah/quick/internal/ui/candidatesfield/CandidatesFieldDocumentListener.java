@@ -44,8 +44,11 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
         CommandExecutor executor = field.getExecutor();
         String commandText = executor.getCommandText();
         String text = field.getText();
-        if (text.length() != 0 && commandText.length() > text.length()) {
+        if (text.isEmpty() == false && commandText.length() > text.length()) {
             executor.removeCandidate();
+        }
+        if (text.isEmpty() && field.isSettingText() == false) {
+            executor.reset();
         }
         String candidateText = field.getCandidateText();
         candidatesList.setCandidateText(candidateText);
@@ -53,16 +56,16 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
     private void handleCandidatesList() {
         String candidateText = field.getCandidateText();
+        String text = field.getText();
         candidatesList.setCandidateText(candidateText);
-        CommandExecutor executor = field.getExecutor();
         if (isNullOrEmpty(candidateText)) {
-            if (executor.isCommited()) {
+            if (isNullOrEmpty(text)) {
                 field.setWindowState(CandidateWindowState.ArgumentWait);
             } else {
                 field.setWindowState(CandidateWindowState.Wait);
             }
         } else {
-            if (executor.isCommited()) {
+            if (isNullOrEmpty(text)) {
                 field.setWindowState(CandidateWindowState.ArgumentInputing);
             } else {
                 field.setWindowState(CandidateWindowState.Inputing);
