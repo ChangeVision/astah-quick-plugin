@@ -3,11 +3,24 @@ package com.change_vision.astah.quick.internal.command.diagram;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 
 public class CloseDiagramCommand implements CandidateSupportCommand{
     
+    @Immediate
+    private final class CurrentDiagramCandidate extends DiagramCandidate {
+        private CurrentDiagramCandidate(IDiagram diagram) {
+            super(diagram);
+        }
+
+        @Override
+        public String getName() {
+            return "Current Diagram(" + super.getName() + ")";
+        }
+    }
+
     private DiagramAPI api = new DiagramAPI();
 
     @Override
@@ -42,12 +55,7 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
     public Candidate[] candidate(String searchKey) {
         IDiagram[] openDiagrams = api.openDiagrams();
         Candidate[] candidates = new Candidate[openDiagrams.length + 1];
-        candidates[0] = new DiagramCandidate(api.getCurrentDiagram()){
-            @Override
-            public String getName() {
-                return "Current Diagram(" + super.getName() + ")";
-            }
-        };
+        candidates[0] = new CurrentDiagramCandidate(api.getCurrentDiagram());
         for (int i = 0; i < openDiagrams.length; i++) {
             candidates[i + 1] = new DiagramCandidate(openDiagrams[i]);
         }
