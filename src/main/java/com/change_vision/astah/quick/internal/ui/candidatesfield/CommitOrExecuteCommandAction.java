@@ -70,11 +70,11 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
             return;
         }
         if (executor.isCommited()) {
+            executor.add(candidate);
             if (isImmidiateCandidate(candidate)) {
                 executeCommand();
                 return;
             }
-            executor.add(candidate);
             String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             field.setText(commandText);
             this.candidatesList.close();
