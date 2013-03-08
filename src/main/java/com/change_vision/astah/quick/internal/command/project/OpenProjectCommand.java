@@ -15,7 +15,29 @@ import com.change_vision.jude.api.inf.view.IconDescription;
 
 public class OpenProjectCommand implements CandidateSupportCommand {
 	
-	private final class AstahFileFilter extends FileFilter {
+	private final class FileChooserCandidate implements Candidate {
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public String getName() {
+            return "Open file chooser";
+        }
+
+        @Override
+        public CandidateIconDescription getIconDescription() {
+            return new AstahCommandIconDescription(IconDescription.PROJECT);
+        }
+
+        @Override
+        public String getDescription() {
+            return "specified by file chooser";
+        }
+    }
+
+    private final class AstahFileFilter extends FileFilter {
 		@Override
 		public String getDescription() {
 			return "Astah File(*.asta,*.jude)";
@@ -74,28 +96,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
     public Candidate[] candidate(String searchKey) {
         File[] recentFiles = api.getRecentFiles();
         Candidate[] candidates = new Candidate[recentFiles.length + 1];
-        candidates[0] = new Candidate() {
-            
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-            
-            @Override
-            public String getName() {
-                return "Open file chooser";
-            }
-            
-            @Override
-            public CandidateIconDescription getIconDescription() {
-                return new AstahCommandIconDescription(IconDescription.PROJECT);
-            }
-            
-            @Override
-            public String getDescription() {
-                return "specified by file chooser";
-            }
-        };
+        candidates[0] = new FileChooserCandidate();
         for (int i = 0; i < recentFiles.length; i++) {
             File file = recentFiles[i];
             candidates[i + 1] = new FileCandidate(file);
@@ -118,6 +119,10 @@ public class OpenProjectCommand implements CandidateSupportCommand {
                     api.openProject(file);
                     return;
                 }
+            }
+            if (candidate instanceof FileChooserCandidate) {
+                openProjectByFileChooser();
+                return;
             }
         }
         openProjectByFileChooser();
