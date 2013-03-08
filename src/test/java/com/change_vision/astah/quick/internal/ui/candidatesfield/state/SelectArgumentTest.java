@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 
 public class SelectArgumentTest {
 	
@@ -26,24 +27,30 @@ public class SelectArgumentTest {
 	@Mock
 	private CandidatesProviderCommand providerCommand;
 	
+	@Mock
+	private CommandExecutor executor;
+
+    private SelectArgument argument;
+	
 	@Before
 	public void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
 		when(committed.getName()).thenReturn("committed command");
 		when(providerCommand.getName()).thenReturn("provider command");
+		argument = new SelectArgument(executor);
 	}
 
 	@Test
 	public void filterCommitted() {
-		SelectArgument argument = new SelectArgument(committed);
+	    when(executor.getCommand()).thenReturn(committed);
 		Candidate[] candidates = argument.filter("committed command");
 		assertThat(candidates.length,is(1));
 	}
 	
 	@Test
 	public void filterProviderCommand() throws Exception {
-		SelectArgument argument = new SelectArgument(providerCommand);
+        when(executor.getCommand()).thenReturn(providerCommand);
 		argument.filter("hoge");		
 		verify(providerCommand).candidate("hoge");
 	}

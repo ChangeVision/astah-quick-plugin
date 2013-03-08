@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.CommandExecutor;
 
 public class SelectArgument implements CandidateState {
 
@@ -14,22 +15,23 @@ public class SelectArgument implements CandidateState {
      */
     private static final Logger logger = LoggerFactory.getLogger(SelectArgument.class);
 
-    private Command committed;
+    private CommandExecutor executor;
 
-    public SelectArgument(Command committed) {
-        this.committed = committed;
+    public SelectArgument(CommandExecutor executor) {
+        this.executor = executor;
     }
 
     @Override
     public Candidate[] filter(String key) {
         logger.trace("candidates:{}", key);
         Candidate[] candidates;
+        Command committed = executor.getCommand();
         if (committed instanceof CandidatesProvider) {
             CandidatesProvider provider = (CandidatesProvider) committed;
             candidates = provider.candidate(key);
         } else {
             candidates = new Candidate[] {
-                    new ValidState(key)
+                    new ValidState(committed,key)
             };
         }
         return candidates;
