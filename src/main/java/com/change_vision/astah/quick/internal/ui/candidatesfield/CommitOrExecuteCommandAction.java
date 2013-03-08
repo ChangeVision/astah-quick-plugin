@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
-import com.change_vision.astah.quick.internal.annotations.Immidiate;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
@@ -71,6 +71,10 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         }
         if (executor.isCommited()) {
             executor.add(candidate);
+            if (isImmidiateCandidate(candidate)) {
+                executeCommand();
+                return;
+            }
             String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             field.setText(commandText);
             this.candidatesList.close();
@@ -90,8 +94,12 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         }
     }
 
+    private boolean isImmidiateCandidate(Candidate candidate) {
+        return candidate.getClass().isAnnotationPresent(Immediate.class);
+    }
+    
     private boolean isImmidiateCommand(Command command) {
-        return command.getClass().isAnnotationPresent(Immidiate.class);
+        return command.getClass().isAnnotationPresent(Immediate.class);
     }
 
     private void executeCommand() {

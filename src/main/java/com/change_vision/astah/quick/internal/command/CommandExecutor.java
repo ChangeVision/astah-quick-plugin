@@ -4,15 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.annotations.LooseName;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 
 public class CommandExecutor {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
 
     private Command command;
     private List<Candidate> candidates = new ArrayList<Candidate>();
@@ -46,6 +54,10 @@ public class CommandExecutor {
     }
 
     private void doExcecute(String candidateText) throws ExecuteCommandException {
+        if (isLooseNameCommand()) {
+            command.execute();
+            return;
+        }
         if (candidates.isEmpty()) {
             executeByArguments(candidateText);
             return;
@@ -58,6 +70,10 @@ public class CommandExecutor {
             executreByCandidates();
             return;
         }
+    }
+
+    private boolean isLooseNameCommand() {
+        return command.getClass().isAnnotationPresent(LooseName.class);
     }
 
     private void executreByCandidates() throws ExecuteCommandException {
@@ -91,6 +107,7 @@ public class CommandExecutor {
 
     private String[] calcArgs(String candidateText, String commandName, String[] candidateWords,
             int commitedLength) {
+        logger.trace("text:{},words:{}",candidateText,candidateWords);
         String[] args = new String[]{};
         if (!candidateText.equals(commandName)) {
             args = Arrays.copyOfRange(candidateWords, commitedLength, candidateWords.length);

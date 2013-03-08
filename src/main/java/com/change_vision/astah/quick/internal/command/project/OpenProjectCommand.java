@@ -9,12 +9,14 @@ import javax.swing.filechooser.FileFilter;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
 public class OpenProjectCommand implements CandidateSupportCommand {
 	
+    @Immediate
 	private final class FileChooserCandidate implements Candidate {
         @Override
         public boolean isEnabled() {

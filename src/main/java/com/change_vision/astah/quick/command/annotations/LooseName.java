@@ -1,12 +1,14 @@
-package com.change_vision.astah.quick.internal.annotations;
+package com.change_vision.astah.quick.command.annotations;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Immidiate {
+@Inherited
+public @interface LooseName {
 
 }

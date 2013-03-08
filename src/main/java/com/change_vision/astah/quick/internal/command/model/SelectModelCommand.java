@@ -4,15 +4,17 @@ import static java.lang.String.format;
 
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.annotations.Immidiate;
+import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.annotations.LooseName;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
-@Immidiate
+@Immediate
+@LooseName
 public class SelectModelCommand implements Command {
 
 	private final INamedElement foundModel;
-	private static final ModelAPI api = new ModelAPI();
+	private ModelAPI api = new ModelAPI();
 
 	public SelectModelCommand(INamedElement foundModel) {
 		this.foundModel = foundModel;
@@ -43,6 +45,8 @@ public class SelectModelCommand implements Command {
 	public CandidateIconDescription getIconDescription() {
 		return new ResourceCommandIconDescription("/icons/glyphicons_027_search.png");
 	}
-
-
+	
+	public void setApi(ModelAPI api) {
+        this.api = api;
+    }
 }

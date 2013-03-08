@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IActivityDiagram;
 import com.change_vision.jude.api.inf.model.IClassDiagram;
@@ -24,6 +25,7 @@ import com.change_vision.jude.api.inf.model.IStateMachine;
 import com.change_vision.jude.api.inf.model.IUseCaseDiagram;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
+@Immediate
 class DiagramCandidate implements Candidate{
     /**
      * Logger for this class

@@ -4,9 +4,11 @@ import java.io.File;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
+@Immediate
 class FileCandidate implements Candidate{
     
     private File file;
