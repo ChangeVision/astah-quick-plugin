@@ -6,9 +6,15 @@ import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescrip
 
 public class ValidState implements Candidate {
 
+    private String args;
+
+    public ValidState(String args) {
+        this.args = args;
+    }
+
     @Override
     public String getName() {
-        return "Execute Command";
+        return "Execute Command '" + args + "'";
     }
 
     @Override

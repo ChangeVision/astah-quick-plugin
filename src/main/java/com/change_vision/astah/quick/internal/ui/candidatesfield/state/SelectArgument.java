@@ -21,14 +21,16 @@ public class SelectArgument implements CandidateState {
     }
 
     @Override
-    public Candidate[] filter(String searchKey) {
-        logger.trace("candidates:{}", searchKey);
+    public Candidate[] filter(String key) {
+        logger.trace("candidates:{}", key);
         Candidate[] candidates;
         if (committed instanceof CandidatesProvider) {
             CandidatesProvider provider = (CandidatesProvider) committed;
-            candidates = provider.candidate(searchKey);
+            candidates = provider.candidate(key);
         } else {
-            candidates = new Candidate[] {};
+            candidates = new Candidate[] {
+                    new ValidState(key)
+            };
         }
         return candidates;
     }

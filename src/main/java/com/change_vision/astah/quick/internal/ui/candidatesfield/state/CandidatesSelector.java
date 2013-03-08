@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
 
 public class CandidatesSelector<T extends Candidate> {
 	
@@ -16,13 +15,7 @@ public class CandidatesSelector<T extends Candidate> {
 	private int currentIndex;
 	@SuppressWarnings("unchecked")
 	private T[] candidates = (T[]) new Candidate[]{};
-
-    private final CommandExecutor executor;
 	
-	public CandidatesSelector(CommandExecutor executor) {
-	    this.executor = executor;
-    }
-
     public void up() {
 		if(candidates.length == 0) return;
 		int oldValue = currentIndex;
@@ -36,9 +29,6 @@ public class CandidatesSelector<T extends Candidate> {
 	@SuppressWarnings("unchecked")
 	public T current() {
 		if(candidates.length == 0){
-		    if (this.executor.isValid()) {
-                return (T) new ValidState();
-            }
 		    return (T) new NotFound();
 		}
 		return candidates[currentIndex];

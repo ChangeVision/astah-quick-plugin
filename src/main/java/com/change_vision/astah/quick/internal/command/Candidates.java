@@ -42,7 +42,7 @@ public class Candidates {
     
     public Candidates(CommandExecutor executor) {
         this.executor = executor;
-        this.selector = new CandidatesSelector<Candidate>(executor);
+        this.selector = new CandidatesSelector<Candidate>();
     }
 
     public void filter(String key) {
