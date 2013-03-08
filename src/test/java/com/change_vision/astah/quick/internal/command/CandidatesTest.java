@@ -30,6 +30,8 @@ public class CandidatesTest {
     @Mock
     private Command two;
 
+    private CommandExecutor executor;
+
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -45,8 +47,8 @@ public class CandidatesTest {
         commandState.add(one);
         commandState.add(two);
 
-        CommandExecutor executor = new CommandExecutor();
-        candidates = new Candidates(executor );
+        executor = new CommandExecutor();
+        candidates = new Candidates(executor);
         candidates.setCommandFactory(commandFactory);
     }
 
@@ -91,8 +93,10 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenRemoveTheNameString() throws Exception {
         candidates.filter("new project");
+        executor.removeCandidate();
         candidates.filter("new");
         Candidate[] actual = candidates.getCandidates();
+        System.out.println(actual);
         assertThat(actual.length, is(2));
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectCommand.class)));
@@ -101,6 +105,7 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenResetTargetCommandName() throws Exception {
         candidates.filter("new project");
+        executor.removeCandidate();
         candidates.filter("new");
         candidates.filter("new diagram");
         Candidate[] actual = candidates.getCandidates();
@@ -112,21 +117,22 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenPasteIncludeSpaceNameString() throws Exception {
         candidates.filter("new project");
+        executor.removeCandidate();
         candidates.filter("new           ");
         Candidate[] actual = candidates.getCandidates();
-        assertThat(actual.length,is(2));
+        assertThat(actual.length, is(2));
         CandidateState next = candidates.getState();
-        assertThat(next,is(instanceOf(SelectCommand.class)));
+        assertThat(next, is(instanceOf(SelectCommand.class)));
     }
-    
 
     @Test
     public void changeStateWhenPasteIncludeTabNameString() throws Exception {
         candidates.filter("new project");
+        executor.removeCandidate();
         candidates.filter("new\t\t\t");
         Candidate[] actual = candidates.getCandidates();
-        assertThat(actual.length,is(2));
+        assertThat(actual.length, is(2));
         CandidateState next = candidates.getState();
-        assertThat(next,is(instanceOf(SelectCommand.class)));
+        assertThat(next, is(instanceOf(SelectCommand.class)));
     }
 }

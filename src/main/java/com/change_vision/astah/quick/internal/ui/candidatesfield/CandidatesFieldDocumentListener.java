@@ -43,18 +43,18 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 	private void handleCandidatesList() {
 		String candidateText = field.getCandidateText();
 		candidatesList.setCandidateText(candidateText);
-		String text = field.getText();
-		if (isNullOrEmpty(candidateText)) {
-		    if (isNullOrEmpty(text)) {
-                field.setWindowState(CandidateWindowState.Wait);
+		CommandExecutor executor = field.getExecutor();
+        if (isNullOrEmpty(candidateText)) {
+		    if (executor.isCommited()) {
+		        field.setWindowState(CandidateWindowState.ArgumentWait);
             }else {
-                field.setWindowState(CandidateWindowState.ArgumentWait);
+                field.setWindowState(CandidateWindowState.Wait);
             }
 		} else {
-            if (isNullOrEmpty(text)) {
-                field.setWindowState(CandidateWindowState.Inputing);
-            }else {
+            if (executor.isCommited()) {
                 field.setWindowState(CandidateWindowState.ArgumentInputing);
+            }else {
+                field.setWindowState(CandidateWindowState.Inputing);
             }
 		}
 	}

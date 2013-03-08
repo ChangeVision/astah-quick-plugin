@@ -11,7 +11,6 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidatesSelector;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectArgument;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
@@ -53,33 +52,41 @@ public class Candidates {
             SelectCommand newState = commandFactory.create();
             setState(newState);
         }
+        if (state instanceof SelectCommand && executor.isCommited()) {
+            Command committed = executor.getCommand();
+            SelectArgument newState = new SelectArgument(committed);
+            setState(newState);
+        }
         Candidate[] candidates = state.filter(searchKey);
-        logger.trace("candidates:'{}'", candidates);
+        logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates);
         selector.setCandidates(candidates);
-        if (isChangedToArgumentState(candidates)) {
+        if (isChangedToArgumentState(key,candidates)) {
             Command committed = (Command) candidates[0];
             if (executor.isCommited() == false) {
                 executor.commit(committed);
             }
             SelectArgument newState = new SelectArgument(committed);
             setState(newState);
+            candidates = state.filter(searchKey);
+            logger.trace("candidates:'{}'", candidates);
+            selector.setCandidates(candidates);
         }
     }
 
-    private boolean isChangedToArgumentState(Candidate[] candidates) {
+    private boolean isChangedToArgumentState(String key,Candidate[] candidates) {
         boolean isCurrentCommandState = state instanceof SelectCommand;
-        return isCurrentCommandState && candidates.length == 1 && candidates[0] instanceof Command
-                && !(candidates[0] instanceof NotFound);
-    }
-
-    private boolean isChangedToCommandState(String searchKey) {
-        boolean isSelectArgument = state instanceof SelectArgument;
-        if (!isSelectArgument) {
+        boolean isFoundOnlyOneCommand = candidates.length == 1 && candidates[0] instanceof Command;
+        if (isCurrentCommandState == false || isFoundOnlyOneCommand == false) {
             return false;
         }
-        Command currentCommand = executor.getCommand();
-        String commandName = currentCommand.getName();
-        return commandName.length() > searchKey.length();
+        Command committed = (Command) candidates[0];
+        String commandName = committed.getName();
+        boolean isCommittedByKey = key.startsWith(commandName);
+        return isCurrentCommandState && isFoundOnlyOneCommand && (isCommittedByKey || executor.isCommited());
+    }
+
+    private boolean isChangedToCommandState(String key) {
+        return (state instanceof SelectArgument) && executor.isCommited() == false;
     }
 
     public void setState(CandidateState newState) {
