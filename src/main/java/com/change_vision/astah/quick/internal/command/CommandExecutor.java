@@ -16,7 +16,7 @@ public class CommandExecutor {
 
     private Command command;
     private List<Candidate> candidates = new ArrayList<Candidate>();
-    private static final String SEPARATE_COMMAND_CHAR = " ";
+    public static final String SEPARATE_COMMAND_CHAR = " ";
 
     public Command getCommand() {
         return command;
@@ -133,7 +133,10 @@ public class CommandExecutor {
             }
             return builder.toString();
         }
-        return candidateText;
+        if (candidateText.length() > commandName.length()) {
+            return candidateText.substring(commandName.length());
+        }
+        return "";
     }
 
     public void reset() {

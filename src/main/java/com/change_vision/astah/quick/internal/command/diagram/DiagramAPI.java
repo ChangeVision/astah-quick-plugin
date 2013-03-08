@@ -23,6 +23,9 @@ class DiagramAPI {
 
         @Override
         public boolean isTarget(INamedElement element) {
+            if (name.isEmpty()) {
+                return isDiagram(element);
+            }
         	String targetName = element.getName().toLowerCase();
         	return isDiagram(element) && targetName.startsWith(name);
         }

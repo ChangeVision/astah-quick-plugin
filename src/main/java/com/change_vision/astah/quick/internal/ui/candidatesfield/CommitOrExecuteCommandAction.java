@@ -71,7 +71,8 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         }
         if (executor.isCommited()) {
             executor.add(candidate);
-            field.setText(executor.getCommandText());
+            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            field.setText(commandText);
             this.candidatesList.close();
             return;
         }
@@ -84,7 +85,8 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
             }
             executor.commit(command);
             field.setWindowState(CandidateWindowState.ArgumentWait);
-            field.setText(executor.getCommandText());
+            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            field.setText(commandText);
         }
     }
 

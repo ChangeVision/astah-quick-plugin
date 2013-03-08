@@ -4,7 +4,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
-public class NullCandidate implements Candidate {
+public class NotFound implements Candidate {
 
 	@Override
 	public String getName() {

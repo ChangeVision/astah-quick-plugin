@@ -53,6 +53,7 @@ public class QuickPanel extends JPanel {
     }
     
     public void reset(){
+        candidatesField.setText("");
         candidatesField.setWindowState(CandidateWindowState.Wait);
     }
 

@@ -29,6 +29,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
     private final QuickWindow quickWindow;
 
+    private boolean settingText;
+
     public CandidatesField(QuickWindow quickWindow, CandidatesListWindow candidatesList) {
         this.quickWindow = quickWindow;
         this.candidatesList = candidatesList;
@@ -65,6 +67,17 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
             throw new IllegalStateException("Illegal state of window: '" + windowState.name() + "'");
         }
     }
+    
+    @Override
+    public void setText(String t) {
+        settingText = true;
+        super.setText(t);
+        settingText = false;
+    }
+    
+    public boolean isSettingText() {
+        return settingText;
+    }
 
     private void openCandidatesList() {
         if (candidatesList.isVisible() == false) {
@@ -81,7 +94,6 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         logger.trace("closeCandidatesListAndReset");
         Candidates commands = candidatesList.getCandidates();
         commands.setState(new SelectCommand());
-        setText(null);
         candidatesList.close();
         CommandExecutor executor = quickWindow.getExecutor();
         executor.reset();
