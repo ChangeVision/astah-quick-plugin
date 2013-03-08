@@ -133,7 +133,10 @@ public class CommandExecutor {
             }
             return builder.toString();
         }
-        return candidateText;
+        if (candidateText.length() > commandName.length()) {
+            return candidateText.substring(commandName.length());
+        }
+        return "";
     }
 
     public void reset() {
