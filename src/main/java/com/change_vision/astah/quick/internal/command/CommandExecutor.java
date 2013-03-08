@@ -16,7 +16,7 @@ public class CommandExecutor {
 
     private Command command;
     private List<Candidate> candidates = new ArrayList<Candidate>();
-    private static final String SEPARATE_COMMAND_CHAR = " ";
+    public static final String SEPARATE_COMMAND_CHAR = " ";
 
     public Command getCommand() {
         return command;
