@@ -11,7 +11,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.annotations.LooseName;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
@@ -54,11 +54,11 @@ public class CommandExecutor {
     }
 
     private void doExcecute(String candidateText) throws ExecuteCommandException {
-        if (isLooseNameCommand()) {
-            command.execute();
-            return;
-        }
         if (candidates.isEmpty()) {
+            if (isImmediateCommand()) {
+                command.execute();
+                return;
+            }
             executeByArguments(candidateText);
             return;
         }
@@ -72,8 +72,8 @@ public class CommandExecutor {
         }
     }
 
-    private boolean isLooseNameCommand() {
-        return command.getClass().isAnnotationPresent(LooseName.class);
+    private boolean isImmediateCommand() {
+        return command.getClass().isAnnotationPresent(Immediate.class);
     }
 
     private void executreByCandidates() throws ExecuteCommandException {
