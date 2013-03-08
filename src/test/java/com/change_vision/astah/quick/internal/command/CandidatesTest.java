@@ -30,9 +30,6 @@ public class CandidatesTest {
     @Mock
     private Command two;
 
-    @Mock
-    private CommandExecutor executor;
-
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -48,7 +45,8 @@ public class CandidatesTest {
         commandState.add(one);
         commandState.add(two);
 
-        candidates = new Candidates(executor);
+        CommandExecutor executor = new CommandExecutor();
+        candidates = new Candidates(executor );
         candidates.setCommandFactory(commandFactory);
     }
 

@@ -35,8 +35,4 @@ public class SelectArgument implements CandidateState {
         return candidates;
     }
 
-    public Command currentCommand() {
-        return committed;
-    }
-
 }

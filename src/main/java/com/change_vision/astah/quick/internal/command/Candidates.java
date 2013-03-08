@@ -58,6 +58,9 @@ public class Candidates {
         selector.setCandidates(candidates);
         if (isChangedToArgumentState(candidates)) {
             Command committed = (Command) candidates[0];
+            if (executor.isCommited() == false) {
+                executor.commit(committed);
+            }
             SelectArgument newState = new SelectArgument(committed);
             setState(newState);
         }
@@ -71,11 +74,10 @@ public class Candidates {
 
     private boolean isChangedToCommandState(String searchKey) {
         boolean isSelectArgument = state instanceof SelectArgument;
-        if (!isSelectArgument || this.executor.isCommited()) {
+        if (!isSelectArgument) {
             return false;
         }
-        SelectArgument argument = (SelectArgument) state;
-        Command currentCommand = argument.currentCommand();
+        Command currentCommand = executor.getCommand();
         String commandName = currentCommand.getName();
         return commandName.length() > searchKey.length();
     }
@@ -94,7 +96,7 @@ public class Candidates {
         if (state instanceof SelectCommand) {
             return (Command) selector.current();
         }
-        return ((SelectArgument) state).currentCommand();
+        return executor.getCommand();
     }
 
     public Candidate[] getCandidates() {
