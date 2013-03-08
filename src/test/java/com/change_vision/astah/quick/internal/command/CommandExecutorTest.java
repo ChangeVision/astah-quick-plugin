@@ -86,10 +86,9 @@ public class CommandExecutorTest {
     @Test
     public void candidateTextWhenCommittedAndSpace() throws Exception {
         executor.commit(command);
-        String candidateText = executor.getCandidateText(COMMAND_NAME + " ");
-        assertThat(candidateText,is(" "));
+        String candidateText = executor.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR);
+        assertThat(candidateText,is(COMMAND_SEPARATOR));
     }
-
 
     @Test
     public void candidateTextAfterCommitted() throws Exception {
