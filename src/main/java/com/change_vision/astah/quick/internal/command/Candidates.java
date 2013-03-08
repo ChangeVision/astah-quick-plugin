@@ -53,8 +53,7 @@ public class Candidates {
             setState(newState);
         }
         if (state instanceof SelectCommand && executor.isCommited()) {
-            Command committed = executor.getCommand();
-            SelectArgument newState = new SelectArgument(committed);
+            SelectArgument newState = new SelectArgument(executor);
             setState(newState);
         }
         Candidate[] candidates = state.filter(searchKey);
@@ -65,7 +64,7 @@ public class Candidates {
             if (executor.isCommited() == false) {
                 executor.commit(committed);
             }
-            SelectArgument newState = new SelectArgument(committed);
+            SelectArgument newState = new SelectArgument(executor);
             setState(newState);
             candidates = state.filter(searchKey);
             logger.trace("candidates:'{}'", candidates);
