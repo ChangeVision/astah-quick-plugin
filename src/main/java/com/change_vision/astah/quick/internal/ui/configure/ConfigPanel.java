@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -15,12 +16,16 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 @SuppressWarnings("serial")
 public class ConfigPanel extends JPanel {
     
-    public ConfigPanel(){
+    final private JWindow window;
+
+    public ConfigPanel(JWindow window){
+        this.window = window;
         setBackground(Color.white);
         JPanel panel = createKeyFieldPanel();
         add(panel);
@@ -35,8 +40,10 @@ public class ConfigPanel extends JPanel {
         Font font = getFont().deriveFont(32.0f);
         keyLabel.setFont(font);
         JTextField keyField = new KeyConfigField("current:" + "ctrl space");
-        JButton saveButton = new JButton("save");
-        JButton cancelButton = new JButton("cancel");
+        Action saveAction = new SaveAction(window);
+        JButton saveButton = new JButton(saveAction);
+        Action cancelAction = new CancelAction(window);
+        JButton cancelButton = new JButton(cancelAction);
         Font buttonFont = getFont().deriveFont(30.0f);
         saveButton.setFont(buttonFont);
         cancelButton.setFont(buttonFont);
