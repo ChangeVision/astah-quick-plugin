@@ -44,7 +44,7 @@ public class AstahAPIWrapper {
     }
     
     public boolean isModifiedProject() {
-       return  getProjectAccessor().isProjectModified();
+       return  isOpenedProject() && getProjectAccessor().isProjectModified();
     }
 
 	public boolean isOpenedProject(){
