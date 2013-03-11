@@ -16,75 +16,83 @@ import com.change_vision.jude.api.inf.system.SystemPropertyAccessor;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
 class ProjectAPI {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ProjectAPI.class);
-	
-	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
-	
-	void createProject(){
-		try {
-			getProjectAccessor().create();
-		} catch (IOException e) {
-			throw new IllegalStateException(e);
-		}
-	}
-	
-	void closeProject(){
-		getProjectAccessor().close();
-	}
-	
-	boolean isOpenedProject(){
-		return wrapper.isOpenedProject();
-	}
-	
-	boolean isClosedProject(){
-		return isOpenedProject() == false;
-	}
-	
-	JFrame getMainFrame(){
-		return getViewManager().getMainFrame();
-	}
 
-	private IViewManager getViewManager() {
-		try {
-			return getProjectAccessor().getViewManager();
-		} catch (InvalidUsingException e) {
-			logger.error(e.getLocalizedMessage(), e);
-			return null;
-		}
-	}
+    private static final Logger logger = LoggerFactory.getLogger(ProjectAPI.class);
 
-	private ProjectAccessor getProjectAccessor(){
-		return wrapper.getProjectAccessor();
-	}
+    private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 
-	void openProject(File file) {
-		try {
-			getProjectAccessor().open(file.getAbsolutePath());
-		} catch (Exception e) {
-			throw new IllegalStateException(e.getLocalizedMessage());
-		}
-	}
+    void createProject() {
+        try {
+            getProjectAccessor().create();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    void closeProject() {
+        getProjectAccessor().close();
+    }
+
+    boolean isModifiedProject() {
+        return wrapper.isModifiedProject();
+    }
+
+    boolean isOpenedProject() {
+        return wrapper.isOpenedProject();
+    }
+
+    boolean isClosedProject() {
+        return isOpenedProject() == false;
+    }
+
+    JFrame getMainFrame() {
+        return getViewManager().getMainFrame();
+    }
+
+    private IViewManager getViewManager() {
+        try {
+            return getProjectAccessor().getViewManager();
+        } catch (InvalidUsingException e) {
+            logger.error(e.getLocalizedMessage(), e);
+            return null;
+        }
+    }
+
+    private ProjectAccessor getProjectAccessor() {
+        return wrapper.getProjectAccessor();
+    }
+
+    void openProject(File file) {
+        try {
+            getProjectAccessor().open(file.getAbsolutePath());
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getLocalizedMessage());
+        }
+    }
 
     File[] getRecentFiles() {
         SystemPropertyAccessor systemPropertyAccessor = wrapper.getSystemPropertyAccessor();
         Properties systemProperties = systemPropertyAccessor.getSystemProperties();
         int recentFileNumber = 0;
         String recentFileNumberString = systemProperties.getProperty("jude.recent_file_number");
-        if (recentFileNumberString == null ||recentFileNumberString.isEmpty()) {
+        if (recentFileNumberString == null || recentFileNumberString.isEmpty()) {
             return new File[recentFileNumber];
         }
         recentFileNumber = Integer.valueOf(recentFileNumberString);
         File[] recentFiles = new File[recentFileNumber];
         for (int i = 0; i < recentFileNumber; i++) {
             String path = systemProperties.getProperty("jude.recent_file_" + i);
-            recentFiles[i] = new File(path );
+            recentFiles[i] = new File(path);
         }
         return recentFiles;
     }
-    
+
     void setWrapper(AstahAPIWrapper wrapper) {
         this.wrapper = wrapper;
+    }
+
+    void save(){
+        wrapper.save();
     }
 
 }

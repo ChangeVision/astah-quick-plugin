@@ -1,5 +1,9 @@
 package com.change_vision.astah.quick.internal.command.project;
 
+import java.awt.Component;
+
+import javax.swing.JOptionPane;
+
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
@@ -7,13 +11,34 @@ import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescrip
 
 @Immediate
 public class QuitCommand implements Command {
+    
+    private ProjectAPI api = new ProjectAPI();
 
     public String getName() {
         return "quit Astah";
     }
 
     public void execute(String... args) {
-        System.exit(0);
+        Component frame = api.getMainFrame();
+        if (api.isModifiedProject()) {
+            int confirm = JOptionPane.showConfirmDialog(frame, "Do you want to save this file before quit Astah?", "Quit and Save", JOptionPane.YES_NO_CANCEL_OPTION);
+            switch (confirm) {
+            case JOptionPane.YES_OPTION:
+                api.save();
+                System.exit(0);
+                break;
+            case JOptionPane.NO_OPTION:
+                System.exit(0);
+            default:
+                break;
+            }
+        }else {
+            int confirm = JOptionPane.showConfirmDialog(frame , "Do you want to quit Astah?", "Quit", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.OK_OPTION) {
+                System.exit(0);
+                return;
+            }
+        }
     }
 
     @Override
