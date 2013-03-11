@@ -23,6 +23,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class ConfigPanel extends JPanel {
     
     final private JWindow window;
+    private JTextField keyField;
 
     public ConfigPanel(JWindow window){
         this.window = window;
@@ -39,8 +40,8 @@ public class ConfigPanel extends JPanel {
         keyLabel.setOpaque(false);
         Font font = getFont().deriveFont(32.0f);
         keyLabel.setFont(font);
-        JTextField keyField = new KeyConfigField("current:" + "ctrl space");
-        Action saveAction = new SaveAction(window);
+        keyField = new KeyConfigField("current:" + "ctrl space");
+        Action saveAction = new SaveAction(this);
         JButton saveButton = new JButton(saveAction);
         Action cancelAction = new CancelAction(window);
         JButton cancelButton = new JButton(cancelAction);
@@ -95,6 +96,14 @@ public class ConfigPanel extends JPanel {
         
         JLabel configureImageLabel = new JLabel(configureImage);
         return configureImageLabel;
+    }
+
+    JWindow getWindow() {
+        return this.window;
+    }
+
+    public String getKeyStroke() {
+        return keyField.getText();
     }
 
     

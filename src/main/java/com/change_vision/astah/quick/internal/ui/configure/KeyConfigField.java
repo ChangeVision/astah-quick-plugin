@@ -63,4 +63,13 @@ final class KeyConfigField extends JTextField {
             g.setColor(prevColor);
         }
     }
+    
+    @Override
+    public String getText() {
+        String text = super.getText();
+        if (text.isEmpty()) {
+            return "ctrl SPACE";
+        }
+        return text;
+    }
 }
