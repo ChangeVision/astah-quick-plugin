@@ -10,23 +10,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.model.QuickProperties;
 
 class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
+
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(OpenQuickWindowEventDispatcher.class);
     
     private final AstahAPIWrapper wrapper = new AstahAPIWrapper();
+    
+    private final QuickProperties properties = new QuickProperties();
 
     private QuickWindow window;
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(e);
-        KeyStroke strokeEvent = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
+        String fireKeyStroke = properties.getKeyStroke();
+        KeyStroke strokeEvent = KeyStroke.getKeyStroke(fireKeyStroke);
         if(strokeEvent.equals(keyStroke)){
-            logger.trace("ctrl+space is fired.");
+            logger.trace("{} is fired.",fireKeyStroke);
             if(window == null){
                 createQuickWindow();
             }
@@ -39,6 +44,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
         }
         return false;
     }
+    
 
     private void createQuickWindow() {
         JFrame frame = wrapper.getMainFrame();
