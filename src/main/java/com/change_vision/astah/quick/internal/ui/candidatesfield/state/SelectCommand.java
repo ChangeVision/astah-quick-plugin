@@ -10,6 +10,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.diagram.DiagramCommands;
+import com.change_vision.astah.quick.internal.command.environment.EnvironmentCommands;
 import com.change_vision.astah.quick.internal.command.model.ModelCommands;
 import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
 import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
@@ -79,6 +80,7 @@ public class SelectCommand implements CandidateState {
         allCommands.addAll(ModelCommands.commands());
         allCommands.addAll(ProjectCommands.commands());
         allCommands.addAll(DiagramCommands.commands());
+        allCommands.addAll(EnvironmentCommands.commands());
     }
 
     @TestForMethod

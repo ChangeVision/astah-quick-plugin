@@ -14,12 +14,11 @@ import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
 public class QuickInterfaceUI {
 
     private KeyboardFocusManager focusManager;
-    private OpenQuickWindowEventDispatcher dispatcher;
+    private static final OpenQuickWindowEventDispatcher dispatcher = new OpenQuickWindowEventDispatcher();
     private final QuickProperties properties = new QuickProperties();
 
     public QuickInterfaceUI() {
         focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        dispatcher = new OpenQuickWindowEventDispatcher();
     }
 
     public void install() {
