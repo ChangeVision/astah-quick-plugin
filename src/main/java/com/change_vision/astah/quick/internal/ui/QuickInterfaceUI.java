@@ -24,17 +24,17 @@ public class QuickInterfaceUI {
 
     public void install() {
         if (properties.exists() == false) {
-            AstahAPIWrapper wrapper = new AstahAPIWrapper();
-            JFrame parent = wrapper.getMainFrame();
-            final ConfigWindow window = new ConfigWindow(parent);
-            window.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    focusManager.addKeyEventDispatcher(dispatcher);
-                }
-            });
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
+                    AstahAPIWrapper wrapper = new AstahAPIWrapper();
+                    JFrame parent = wrapper.getMainFrame();
+                    final ConfigWindow window = new ConfigWindow(parent);
+                    window.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            focusManager.addKeyEventDispatcher(dispatcher);
+                        }
+                    });
                     window.open();
                 }
             });

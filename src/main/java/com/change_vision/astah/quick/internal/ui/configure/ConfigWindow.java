@@ -16,6 +16,7 @@ public class ConfigWindow extends JWindow {
         JPanel configPanel = new ConfigPanel(this);
         add(configPanel);
         pack();
+        setAlwaysOnTop(true);
     }
 
     public void open() {
