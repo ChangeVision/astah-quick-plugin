@@ -39,7 +39,6 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         setEditable(true);
         candidatesList.getCandidates().addPropertyChangeListener(this);
         new CommitOrExecuteCommandAction(this, this.quickWindow, this.candidatesList);
-        new CommitCommandAction(this, this.candidatesList);
         new UpCandidatesListAction(this, this.candidatesList);
         new DownCandidatesListAction(this, this.candidatesList);
 

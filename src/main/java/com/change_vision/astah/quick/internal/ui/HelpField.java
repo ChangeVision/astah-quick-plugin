@@ -11,7 +11,6 @@ import javax.swing.Timer;
 public class HelpField extends JLabel {
     
     private final String[] messages = new String[]{
-            "(Ctrl+Right Arrow) commit command short cut",
             "(ESC) close quick panel"
     };
     
