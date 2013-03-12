@@ -13,7 +13,7 @@ import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
-import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
+import com.change_vision.astah.quick.internal.exception.UncommitedCommandExcepition;
 
 public class CommandExecutor {
     /**

@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.command.exception;
+package com.change_vision.astah.quick.internal.exception;
 
 public class UncommitedCommandExcepition extends IllegalStateException {
 
