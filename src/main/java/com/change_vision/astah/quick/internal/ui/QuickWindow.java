@@ -65,6 +65,7 @@ public class QuickWindow extends JWindow {
         setVisible(true);
         candidatesList.setPanelSize(getSize());
         candidatesList.setCandidateText("");
+        quickPanel.opened();
     }
 
     public CommandExecutor getExecutor() {

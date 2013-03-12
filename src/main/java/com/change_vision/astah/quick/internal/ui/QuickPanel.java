@@ -52,6 +52,10 @@ public class QuickPanel extends JPanel {
         this.closeButton.setAction(action);
     }
     
+    public void opened(){
+        candidatesField.setWindowState(CandidateWindowState.Inputing);
+    }
+    
     public void reset(){
         candidatesField.setText("");
         candidatesField.setWindowState(CandidateWindowState.Wait);
