@@ -13,7 +13,6 @@ public class ProjectCommands {
         commands.add(new NewProjectCommand());
         commands.add(new OpenProjectCommand());
         commands.add(new CloseProjectCommand());
-        commands.add(new QuitCommand());
     }
 
     public static List<Command> commands() {

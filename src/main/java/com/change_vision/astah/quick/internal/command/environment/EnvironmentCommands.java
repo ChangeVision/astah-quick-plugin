@@ -11,6 +11,7 @@ public class EnvironmentCommands {
 	
 	static {
 		commands.add(new ConfigCommand());
+        commands.add(new QuitCommand());
 	}
 	
 	public static List<Command> commands(){
