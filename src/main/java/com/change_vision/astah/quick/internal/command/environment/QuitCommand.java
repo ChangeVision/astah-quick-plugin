@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.project;
+package com.change_vision.astah.quick.internal.command.environment;
 
 import java.awt.Component;
 
@@ -12,7 +12,7 @@ import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescrip
 @Immediate
 public class QuitCommand implements Command {
     
-    private ProjectAPI api = new ProjectAPI();
+    private EnvironmentAPI api = new EnvironmentAPI();
 
     public String getName() {
         return "quit Astah";
