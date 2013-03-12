@@ -14,6 +14,7 @@ import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IClass;
+import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
@@ -31,7 +32,20 @@ public class ModelAPI {
     boolean isOpenedProject() {
         return wrapper.isOpenedProject();
     }
-
+    
+    void addStereotype(IElement element,String stereotype){
+        ITransactionManager transactionManager = getTransactionManager();
+        try {
+            transactionManager.beginTransaction();
+            element.addStereotype(stereotype);
+            transactionManager.endTransaction();
+        } catch (InvalidEditingException e) {
+            transactionManager.abortTransaction();
+            throw new IllegalStateException(e);
+        }
+        
+    }
+    
     private ProjectAccessor getProjectAccessor() {
         return wrapper.getProjectAccessor();
     }

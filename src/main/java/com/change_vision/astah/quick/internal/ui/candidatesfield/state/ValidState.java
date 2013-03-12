@@ -9,8 +9,8 @@ import com.change_vision.astah.quick.command.Command;
 public class ValidState implements Candidate {
 
     private Command command;
+    
     private String args;
-
     public ValidState(Command command,String args) {
         this.command = command;
         this.args = args;

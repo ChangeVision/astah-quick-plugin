@@ -225,9 +225,9 @@ public class CommandExecutorTest {
     public void resetWithCandidates() throws Exception {
         executor.commit(candidateCommand);
         executor.add(one);
-        assertThat(executor.getCandidates().size(),is(1));
+        assertThat(executor.getCandidates().length,is(1));
         executor.reset();
-        assertThat(executor.getCandidates().size(),is(0));
+        assertThat(executor.getCandidates().length,is(0));
     }
 
 }

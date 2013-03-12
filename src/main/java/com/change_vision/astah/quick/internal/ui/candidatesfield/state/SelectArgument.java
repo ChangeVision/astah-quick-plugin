@@ -28,7 +28,8 @@ public class SelectArgument implements CandidateState {
         Command committed = executor.getCommand();
         if (committed instanceof CandidatesProvider) {
             CandidatesProvider provider = (CandidatesProvider) committed;
-            candidates = provider.candidate(key);
+            Candidate[] committedCandidates = executor.getCandidates();
+            candidates = provider.candidate(committedCandidates,key);
         } else {
             candidates = new Candidate[] {
                     new ValidState(committed,key)

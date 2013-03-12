@@ -95,7 +95,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 	}
 
     @Override
-    public Candidate[] candidate(String searchKey) {
+    public Candidate[] candidate(Candidate[] committed,String searchKey) {
         File[] recentFiles = api.getRecentFiles();
         Candidate[] candidates = new Candidate[recentFiles.length + 1];
         candidates[0] = new FileChooserCandidate();

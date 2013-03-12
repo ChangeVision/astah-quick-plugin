@@ -52,7 +52,7 @@ public class SelectArgumentTest {
 	public void filterProviderCommand() throws Exception {
         when(executor.getCommand()).thenReturn(providerCommand);
 		argument.filter("hoge");		
-		verify(providerCommand).candidate("hoge");
+		verify(providerCommand).candidate(new Candidate[0],"hoge");
 	}
 
 }

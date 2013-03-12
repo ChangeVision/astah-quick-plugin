@@ -60,7 +60,7 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 	}
 
 	@Override
-	public Candidate[] candidate(String searchKey) {
+	public Candidate[] candidate(Candidate[] committed,String searchKey) {
 		logger.trace("searchKey:{}",searchKey);
 		IDiagram[] found = api.find(searchKey);
 		Candidate[] candidates = new DiagramCandidate[found.length];

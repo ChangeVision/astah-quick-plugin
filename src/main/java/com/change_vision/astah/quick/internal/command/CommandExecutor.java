@@ -14,7 +14,6 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.command.exception.UncommitedCommandExcepition;
-import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 
 public class CommandExecutor {
     /**
@@ -142,13 +141,9 @@ public class CommandExecutor {
         String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
         if (candidateWords.length > commandWords.length) {
             StringBuilder builder = new StringBuilder();
-            boolean first = true;
             for(int i = commandWords.length; i < candidateWords.length; i++){
                 builder.append(candidateWords[i]);
-                if (first == false) {
-                    builder.append(SEPARATE_COMMAND_CHAR);
-                }
-                first = false;
+                builder.append(SEPARATE_COMMAND_CHAR);
             }
             return builder.toString().trim();
         }
@@ -163,9 +158,8 @@ public class CommandExecutor {
         this.candidates.clear();
     }
     
-    @TestForMethod
-    List<Candidate> getCandidates() {
-        return candidates;
+    public Candidate[] getCandidates() {
+        return candidates.toArray(new Candidate[0]);
     }
 
     public boolean isValid() {

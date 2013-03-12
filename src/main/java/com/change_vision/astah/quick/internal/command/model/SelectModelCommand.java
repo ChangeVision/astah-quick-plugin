@@ -6,8 +6,9 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.annotations.LooseName;
-import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.view.IconDescription;
 
 @Immediate
 @LooseName
@@ -43,7 +44,7 @@ public class SelectModelCommand implements Command {
 	
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_027_search.png");
+        return new AstahCommandIconDescription(IconDescription.MODEL);
 	}
 	
 	public void setApi(ModelAPI api) {

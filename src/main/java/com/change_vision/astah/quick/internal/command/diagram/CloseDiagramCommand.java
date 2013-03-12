@@ -52,7 +52,7 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
     }
 
     @Override
-    public Candidate[] candidate(String searchKey) {
+    public Candidate[] candidate(Candidate[] committed,String searchKey) {
         IDiagram[] openDiagrams = api.openDiagrams();
         Candidate[] candidates = new Candidate[openDiagrams.length + 1];
         candidates[0] = new CurrentDiagramCandidate(api.getCurrentDiagram());
