@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.project;
+package com.change_vision.astah.quick.command.candidates;
 
 import java.io.File;
 
@@ -9,11 +9,11 @@ import com.change_vision.astah.quick.internal.command.AstahCommandIconDescriptio
 import com.change_vision.jude.api.inf.view.IconDescription;
 
 @Immediate
-class FileCandidate implements Candidate{
+public class ProjectCandidate implements Candidate{
     
     private File file;
 
-    FileCandidate(File file){
+    public ProjectCandidate(File file){
         this.file = file;
     }
 
@@ -37,7 +37,7 @@ class FileCandidate implements Candidate{
         return new AstahCommandIconDescription(IconDescription.PROJECT);
     }
     
-    File getFile() {
+    public File getFile() {
         return file;
     }
 

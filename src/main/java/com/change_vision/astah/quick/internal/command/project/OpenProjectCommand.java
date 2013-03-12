@@ -10,6 +10,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.candidates.ProjectCandidate;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -101,7 +102,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
         candidates[0] = new FileChooserCandidate();
         for (int i = 0; i < recentFiles.length; i++) {
             File file = recentFiles[i];
-            candidates[i + 1] = new FileCandidate(file);
+            candidates[i + 1] = new ProjectCandidate(file);
         }
         return candidates;
     }
@@ -114,8 +115,8 @@ public class OpenProjectCommand implements CandidateSupportCommand {
         }
         // TODO Should this command supports multiple candidates?
         for (Candidate candidate : candidates) {
-            if (candidate instanceof FileCandidate) {
-                FileCandidate fileCandidate = (FileCandidate) candidate;
+            if (candidate instanceof ProjectCandidate) {
+                ProjectCandidate fileCandidate = (ProjectCandidate) candidate;
                 File file = fileCandidate.getFile();
                 if (file != null) {
                     api.openProject(file);

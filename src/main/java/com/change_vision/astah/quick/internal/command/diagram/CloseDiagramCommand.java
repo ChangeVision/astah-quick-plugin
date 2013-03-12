@@ -4,6 +4,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.candidates.DiagramCandidate;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 

@@ -3,6 +3,8 @@ package com.change_vision.astah.quick.internal.command.model;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.candidates.ElementCandidate;
+import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;

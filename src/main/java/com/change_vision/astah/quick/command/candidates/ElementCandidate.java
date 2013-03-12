@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.model;
+package com.change_vision.astah.quick.command.candidates;
 
 import static java.lang.String.format;
 
@@ -8,11 +8,11 @@ import com.change_vision.astah.quick.internal.command.AstahCommandIconDescriptio
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-class ElementCandidate implements Candidate {
+public class ElementCandidate implements Candidate {
     
     private INamedElement element;
 
-    ElementCandidate(INamedElement element) {
+    public ElementCandidate(INamedElement element) {
         this.element = element;
     }
 
@@ -37,7 +37,7 @@ class ElementCandidate implements Candidate {
         return new AstahCommandIconDescription(IconDescription.MODEL);
     }
     
-    INamedElement getElement() {
+    public INamedElement getElement() {
         return element;
     }
 

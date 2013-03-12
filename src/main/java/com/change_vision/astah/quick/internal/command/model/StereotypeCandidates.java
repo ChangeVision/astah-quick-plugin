@@ -3,6 +3,8 @@ package com.change_vision.astah.quick.internal.command.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
+
 class StereotypeCandidates {
     
     private static final StereotypeCandidate[] DEFINED_CANDIDATES = new StereotypeCandidate[]{

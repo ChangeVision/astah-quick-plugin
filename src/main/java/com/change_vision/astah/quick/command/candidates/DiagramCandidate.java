@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.diagram;
+package com.change_vision.astah.quick.command.candidates;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import com.change_vision.jude.api.inf.model.IUseCaseDiagram;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
 @Immediate
-class DiagramCandidate implements Candidate{
+public class DiagramCandidate implements Candidate{
     /**
      * Logger for this class
      */
@@ -34,7 +34,7 @@ class DiagramCandidate implements Candidate{
 	
 	private IDiagram diagram;
 
-	DiagramCandidate(IDiagram diagram){
+	public DiagramCandidate(IDiagram diagram){
 		this.diagram = diagram;
 	}
 
