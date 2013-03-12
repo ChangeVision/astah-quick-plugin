@@ -78,8 +78,8 @@ public class SelectCommand implements CandidateState {
     @TestForMethod
     public void initCommands() {
         allCommands.addAll(ModelCommands.commands());
-        allCommands.addAll(ProjectCommands.commands());
         allCommands.addAll(DiagramCommands.commands());
+        allCommands.addAll(ProjectCommands.commands());
         allCommands.addAll(EnvironmentCommands.commands());
     }
 

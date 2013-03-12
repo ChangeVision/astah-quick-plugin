@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
-import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
@@ -107,7 +106,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         quickWindow.close();
         try {
             executor.execute(candidateText);
-        } catch (ExecuteCommandException e) {
+        } catch (Exception e) {
             quickWindow.notifyError("Alert", e.getMessage());
         }
         quickWindow.reset();
