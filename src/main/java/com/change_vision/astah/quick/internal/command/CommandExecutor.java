@@ -1,5 +1,7 @@
 package com.change_vision.astah.quick.internal.command;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,8 @@ import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.exception.UncommitedCommandExcepition;
 
 public class CommandExecutor {
+    public static final String PROP_OF_COMMAND = "command";
+    public static final String SEPARATE_COMMAND_CHAR = " ";
     /**
      * Logger for this class
      */
@@ -23,14 +27,16 @@ public class CommandExecutor {
 
     private Command command;
     private List<Candidate> candidates = new ArrayList<Candidate>();
-    public static final String SEPARATE_COMMAND_CHAR = " ";
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public Command getCommand() {
         return command;
     }
 
     public void commit(Command command) {
+        Command old = this.command;
         this.command = command;
+        support.firePropertyChange(PROP_OF_COMMAND, old, command);
     }
 
     public boolean isCommited() {
@@ -180,5 +186,15 @@ public class CommandExecutor {
         }
         return candidates.remove(candidates.size() - 1);
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
+    
+    
 
 }
