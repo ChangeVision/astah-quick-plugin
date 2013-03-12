@@ -47,8 +47,10 @@ public class CommandExecutor {
     }
 
     public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
+        logger.trace("execute:'{}'",candidateText);
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
+        candidateText = candidateText.replaceAll("\\s+", SEPARATE_COMMAND_CHAR);
         doExcecute(candidateText);
         reset();
     }
@@ -148,7 +150,7 @@ public class CommandExecutor {
                 }
                 first = false;
             }
-            return builder.toString();
+            return builder.toString().trim();
         }
         if (candidateText.length() > commandName.length()) {
             return candidateText.substring(commandName.length());

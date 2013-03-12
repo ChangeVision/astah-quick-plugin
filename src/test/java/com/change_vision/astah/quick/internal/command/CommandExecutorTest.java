@@ -105,6 +105,13 @@ public class CommandExecutorTest {
         String candidateText = executor.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
         assertThat(candidateText,is("hoge"));
     }
+    
+    @Test
+    public void candidateTextHasSpaceSequence() throws Exception {
+        executor.commit(command);
+        String candidateText = executor.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR + COMMAND_SEPARATOR + "hoge");
+        assertThat(candidateText,is("hoge"));
+    }
 
     @Test(expected=UncommitedCommandExcepition.class)
     public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition, ExecuteCommandException {
@@ -143,6 +150,21 @@ public class CommandExecutorTest {
         executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
         verify(command).execute("hoge");
     }
+    
+    @Test
+    public void callExecuteWhenArgumentIsStringAndHasSpaceSequence() throws Exception {
+        executor.commit(command);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + COMMAND_SEPARATOR + "hoge");
+        verify(command).execute("hoge");
+    }
+    
+    @Test
+    public void callExecuteWhenArgumentIsStringAndHasSpaceTripleSequence() throws Exception {
+        executor.commit(command);
+        executor.execute(COMMAND_NAME + COMMAND_SEPARATOR + COMMAND_SEPARATOR + COMMAND_SEPARATOR + "hoge");
+        verify(command).execute("hoge");
+    }
+
     
     @Test
     public void callExecuteWhenAnArgumentIsSet() throws Exception {
