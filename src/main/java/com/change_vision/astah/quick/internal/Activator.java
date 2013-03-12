@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick;
+package com.change_vision.astah.quick.internal;
 
 
 import org.osgi.framework.BundleActivator;
