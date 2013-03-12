@@ -16,43 +16,44 @@ import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 
 public class SelectArgumentTest {
-	
-	private static abstract class CandidatesProviderCommand implements Command,CandidatesProvider{
-		
-	}
-	
-	@Mock
-	private Command committed;
-	
-	@Mock
-	private CandidatesProviderCommand providerCommand;
-	
-	@Mock
-	private CommandExecutor executor;
+
+    private static abstract class CandidatesProviderCommand implements Command, CandidatesProvider {
+
+    }
+
+    @Mock
+    private Command committed;
+
+    @Mock
+    private CandidatesProviderCommand providerCommand;
+
+    @Mock
+    private CommandExecutor executor;
 
     private SelectArgument argument;
-	
-	@Before
-	public void before() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		
-		when(committed.getName()).thenReturn("committed command");
-		when(providerCommand.getName()).thenReturn("provider command");
-		argument = new SelectArgument(executor);
-	}
 
-	@Test
-	public void filterCommitted() {
-	    when(executor.getCommand()).thenReturn(committed);
-		Candidate[] candidates = argument.filter("committed command");
-		assertThat(candidates.length,is(1));
-	}
-	
-	@Test
-	public void filterProviderCommand() throws Exception {
+    @Before
+    public void before() throws Exception {
+        MockitoAnnotations.initMocks(this);
+
+        when(committed.getName()).thenReturn("committed command");
+        when(providerCommand.getName()).thenReturn("provider command");
+        argument = new SelectArgument(executor);
+    }
+
+    @Test
+    public void filterCommitted() {
+        when(executor.getCommand()).thenReturn(committed);
+        Candidate[] candidates = argument.filter("committed command");
+        assertThat(candidates.length, is(1));
+    }
+
+    @Test
+    public void filterProviderCommand() throws Exception {
+        when(executor.getCandidates()).thenReturn(new Candidate[0]);
         when(executor.getCommand()).thenReturn(providerCommand);
-		argument.filter("hoge");		
-		verify(providerCommand).candidate(new Candidate[0],"hoge");
-	}
+        argument.filter("hoge");
+        verify(providerCommand).candidate(new Candidate[0], "hoge");
+    }
 
 }

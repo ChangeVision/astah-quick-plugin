@@ -159,6 +159,9 @@ public class CommandExecutor {
     }
     
     public Candidate[] getCandidates() {
+        if (candidates.size() == 0) {
+            return new Candidate[0];
+        }
         return candidates.toArray(new Candidate[0]);
     }
 
