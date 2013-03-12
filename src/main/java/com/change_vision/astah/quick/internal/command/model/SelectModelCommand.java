@@ -1,40 +1,37 @@
 package com.change_vision.astah.quick.internal.command.model;
 
-import static java.lang.String.format;
-
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.annotations.LooseName;
-import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.jude.api.inf.model.INamedElement;
-import com.change_vision.jude.api.inf.view.IconDescription;
 
 @Immediate
 @LooseName
 public class SelectModelCommand implements Command {
 
-	private final INamedElement foundModel;
+	private final ElementCandidate candidate;
 	private ModelAPI api = new ModelAPI();
 
 	public SelectModelCommand(INamedElement foundModel) {
-		this.foundModel = foundModel;
+		this.candidate = new ElementCandidate(foundModel);
 	}
 
 	@Override
 	public String getName() {
-		return foundModel.getName();
+		return candidate.getName();
 	}
 
 	@Override
 	public void execute(String... args) {
-		api.showInStructureTree(foundModel);
+		INamedElement element = candidate.getElement();
+		api.showInStructureTree(element);
 	}
 
 	@Override
 	public String getDescription() {
-		String fullName = foundModel.getFullName(".");
-		return format("%s", fullName);
+		return candidate.getDescription();
 	}
 
 	@Override
@@ -44,7 +41,7 @@ public class SelectModelCommand implements Command {
 	
 	@Override
 	public CandidateIconDescription getIconDescription() {
-        return new AstahCommandIconDescription(IconDescription.MODEL);
+		return candidate.getIconDescription();
 	}
 	
 	public void setApi(ModelAPI api) {

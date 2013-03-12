@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
-import com.change_vision.jude.api.inf.model.IPackage;
 
 public class SelectModelCommandFactory {
 
@@ -31,22 +29,6 @@ public class SelectModelCommandFactory {
     }
 
     private Command createSelectCommand(INamedElement foundModel) {
-        if (foundModel instanceof IClass) {
-            IClass classModel = (IClass) foundModel;
-            boolean isInterface = classModel.hasStereotype("interface");
-            if (isInterface) {
-                return new SelectInterfaceCommand(classModel);
-            }
-            boolean isActor = classModel.hasStereotype("actor");
-            if (isActor) {
-                return new SelectActorCommand(classModel);
-            }
-            return new SelectClassCommand(classModel);
-        }
-        if (foundModel instanceof IPackage) {
-            IPackage packageModel = (IPackage) foundModel;
-            return new SelectPackageCommand(packageModel);
-        }
         return new SelectModelCommand(foundModel);
     }
 

@@ -66,45 +66,6 @@ public class SelectModelCommandFactoryTest {
 	}
 	
 	@Test
-	public void foundAClass() throws Exception {
-		INamedElement[] elements = new INamedElement[]{
-				clazz
-		};
-		when(api.find(dummyKey)).thenReturn(elements);
-		
-		List<Candidate> candidates = factory.create(dummyKey);
-		assertThat(candidates.size(),is(1));
-		Candidate candidate = candidates.get(0);
-		assertThat(candidate,is(instanceOf(SelectClassCommand.class)));
-	}
-	
-	@Test
-	public void foundAInterface() throws Exception {
-		INamedElement[] elements = new INamedElement[]{
-				interfaze
-		};
-		when(api.find(dummyKey)).thenReturn(elements);
-		
-		List<Candidate> candidates = factory.create(dummyKey);
-		assertThat(candidates.size(),is(1));
-		Candidate candidate = candidates.get(0);
-		assertThat(candidate,is(instanceOf(SelectInterfaceCommand.class)));		
-	}
-	
-	@Test
-	public void foundAPackage() throws Exception {
-		INamedElement[] elements = new INamedElement[]{
-				packaze
-		};
-		when(api.find(dummyKey)).thenReturn(elements);
-		
-		List<Candidate> candidates = factory.create(dummyKey);
-		assertThat(candidates.size(),is(1));
-		Candidate candidate = candidates.get(0);
-		assertThat(candidate,is(instanceOf(SelectPackageCommand.class)));				
-	}
-	
-	@Test
 	public void foundModels() throws Exception {
 		INamedElement[] elements = new INamedElement[]{
 				clazz,

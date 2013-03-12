@@ -24,9 +24,6 @@ public class SelectCommand implements CandidateState {
 
     private final List<Command> allCommands = new ArrayList<Command>();
 
-    static {
-    }
-
     private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
 
     public SelectCommand() {
