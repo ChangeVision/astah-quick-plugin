@@ -61,6 +61,18 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>dev.change-vision.com-deploy</id>
+			<name>dev.change-vision.com Maven Repository</name>
+			<url>scpexe://dev.change-vision.com/opt/repository/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev.change-vision.com-snapshot-deploy</id>
+			<name>dev.change-vision.com Maven Repository</name>
+			<url>scpexe://dev.change-vision.com/opt/repository/maven2-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<reporting>
 		<plugins>
 			<plugin>
