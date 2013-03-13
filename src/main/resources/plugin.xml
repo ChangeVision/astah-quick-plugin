@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-
+   <extension point="com.change_vision.astah.ui.actionSets">
+      <actionSet
+            label="%action_set_setting_quick"
+            visible="true"
+            id="com.change_vision.quick.actionSet">
+         <action
+			   label="%quick_list"
+               class="com.change_vision.astah.quick.internal.ui.actions.ConfigureQuickAction"
+               tooltip="%quick_list_tooltip"
+               menubarPath="help/version"
+               id="com.change_vision.astah.quick.setting">
+         </action>
+     </actionSet>
+   </extension>
 </plugin>

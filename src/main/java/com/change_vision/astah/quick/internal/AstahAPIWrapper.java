@@ -1,10 +1,18 @@
 package com.change_vision.astah.quick.internal;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
+import com.change_vision.jude.api.inf.exception.LicenseNotFoundException;
+import com.change_vision.jude.api.inf.exception.ProjectLockedException;
+import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectAccessorFactory;
+import com.change_vision.jude.api.inf.system.SystemPropertyAccessor;
+import com.change_vision.jude.api.inf.system.SystemPropertyAccessorFactory;
+import com.change_vision.jude.api.inf.view.IDiagramViewManager;
 import com.change_vision.jude.api.inf.view.IIconManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
@@ -34,6 +42,10 @@ public class AstahAPIWrapper {
             throw new IllegalStateException("ProjectAccessor class is not found. It maybe classpath issue. Please check your classpath.");
         }
     }
+    
+    public boolean isModifiedProject() {
+       return  isOpenedProject() && getProjectAccessor().isProjectModified();
+    }
 
 	public boolean isOpenedProject(){
 		return getProjectAccessor().hasProject();
@@ -46,5 +58,31 @@ public class AstahAPIWrapper {
 	public boolean isClosedProject() {
 		return isOpenedProject() == false;
 	}
+
+    public IDiagramViewManager getDiagramViewManager() {
+        return getViewManager().getDiagramViewManager();
+    }
+    
+    public SystemPropertyAccessor getSystemPropertyAccessor(){
+        try {
+            return SystemPropertyAccessorFactory.getSystemPropertyAccessor();
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("SystemPropertyAccessor class is not found. It maybe classpath issue. Please check your classpath.");
+        }
+    }
+
+    public void save(){
+        try {
+            getProjectAccessor().save();
+        } catch (LicenseNotFoundException e) {
+            throw new IllegalStateException("License is not installed or using community.",e);
+        } catch (ProjectNotFoundException e) {
+            throw new IllegalStateException("Project is not found.",e);
+        } catch (ProjectLockedException e) {
+            throw new IllegalStateException("Project is locked.",e);
+        } catch (IOException e) {
+            throw new IllegalStateException("IOException is occurred.",e);
+        }
+    }
 
 }

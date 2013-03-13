@@ -7,7 +7,7 @@
 
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>${user.home}/.astah/${astah.edition}/astah.log</File>
+		<File>${user.home}/.astah/${astah.edition}/quick.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
 			<FileNamePattern>${user.home}/.astah/${astah.edition}/.%i.log.zip</FileNamePattern>
 			<MinIndex>1</MinIndex>
@@ -25,9 +25,11 @@
 	</appender>
 
 
-	<root level="${rootLevel:-OFF}">
+	<root level="TRACE">
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
+		<logger name="com.change_vision" level="${rootLevel:-OFF}">
+			<appender-ref ref="FILE" />
+		</logger>
 	</root>
 
 </configuration>

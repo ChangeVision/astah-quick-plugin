@@ -13,9 +13,10 @@ public class CandidatesSelector<T extends Candidate> {
     private static final Logger logger = LoggerFactory.getLogger(CandidatesSelector.class);
 	
 	private int currentIndex;
-	private T[] candidates;
+	@SuppressWarnings("unchecked")
+	private T[] candidates = (T[]) new Candidate[]{};
 	
-	void up() {
+    public void up() {
 		if(candidates.length == 0) return;
 		int oldValue = currentIndex;
 		currentIndex--;
@@ -26,12 +27,14 @@ public class CandidatesSelector<T extends Candidate> {
 	}
 
 	@SuppressWarnings("unchecked")
-	T current() {
-		if(candidates.length == 0) return (T) new NullCandidate();
+	public T current() {
+		if(candidates.length == 0){
+		    return (T) new NotFound();
+		}
 		return candidates[currentIndex];
 	}
 
-	void down() {
+	public void down() {
 		int oldValue = currentIndex;
 		currentIndex++;
 		if(currentIndex >= candidates.length){
@@ -45,7 +48,7 @@ public class CandidatesSelector<T extends Candidate> {
 		logger.trace("{}: old:'{}' new:'{}'",new Object[]{propertyName,oldValue,newValue});
     }
 
-	void setCandidates(T[] candidates) {
+	public void setCandidates(T[] candidates) {
 		this.candidates = candidates;
 		this.currentIndex = 0;
 	}

@@ -28,6 +28,7 @@ public final class CandidatesListWindow extends JWindow {
     }
 
 	public void setCandidateText(String candidateText) {
+	    logger.trace("setCandidateText:{}",candidateText);
 		panel.updateCandidateText(candidateText);
 	}
 
@@ -58,11 +59,6 @@ public final class CandidatesListWindow extends JWindow {
 	public void open() {
 		logger.trace("open");
 		setVisible(true);
-	}
-	
-	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
 	}
 
 }

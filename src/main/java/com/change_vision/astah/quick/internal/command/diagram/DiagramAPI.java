@@ -4,43 +4,65 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IDiagramViewManager;
-import com.change_vision.jude.api.inf.view.IViewManager;
 
 class DiagramAPI {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
+	private final class DiagramFinder implements ModelFinder {
+        private final String name;
+
+        private DiagramFinder(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean isTarget(INamedElement element) {
+            if (name.isEmpty()) {
+                return isDiagram(element);
+            }
+        	String targetName = element.getName().toLowerCase();
+        	return isDiagram(element) && targetName.startsWith(name);
+        }
+
+        private boolean isDiagram(INamedElement element) {
+        	return element instanceof IDiagram;
+        }
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
 	
-	private AstahAPIWrapper wrapper = new AstahAPIWrapper();
+	private final AstahAPIWrapper wrapper;
+	
+	DiagramAPI(){
+	    this.wrapper = new AstahAPIWrapper();
+	}
+	
+	@TestForMethod
+	DiagramAPI(AstahAPIWrapper wrapper){
+	    this.wrapper = wrapper;
+	}
 	
 	void open(IDiagram diagram){
-		if(diagram == null) throw new IllegalArgumentException("diagram is null");
-		IViewManager viewManager = wrapper.getViewManager();
-		IDiagramViewManager diagramViewManager = viewManager.getDiagramViewManager();
+		if(diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.open_null_argument")); //$NON-NLS-1$
+		IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
 		diagramViewManager.open(diagram);
 	}
 	
 	IDiagram[] find(final String name){
-		logger.trace("find:{}",name);
+        if(name == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.find_null_argument")); //$NON-NLS-1$
+		logger.trace("find:{}",name); //$NON-NLS-1$
 		ProjectAccessor projectAccessor = wrapper.getProjectAccessor();
+		DiagramFinder diagramFinder = new DiagramFinder(name);
 		INamedElement[] elements = null;
 		try {
-			elements = projectAccessor.findElements(new ModelFinder() {
-				@Override
-				public boolean isTarget(INamedElement element) {
-					String targetName = element.getName().toLowerCase();
-					return isDiagram(element) && targetName.startsWith(name);
-				}
-
-				private boolean isDiagram(INamedElement element) {
-					return element instanceof IDiagram;
-				}
-			});
+            elements = projectAccessor.findElements(diagramFinder);
 		} catch (ProjectNotFoundException e) {
 			throw new IllegalStateException(e);
 		}
@@ -54,4 +76,31 @@ class DiagramAPI {
 	boolean isOpenedProject(){
 		return wrapper.isOpenedProject();
 	}
+
+    void close(IDiagram diagram) {
+        if (diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.close_null_argument")); //$NON-NLS-1$
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        diagramViewManager.close(diagram);
+    }
+    
+    boolean isOpenDiagrams() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        IDiagram currentDiagram = diagramViewManager.getCurrentDiagram();
+        return currentDiagram != null;
+    }
+
+    void closeCurrentDiagram() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        diagramViewManager.closeCurrentDiagramEditor();
+    }
+
+    IDiagram[] openDiagrams() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        return diagramViewManager.getOpenDiagrams();
+    }
+
+    IDiagram getCurrentDiagram() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        return diagramViewManager.getCurrentDiagram();
+    }
 }

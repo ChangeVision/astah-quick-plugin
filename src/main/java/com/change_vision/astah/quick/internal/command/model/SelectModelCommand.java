@@ -1,46 +1,50 @@
 package com.change_vision.astah.quick.internal.command.model;
 
-import static java.lang.String.format;
-
-import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
-import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.annotations.LooseName;
+import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
+@Immediate
+@LooseName
 public class SelectModelCommand implements Command {
 
-	private final INamedElement foundModel;
-	private static final ModelAPI api = new ModelAPI();
+	private final ElementCandidate candidate;
+	private ModelAPI api = new ModelAPI();
 
 	public SelectModelCommand(INamedElement foundModel) {
-		this.foundModel = foundModel;
+		this.candidate = new ElementCandidate(foundModel);
 	}
 
 	@Override
 	public String getName() {
-		return foundModel.getName();
+		return candidate.getName();
 	}
 
 	@Override
 	public void execute(String... args) {
-		api.showInStructureTree(foundModel);
+		INamedElement element = candidate.getElement();
+		api.showInStructureTree(element);
 	}
 
 	@Override
 	public String getDescription() {
-		String fullName = foundModel.getFullName(".");
-		return format("%s", fullName);
+		return candidate.getDescription();
 	}
 
 	@Override
-	public boolean isEnable() {
+	public boolean isEnabled() {
 		return true;
 	}
 	
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_027_search.png");
+		return candidate.getIconDescription();
 	}
-
-
+	
+	public void setApi(ModelAPI api) {
+        this.api = api;
+    }
 }
