@@ -51,7 +51,7 @@ public class ConfigPanel extends JPanel {
         JButton saveButton = new JButton(saveAction);
         Action cancelAction = new CancelAction(window);
         JButton cancelButton = new JButton(cancelAction);
-        Font buttonFont = getFont().deriveFont(30.0f);
+        Font buttonFont = getFont().deriveFont(24.0f);
         saveButton.setFont(buttonFont);
         cancelButton.setFont(buttonFont);
         GroupLayout gl_panel = new GroupLayout(panel);
