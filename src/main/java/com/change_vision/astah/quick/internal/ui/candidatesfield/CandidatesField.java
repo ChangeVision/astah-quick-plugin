@@ -6,6 +6,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.Document;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +47,12 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(this,
                 this.candidatesList);
         
-        getDocument().addDocumentListener(listener);
+        Document document = getDocument();
+        if (document instanceof AbstractDocument) {
+            AbstractDocument abstractDocument = (AbstractDocument) document;
+            abstractDocument.setDocumentFilter(new CandidatesFieldDocumentFilter());
+        }
+        document.addDocumentListener(listener);
     }
 
     public void setWindowState(CandidateWindowState windowState) {
