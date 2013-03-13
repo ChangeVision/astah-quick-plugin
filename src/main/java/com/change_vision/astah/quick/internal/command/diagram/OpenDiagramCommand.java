@@ -7,6 +7,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.candidates.DiagramCandidate;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 
@@ -21,12 +22,12 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 	
 	@Override
 	public String getName() {
-		return "open diagram";
+		return "open diagram"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getDescription() {
-		return "open specified diagram";
+		return Messages.getString("OpenDiagramCommand.description"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png");
+		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class OpenDiagramCommand implements CandidateSupportCommand {
 
 	@Override
 	public Candidate[] candidate(Candidate[] committed,String searchKey) {
-		logger.trace("searchKey:{}",searchKey);
+		logger.trace("searchKey:{}",searchKey); //$NON-NLS-1$
 		IDiagram[] found = api.find(searchKey);
 		Candidate[] candidates = new DiagramCandidate[found.length];
 

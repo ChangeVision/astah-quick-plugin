@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
@@ -24,6 +25,8 @@ import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
 
 public class ModelAPI {
+
+    private static final String PACKAGE_SEPARATOR_REGEX = "\\."; //$NON-NLS-1$
 
     private static final Logger logger = LoggerFactory.getLogger(ModelAPI.class);
 
@@ -51,12 +54,12 @@ public class ModelAPI {
     }
 
     void createClass(String className) {
-        if (className == null) throw new IllegalArgumentException("className is null.");
+        if (className == null) throw new IllegalArgumentException(Messages.getString("ModelAPI.createClass_null_argument_message")); //$NON-NLS-1$
         IPackage parent = getProject();
         ITransactionManager transactionManager = getTransactionManager();
         BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
 
-        String[] namespaces = className.split("\\.");
+        String[] namespaces = className.split(PACKAGE_SEPARATOR_REGEX);
         if (namespaces.length != 1) {
             className = namespaces[namespaces.length - 1];
             namespaces = Arrays.copyOfRange(namespaces, 0, namespaces.length - 1);
@@ -73,15 +76,12 @@ public class ModelAPI {
     }
 
     void createInterface(String interfaceName) {
-        if (interfaceName == null) throw new IllegalArgumentException("interfaceName is null.");
-        INamedElement[] found = find(interfaceName);
-        if (found.length > 0)
-            throw new IllegalArgumentException("The name of element is already existed.");
+        if (interfaceName == null) throw new IllegalArgumentException(Messages.getString("ModelAPI.createInterface_null_argument_message")); //$NON-NLS-1$
         IPackage parent = getProject();
         ITransactionManager transactionManager = getTransactionManager();
         BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
 
-        String[] namespaces = interfaceName.split("\\.");
+        String[] namespaces = interfaceName.split(PACKAGE_SEPARATOR_REGEX);
         if (namespaces.length != 1) {
             interfaceName = namespaces[namespaces.length - 1];
             namespaces = Arrays.copyOfRange(namespaces, 0, namespaces.length - 1);
@@ -99,7 +99,7 @@ public class ModelAPI {
 
     void createPackage(String packageName) {
         IModel project = getProject();
-        String[] namespaces = packageName.split("\\.");
+        String[] namespaces = packageName.split(PACKAGE_SEPARATOR_REGEX);
         createPackage(project, namespaces);
     }
 
@@ -111,13 +111,13 @@ public class ModelAPI {
             INamedElement[] ownedElements = parent.getOwnedElements();
             boolean found = false;
             for (INamedElement element : ownedElements) {
-                logger.trace("check exist package {}", element.getName());
+                logger.trace("check exist package {}", element.getName()); //$NON-NLS-1$
                 if (element.getName().equals(namespace)) {
                     if (element instanceof IPackage) {
                         parent = (IPackage) element;
                         found = true;
                     } else {
-                        throw new IllegalArgumentException("Same name is existed.");
+                        throw new IllegalArgumentException(Messages.getString("ModelAPI.sameName_existed_error_message")); //$NON-NLS-1$
                     }
                 }
             }
@@ -159,7 +159,7 @@ public class ModelAPI {
     }
 
     INamedElement[] find(final String searchKey) {
-        logger.trace("find:{}", searchKey);
+        logger.trace("find:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
             return getProjectAccessor().findElements(new ModelFinder() {
@@ -186,7 +186,7 @@ public class ModelAPI {
                 }
             });
         } catch (ProjectNotFoundException e) {
-            throw new IllegalArgumentException("It maybe occurred by class path issue.");
+            throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
         }
     }
 

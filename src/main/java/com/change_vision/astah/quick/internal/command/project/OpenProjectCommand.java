@@ -11,6 +11,7 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.candidates.ProjectCandidate;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -26,7 +27,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 
         @Override
         public String getName() {
-            return "Open file chooser";
+            return Messages.getString("OpenProjectCommand.file_chooser_candidate_name"); //$NON-NLS-1$
         }
 
         @Override
@@ -36,21 +37,21 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 
         @Override
         public String getDescription() {
-            return "specified by file chooser";
+            return Messages.getString("OpenProjectCommand.file_chooser_candidate_description"); //$NON-NLS-1$
         }
     }
 
     private final class AstahFileFilter extends FileFilter {
 		@Override
 		public String getDescription() {
-			return "Astah File(*.asta,*.jude)";
+			return Messages.getString("OpenProjectCommand.astah_file_filter_description"); //$NON-NLS-1$
 		}
 
 		@Override
 		public boolean accept(File targetFile) {
 			String fileName = targetFile.getName();
-			boolean isAstaFile = fileName.endsWith(".asta");
-			boolean isJudeFile = fileName.endsWith(".jude");
+			boolean isAstaFile = fileName.endsWith(".asta"); //$NON-NLS-1$
+			boolean isJudeFile = fileName.endsWith(".jude"); //$NON-NLS-1$
 			return isAstaFile || isJudeFile || targetFile.isDirectory();
 		}
 	}
@@ -59,7 +60,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 
 	@Override
 	public String getName() {
-		return "open project";
+		return "open project"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 
 	@Override
 	public String getDescription() {
-		return "open project...";
+		return Messages.getString("OpenProjectCommand.description"); //$NON-NLS-1$
 	}
 	
 	@Override
@@ -92,7 +93,7 @@ public class OpenProjectCommand implements CandidateSupportCommand {
 	
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png");
+		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png"); //$NON-NLS-1$
 	}
 
     @Override

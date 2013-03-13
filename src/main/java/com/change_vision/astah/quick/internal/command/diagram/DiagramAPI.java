@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IDiagram;
@@ -49,14 +50,14 @@ class DiagramAPI {
 	}
 	
 	void open(IDiagram diagram){
-		if(diagram == null) throw new IllegalArgumentException("diagram is null");
+		if(diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.open_null_argument")); //$NON-NLS-1$
 		IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
 		diagramViewManager.open(diagram);
 	}
 	
 	IDiagram[] find(final String name){
-        if(name == null) throw new IllegalArgumentException("name is null");
-		logger.trace("find:{}",name);
+        if(name == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.find_null_argument")); //$NON-NLS-1$
+		logger.trace("find:{}",name); //$NON-NLS-1$
 		ProjectAccessor projectAccessor = wrapper.getProjectAccessor();
 		DiagramFinder diagramFinder = new DiagramFinder(name);
 		INamedElement[] elements = null;
@@ -77,7 +78,7 @@ class DiagramAPI {
 	}
 
     void close(IDiagram diagram) {
-        if (diagram == null) throw new IllegalArgumentException("diagram is null");
+        if (diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.close_null_argument")); //$NON-NLS-1$
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         diagramViewManager.close(diagram);
     }

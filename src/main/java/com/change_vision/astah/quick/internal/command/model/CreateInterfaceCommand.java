@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -20,17 +21,17 @@ public class CreateInterfaceCommand implements Command{
 
 	@Override
 	public String getName() {
-		return "create interface";
+		return "create interface"; //$NON-NLS-1$
 	}
 
 	@Override
 	public void execute(String... args) throws ExecuteCommandException {
-		if(args == null || args.length == 0) throw new IllegalArgumentException("'create ingerface' command needs argument.");
+		if(args == null || args.length == 0) throw new IllegalArgumentException(Messages.getString("CreateInterfaceCommand.argument_error_message")); //$NON-NLS-1$
 		for (String interfaceName : args) {
-			logger.trace("create interface '{}'",interfaceName);
+			logger.trace("create interface '{}'",interfaceName); //$NON-NLS-1$
             INamedElement[] found = api.find(interfaceName);
             if (found.length > 0) {
-                String message = format("'%s' is already existed.",interfaceName);
+                String message = format(Messages.getString("CreateInterfaceCommand.already_existed_error_message"),interfaceName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
             }
 			api.createInterface(interfaceName);
@@ -39,7 +40,7 @@ public class CreateInterfaceCommand implements Command{
 
 	@Override
 	public String getDescription() {
-		return "create interface [interface name]";
+		return Messages.getString("CreateInterfaceCommand.description"); //$NON-NLS-1$
 	}
 	
 	@Override

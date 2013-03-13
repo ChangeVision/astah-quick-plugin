@@ -19,8 +19,6 @@ class SaveAction extends AbstractAction {
     private static final Logger logger = LoggerFactory.getLogger(SaveAction.class);
 
     final private ConfigPanel configPanel;
-    
-    private final QuickProperties properties = new QuickProperties();
 
     SaveAction(ConfigPanel configPanel) {
         super("save");
@@ -31,6 +29,7 @@ class SaveAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         String keyStroke = configPanel.getKeyStroke();
         logger.trace("save:{}",keyStroke);
+        QuickProperties properties = configPanel.getProperties();
         properties.setKeyStroke(keyStroke);
         JWindow window = configPanel.getWindow();
         window.setVisible(false);

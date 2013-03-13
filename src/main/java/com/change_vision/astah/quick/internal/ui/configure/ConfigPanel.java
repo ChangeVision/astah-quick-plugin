@@ -19,12 +19,17 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.model.QuickProperties;
+
 @SuppressWarnings("serial")
 public class ConfigPanel extends JPanel {
     
+    private static final String LABEL_OF_CURRENT = Messages.getString("ConfigPanel.current_label"); //$NON-NLS-1$
     final private JWindow window;
     private JTextField keyField;
-
+    private final QuickProperties properties = new QuickProperties();
+    
     public ConfigPanel(JWindow window){
         this.window = window;
         setBackground(Color.white);
@@ -36,11 +41,12 @@ public class ConfigPanel extends JPanel {
         JLabel configureImageLabel = createConfigImageLabel();
         JPanel panel = new JPanel();
         panel.setOpaque(false);
-        JLabel keyLabel = new JLabel("Key:");
+        JLabel keyLabel = new JLabel(Messages.getString("ConfigPanel.key_label")); //$NON-NLS-1$
         keyLabel.setOpaque(false);
         Font font = getFont().deriveFont(32.0f);
         keyLabel.setFont(font);
-        keyField = new KeyConfigField("current:" + "ctrl space");
+        String keyStroke = properties.getKeyStroke();
+        keyField = new KeyConfigField(LABEL_OF_CURRENT + keyStroke);
         Action saveAction = new SaveAction(this);
         JButton saveButton = new JButton(saveAction);
         Action cancelAction = new CancelAction(window);
@@ -85,7 +91,7 @@ public class ConfigPanel extends JPanel {
     }
 
     private JLabel createConfigImageLabel() {
-        URL astahIconURL = this.getClass().getResource("/icons/configure_image.png");
+        URL astahIconURL = this.getClass().getResource(Messages.getString("ConfigPanel.image_path")); //$NON-NLS-1$
         BufferedImage image;
         try {
             image = ImageIO.read(astahIconURL);
@@ -103,7 +109,15 @@ public class ConfigPanel extends JPanel {
     }
 
     public String getKeyStroke() {
-        return keyField.getText();
+        String text = keyField.getText();
+        if (text.isEmpty()) {
+            return "ctrl SPACE";
+        }
+        return text;
+    }
+
+    public QuickProperties getProperties() {
+        return this.properties;
     }
 
     

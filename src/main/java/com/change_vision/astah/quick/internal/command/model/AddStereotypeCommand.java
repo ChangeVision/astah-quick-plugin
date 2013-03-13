@@ -6,6 +6,7 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
@@ -18,12 +19,12 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
 
     @Override
     public String getName() {
-        return "add stereotype";
+        return "add stereotype"; //$NON-NLS-1$
     }
 
     @Override
     public String getDescription() {
-        return "add stereotype [target] [stereotype]";
+        return Messages.getString("AddStereotypeCommand.description"); //$NON-NLS-1$
     }
 
     @Override
@@ -33,7 +34,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
 
     @Override
     public CandidateIconDescription getIconDescription() {
-        return new ResourceCommandIconDescription("/icons/glyphicons_117_embed.png");
+        return new ResourceCommandIconDescription("/icons/glyphicons_117_embed.png"); //$NON-NLS-1$
     }
 
     @Override
@@ -90,7 +91,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
             ElementCandidate elementCandidate = (ElementCandidate) target;
             element = elementCandidate.getElement();
         }else {
-            throw new ExecuteCommandException("element must be set.");
+            throw new ExecuteCommandException(Messages.getString("AddStereotypeCommand.element_must_be_set_error_message")); //$NON-NLS-1$
         }
         
         for (int i = 1; i < candidates.length; i++) {

@@ -64,12 +64,4 @@ final class KeyConfigField extends JTextField {
         }
     }
     
-    @Override
-    public String getText() {
-        String text = super.getText();
-        if (text.isEmpty()) {
-            return "ctrl SPACE";
-        }
-        return text;
-    }
 }

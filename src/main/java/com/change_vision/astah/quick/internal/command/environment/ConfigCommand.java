@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.astah.quick.internal.ui.QuickInterfaceUI;
 import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
@@ -18,12 +19,12 @@ class ConfigCommand implements Command {
 
 	@Override
 	public String getName() {
-		return "config";
+		return "config"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getDescription() {
-		return "configure shortcut key";
+		return Messages.getString("ConfigCommand.description"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -33,7 +34,7 @@ class ConfigCommand implements Command {
 
 	@Override
 	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_136_cogwheel.png");
+		return new ResourceCommandIconDescription("/icons/glyphicons_136_cogwheel.png"); //$NON-NLS-1$
 	}
 
 	@Override

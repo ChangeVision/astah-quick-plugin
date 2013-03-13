@@ -1,10 +1,13 @@
 package com.change_vision.astah.quick.internal.command.diagram;
 
+import static java.lang.String.format;
+
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.candidates.DiagramCandidate;
+import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.jude.api.inf.model.IDiagram;
 
@@ -18,7 +21,8 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
 
         @Override
         public String getName() {
-            return "Current Diagram(" + super.getName() + ")";
+            String message = format(Messages.getString("CloseDiagramCommand.current_diagram_name"), super.getName()); //$NON-NLS-1$
+            return message;
         }
     }
 
@@ -26,12 +30,12 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
 
     @Override
     public String getName() {
-        return "close diagram";
+        return "close diagram"; //$NON-NLS-1$
     }
 
     @Override
     public String getDescription() {
-        return "close specified diagram or current one if no one specified.";
+        return Messages.getString("CloseDiagramCommand.description"); //$NON-NLS-1$
     }
 
     @Override
@@ -41,7 +45,7 @@ public class CloseDiagramCommand implements CandidateSupportCommand{
 
     @Override
     public CandidateIconDescription getIconDescription() {
-        return new ResourceCommandIconDescription("/icons/glyphicons_207_remove_2.png");
+        return new ResourceCommandIconDescription("/icons/glyphicons_207_remove_2.png"); //$NON-NLS-1$
 
     }
 

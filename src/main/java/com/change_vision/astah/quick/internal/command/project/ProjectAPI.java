@@ -74,14 +74,14 @@ class ProjectAPI {
         SystemPropertyAccessor systemPropertyAccessor = wrapper.getSystemPropertyAccessor();
         Properties systemProperties = systemPropertyAccessor.getSystemProperties();
         int recentFileNumber = 0;
-        String recentFileNumberString = systemProperties.getProperty("jude.recent_file_number");
+        String recentFileNumberString = systemProperties.getProperty("jude.recent_file_number"); //$NON-NLS-1$
         if (recentFileNumberString == null || recentFileNumberString.isEmpty()) {
             return new File[recentFileNumber];
         }
         recentFileNumber = Integer.valueOf(recentFileNumberString);
         File[] recentFiles = new File[recentFileNumber];
         for (int i = 0; i < recentFileNumber; i++) {
-            String path = systemProperties.getProperty("jude.recent_file_" + i);
+            String path = systemProperties.getProperty("jude.recent_file_" + i); //$NON-NLS-1$
             recentFiles[i] = new File(path);
         }
         return recentFiles;

@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.Messages;
 
 public class ValidState implements Candidate {
 
@@ -18,12 +19,13 @@ public class ValidState implements Candidate {
 
     @Override
     public String getName() {
-        return format("Execute '%s' '%s'",command.getName(), args);
+        String message = Messages.getString("ValidState.name"); //$NON-NLS-1$
+        return format(message,command.getName(), args);
     }
 
     @Override
     public String getDescription() {
-        return "Execute specified command";
+        return Messages.getString("ValidState.description"); //$NON-NLS-1$
     }
 
     @Override

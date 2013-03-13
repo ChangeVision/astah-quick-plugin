@@ -18,8 +18,8 @@ import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.exception.UncommitedCommandExcepition;
 
 public class CommandExecutor {
-    public static final String PROP_OF_COMMAND = "command";
-    public static final String SEPARATE_COMMAND_CHAR = " ";
+    public static final String PROP_OF_COMMAND = "command"; //$NON-NLS-1$
+    public static final String SEPARATE_COMMAND_CHAR = " "; //$NON-NLS-1$
     /**
      * Logger for this class
      */
@@ -52,10 +52,10 @@ public class CommandExecutor {
     }
 
     public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
-        logger.trace("execute:'{}'",candidateText);
+        logger.trace("execute:'{}'",candidateText); //$NON-NLS-1$
         if (isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
-        candidateText = candidateText.replaceAll("\\s+", SEPARATE_COMMAND_CHAR);
+        candidateText = candidateText.replaceAll("\\s+", SEPARATE_COMMAND_CHAR); //$NON-NLS-1$
         doExcecute(candidateText);
         reset();
     }
@@ -114,7 +114,7 @@ public class CommandExecutor {
 
     private String[] calcArgs(String candidateText, String commandName, String[] candidateWords,
             int commitedLength) {
-        logger.trace("text:{},words:{}",candidateText,candidateWords);
+        logger.trace("text:{},words:{}",candidateText,candidateWords); //$NON-NLS-1$
         String[] args = new String[]{};
         if (!candidateText.equals(commandName)) {
             args = Arrays.copyOfRange(candidateWords, commitedLength, candidateWords.length);
@@ -128,7 +128,7 @@ public class CommandExecutor {
 
     public String getCommandText() {
         if (isUncommited()) {
-            return "";
+            return ""; //$NON-NLS-1$
         }
         StringBuilder builder = new StringBuilder(command.getName());
         for (Candidate candidate : candidates) {
@@ -156,7 +156,7 @@ public class CommandExecutor {
         if (candidateText.length() > commandName.length()) {
             return candidateText.substring(commandName.length());
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     public void reset() {

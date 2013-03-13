@@ -22,7 +22,7 @@ public class Candidates {
         }
     }
 
-    public static final String PROP_STATE = "state";
+    public static final String PROP_STATE = "state"; //$NON-NLS-1$
 
     /**
      * Logger for this class
@@ -45,9 +45,9 @@ public class Candidates {
     }
 
     public void filter(String key) {
-        if (key == null) throw new IllegalArgumentException("key is null.");
+        if (key == null) throw new IllegalArgumentException("key is null."); //$NON-NLS-1$
         String searchKey = key.trim();
-        logger.trace("key:'{}'", searchKey);
+        logger.trace("key:'{}'", searchKey); //$NON-NLS-1$
         if (isChangedToCommandState(searchKey)) {
             SelectCommand newState = commandFactory.create();
             setState(newState);
@@ -57,7 +57,7 @@ public class Candidates {
             setState(newState);
         }
         Candidate[] candidates = state.filter(searchKey);
-        logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates);
+        logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates); //$NON-NLS-1$
         selector.setCandidates(candidates);
         if (isChangedToArgumentState(key,candidates)) {
             Command committed = (Command) candidates[0];
@@ -67,7 +67,7 @@ public class Candidates {
             SelectArgument newState = new SelectArgument(executor);
             setState(newState);
             candidates = state.filter(searchKey);
-            logger.trace("candidates:'{}'", candidates);
+            logger.trace("candidates:'{}'", candidates); //$NON-NLS-1$
             selector.setCandidates(candidates);
         }
     }

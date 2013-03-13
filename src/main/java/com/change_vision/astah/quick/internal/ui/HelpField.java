@@ -7,11 +7,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+import com.change_vision.astah.quick.internal.Messages;
+
 @SuppressWarnings("serial")
 public class HelpField extends JLabel {
     
     private final String[] messages = new String[]{
-            "(ESC) close quick panel"
+            Messages.getString("HelpField.esc_message") //$NON-NLS-1$
     };
     
 
