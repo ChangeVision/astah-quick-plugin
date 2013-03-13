@@ -5,8 +5,8 @@
 		<bundle.symbolicName>com.change_vision.astah.quick</bundle.symbolicName>
 		<bundle.namespace>com.change_vision.astah.quick</bundle.namespace>
 		<plugin.install>true</plugin.install>
-		<astah.version>6.6</astah.version>
-		<astah.edition>all</astah.edition>
+		<astah.version>6.6.4</astah.version>
+		<astah.edition>pro</astah.edition>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.change_vision.astah</groupId>
