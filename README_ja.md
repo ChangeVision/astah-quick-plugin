@@ -17,10 +17,10 @@ Quick Windowには1行の入力フィールドがあり、予め定義された�
 
 インストール方法
 ----------------
-0. [Download the jar file.](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
-1. Start Astah
-2. Install the plug-in at the Plugin List Dialog ([help]-[Plugin List] menu)
-3. You find the configuration window to display Quick Window
+0. [JARファイルのダウンロード](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
+1. astah*を起動
+2. プラグイン一覧からインストールする ([ヘルプ]-[プラグイン一覧])
+3. インストール後、再起動するとQuick Windowを表示するための設定画面が開かれます。
 
 ライセンス
 ---------------
