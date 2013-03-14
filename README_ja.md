@@ -1,6 +1,8 @@
 astah* Quick プラグイン
 ===============================
 
+![demo](http://raw.github.com/kompiro/astah-quick-plugin/master/docs/images/demo.gif)
+
 バージョン
 ----------------
 1.0.0
