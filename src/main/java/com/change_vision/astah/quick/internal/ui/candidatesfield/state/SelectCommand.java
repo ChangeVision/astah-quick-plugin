@@ -9,11 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
-import com.change_vision.astah.quick.internal.command.diagram.DiagramCommands;
-import com.change_vision.astah.quick.internal.command.environment.EnvironmentCommands;
-import com.change_vision.astah.quick.internal.command.model.ModelCommands;
+import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
-import com.change_vision.astah.quick.internal.command.project.ProjectCommands;
 
 public class SelectCommand implements CandidateState {
 
@@ -22,12 +19,12 @@ public class SelectCommand implements CandidateState {
      */
     private static final Logger logger = LoggerFactory.getLogger(SelectCommand.class);
 
-    private final List<Command> allCommands = new ArrayList<Command>();
-
     private SelectModelCommandFactory commandFactory = new SelectModelCommandFactory();
+    
+    private Commands commands;
 
-    public SelectCommand() {
-        initCommands();
+    public SelectCommand(Commands commands) {
+        this.commands = commands;
     }
 
     @Override
@@ -35,14 +32,14 @@ public class SelectCommand implements CandidateState {
         logger.trace("key:{}", key);
         List<Candidate> candidates = new ArrayList<Candidate>();
         if (key == null || key.isEmpty()) {
-            for (Command command : allCommands) {
+            for (Command command : commands.getCommands()) {
                 if (command.isEnabled()) {
                     candidates.add(command);
                 }
             }
             return candidates.toArray(new Candidate[] {});
         }
-        for (Command command : allCommands) {
+        for (Command command : commands.getCommands()) {
             String commandName = command.getName();
             if (command.isEnabled() && isCandidate(key, commandName)) {
                 candidates.add(command);
@@ -60,24 +57,6 @@ public class SelectCommand implements CandidateState {
 
     private boolean isCandidate(String searchKey, String commandName) {
         return commandName.startsWith(searchKey);
-    }
-
-    @TestForMethod
-    public void add(Command command) {
-        allCommands.add(command);
-    }
-
-    @TestForMethod
-    public void clear() {
-        allCommands.clear();
-    }
-
-    @TestForMethod
-    public void initCommands() {
-        allCommands.addAll(ModelCommands.commands());
-        allCommands.addAll(DiagramCommands.commands());
-        allCommands.addAll(ProjectCommands.commands());
-        allCommands.addAll(EnvironmentCommands.commands());
     }
 
     @TestForMethod

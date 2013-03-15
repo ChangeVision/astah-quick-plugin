@@ -12,9 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;
 
 public class SelectCommandTest {
@@ -44,12 +46,18 @@ public class SelectCommandTest {
 
     private List<Command> allCommands;
 
+    private Commands commands;
+
+    @Mock
+    private ServiceTracker tracker;
+
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        state = new SelectCommand();
-        state.clear();
+        commands = new Commands(tracker);
+        state = new SelectCommand(commands);
+        commands.clear();
         state.setCommandFactory(commandFactory);
 
         createMockCommand(closeProjectCommand, "close project", true);
@@ -59,10 +67,10 @@ public class SelectCommandTest {
         createMockCommand(foundClassModelCommand, "Class", true);
         createMockCommand(foundPackageModelCommand, "Class Package", true);
 
-        state.add(closeProjectCommand);
-        state.add(createClassCommand);
-        state.add(createPackageCommand);
-        state.add(notEnabledCommand);
+        commands.add(closeProjectCommand);
+        commands.add(createClassCommand);
+        commands.add(createPackageCommand);
+        commands.add(notEnabledCommand);
 
         allCommands = new ArrayList<Command>();
 
@@ -74,7 +82,7 @@ public class SelectCommandTest {
 
     @After
     public void after() throws Exception {
-        state.initCommands();
+        commands.initCommands();
     }
 
     private Command createMockCommand(Command target, String commandName, boolean enable) {

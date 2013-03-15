@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
@@ -32,23 +33,27 @@ public class CandidatesTest {
 
     private CommandExecutor executor;
 
+    @Mock
+    private ServiceTracker tracker;
+
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        SelectCommand commandState = new SelectCommand();
-        commandState.clear();
+        Commands commands = new Commands(tracker);
+        SelectCommand commandState = new SelectCommand(commands);
+        commands.clear();
         when(commandFactory.create()).thenReturn(commandState);
 
         when(one.getName()).thenReturn("new project");
         when(one.isEnabled()).thenReturn(true);
         when(two.getName()).thenReturn("new diagram");
         when(two.isEnabled()).thenReturn(true);
-        commandState.add(one);
-        commandState.add(two);
+        commands.add(one);
+        commands.add(two);
 
         executor = new CommandExecutor();
-        candidates = new Candidates(executor);
+        candidates = new Candidates(commands,executor);
         candidates.setCommandFactory(commandFactory);
     }
 

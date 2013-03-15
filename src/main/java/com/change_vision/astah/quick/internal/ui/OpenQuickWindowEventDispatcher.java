@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.model.QuickProperties;
 
 class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
@@ -24,6 +25,12 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     private final QuickProperties properties = new QuickProperties();
 
     private QuickWindow window;
+    
+    private final Commands commands;
+    
+    OpenQuickWindowEventDispatcher(Commands commands) {
+        this.commands = commands;
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -48,6 +55,6 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
     private void createQuickWindow() {
         JFrame frame = wrapper.getMainFrame();
-        window = new QuickWindow(frame);
+        window = new QuickWindow(frame,commands);
     }
 }

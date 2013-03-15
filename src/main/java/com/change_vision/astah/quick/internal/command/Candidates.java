@@ -16,9 +16,11 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCom
 
 public class Candidates {
 
+    private Commands commands;
+
     class SelectCommandFactory {
         SelectCommand create() {
-            return new SelectCommand();
+            return new SelectCommand(commands);
         }
     }
 
@@ -31,16 +33,18 @@ public class Candidates {
 
     private SelectCommandFactory commandFactory = new SelectCommandFactory();
 
-    private CandidateState state = commandFactory.create();
+    private CandidateState state;
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     private CandidatesSelector<Candidate> selector;
 
     private CommandExecutor executor;
-    
-    public Candidates(CommandExecutor executor) {
+        
+    public Candidates(Commands commands, CommandExecutor executor) {
+        this.commands = commands;
         this.executor = executor;
+        this.state = commandFactory.create();
         this.selector = new CandidatesSelector<Candidate>();
     }
 
