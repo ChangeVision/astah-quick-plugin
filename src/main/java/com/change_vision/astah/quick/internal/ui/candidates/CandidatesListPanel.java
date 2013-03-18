@@ -20,19 +20,19 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.internal.command.Candidates;
 
 @SuppressWarnings("serial")
-public class CandidatesWindowPanel extends JPanel {
+public class CandidatesListPanel extends JPanel {
 
     /**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(CandidatesWindowPanel.class);
+    private static final Logger logger = LoggerFactory.getLogger(CandidatesListPanel.class);
 
     private CandidatesList candidateList;
     private Candidates candidates;
 
     private JScrollPane scrollPane;
 
-    public CandidatesWindowPanel(Candidates commands) {
+    public CandidatesListPanel(Candidates commands) {
         this.candidates = commands;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();

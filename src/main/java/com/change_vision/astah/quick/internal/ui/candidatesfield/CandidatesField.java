@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
@@ -26,13 +26,13 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
      */
     private static final Logger logger = LoggerFactory.getLogger(CandidatesField.class);
 
-    private final CandidatesWindowPanel candidatesList;
+    private final CandidatesListPanel candidatesList;
 
     private final QuickWindow quickWindow;
 
     private boolean settingText;
 
-    public CandidatesField(QuickWindow quickWindow, CandidatesWindowPanel candidatesList) {
+    public CandidatesField(QuickWindow quickWindow, CandidatesListPanel candidatesList) {
         this.quickWindow = quickWindow;
         this.candidatesList = candidatesList;
         setFont(new Font("Dialog", Font.PLAIN, 32));

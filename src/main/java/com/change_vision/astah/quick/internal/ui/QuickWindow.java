@@ -16,14 +16,14 @@ import javax.swing.KeyStroke;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
 
     private final QuickPanel quickPanel;
     private final MessageNotifier notifier;
-    private final CandidatesWindowPanel candidatesList;
+    private final CandidatesListPanel candidatesList;
     private final Candidates candidates;
     private final CommandExecutor executor;
     private final Commands commands;
@@ -39,7 +39,7 @@ public class QuickWindow extends JWindow {
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
         this.candidates = new Candidates(this.commands, this.executor);
-        this.candidatesList = new CandidatesWindowPanel(candidates);
+        this.candidatesList = new CandidatesListPanel(candidates);
         this.quickPanel = new QuickPanel(this, this.candidatesList);
         this.quickPanel.setCloseAction(closeAction);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -82,7 +82,7 @@ public class QuickWindow extends JWindow {
         return this.commands;
     }
     
-    public CandidatesWindowPanel getCandidatesWindowPanel(){
+    public CandidatesListPanel getCandidatesWindowPanel(){
         return this.candidatesList;
     }
 

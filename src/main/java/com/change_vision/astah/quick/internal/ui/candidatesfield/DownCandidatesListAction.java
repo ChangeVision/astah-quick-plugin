@@ -7,14 +7,14 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 
 final class DownCandidatesListAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final String KEY = "DOWN";
-	private final CandidatesWindowPanel candidatesList;
+	private final CandidatesListPanel candidatesList;
 
-	DownCandidatesListAction(CandidatesField field,CandidatesWindowPanel candidatesList) {
+	DownCandidatesListAction(CandidatesField field,CandidatesListPanel candidatesList) {
 		super("down-command");
 		this.candidatesList = candidatesList;
 		InputMap inputMap = field.getInputMap();

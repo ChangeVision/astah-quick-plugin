@@ -16,7 +16,7 @@ import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
@@ -34,7 +34,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
 
     private final QuickWindow quickWindow;
 
-    private final CandidatesWindowPanel candidatesList;
+    private final CandidatesListPanel candidatesList;
 
     private CommandExecutor executor;
 

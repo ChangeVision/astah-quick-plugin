@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
 final class CandidatesFieldDocumentListener implements DocumentListener {
@@ -18,10 +18,10 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
     private final CandidatesField field;
 
-    private CandidatesWindowPanel candidatesList;
+    private CandidatesListPanel candidatesList;
 
     public CandidatesFieldDocumentListener(CandidatesField candidatesField,
-            CandidatesWindowPanel candidatesList) {
+            CandidatesListPanel candidatesList) {
         this.field = candidatesField;
         this.candidatesList = candidatesList;
     }
