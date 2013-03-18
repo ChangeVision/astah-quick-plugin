@@ -7,15 +7,15 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
 
 final class UpCandidatesListAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
-	private CandidatesListWindow candidatesList;
+	private CandidatesWindowPanel candidatesList;
 	private static final String KEY = "UP";
 
-	UpCandidatesListAction(CandidatesField field,CandidatesListWindow commandList) {
+	UpCandidatesListAction(CandidatesField field,CandidatesWindowPanel commandList) {
 		super("up-command");
 		this.candidatesList = commandList;
 		InputMap inputMap = field.getInputMap();

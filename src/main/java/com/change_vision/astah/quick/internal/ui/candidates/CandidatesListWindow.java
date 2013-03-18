@@ -29,7 +29,7 @@ public final class CandidatesListWindow extends JWindow {
 
 	public void setCandidateText(String candidateText) {
 	    logger.trace("setCandidateText:{}",candidateText);
-		panel.updateCandidateText(candidateText);
+//		panel.updateCandidateText(candidateText);
 	}
 
 	public void up() {

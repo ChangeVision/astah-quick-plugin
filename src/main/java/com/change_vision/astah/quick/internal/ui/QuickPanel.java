@@ -21,7 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
@@ -34,7 +34,7 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
     private JLabel iconLabel;
     private Icon astahIcon;
 
-    public QuickPanel(QuickWindow quickWindow,CandidatesListWindow candidatesList) {
+    public QuickPanel(QuickWindow quickWindow,CandidatesWindowPanel candidatesList) {
         setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");

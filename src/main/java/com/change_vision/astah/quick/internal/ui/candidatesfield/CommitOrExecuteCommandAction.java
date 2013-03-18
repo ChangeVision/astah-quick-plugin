@@ -16,7 +16,7 @@ import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesWindowPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
@@ -34,12 +34,11 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
 
     private final QuickWindow quickWindow;
 
-    private final CandidatesListWindow candidatesList;
+    private final CandidatesWindowPanel candidatesList;
 
     private CommandExecutor executor;
 
-    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow,
-            CandidatesListWindow candidatesList) {
+    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow) {
         super("commit-or-execute-command");
         this.field = field;
         InputMap inputMap = field.getInputMap();
@@ -47,7 +46,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
         actionMap.put(KEY, this);
         this.quickWindow = quickWindow;
-        this.candidatesList = candidatesList;
+        this.candidatesList = quickWindow.getCandidatesWindowPanel();
         this.executor = field.getExecutor();
     }
 
@@ -76,7 +75,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
             }
             String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             field.setText(commandText);
-            this.candidatesList.close();
+            this.candidatesList.setVisible(false);
             return;
         }
         if (candidate instanceof Command) {
