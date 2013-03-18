@@ -53,11 +53,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.trace("press enter");
-        if (candidatesList.isVisible()) {
-            commitCandidate();
-            return;
-        }
-        executeCommand();
+        commitCandidate();
     }
 
     private void commitCandidate() {
@@ -75,7 +71,6 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
             }
             String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             field.setText(commandText);
-            this.candidatesList.setVisible(false);
             return;
         }
         if (candidate instanceof Command) {
