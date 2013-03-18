@@ -2,6 +2,8 @@ package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,13 +29,28 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.Candidate
 @SuppressWarnings("serial")
 public class QuickPanel extends JPanel implements PropertyChangeListener {
 
+    private final class CandidateDoubleClickListener extends MouseAdapter {
+        private CandidateDecider decider;
+
+        private CandidateDoubleClickListener(QuickWindow quickWindow, CandidatesField candidatesField) {
+            this.decider = new CandidateDecider(quickWindow,candidatesField);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getClickCount() > 1) {
+                decider.decide();
+            }
+        }
+    }
+
     private CandidatesField candidatesField;
     private HelpField helpField;
     private JLabel iconLabel;
     private Icon astahIcon;
     private final CandidatesListPanel candidatesList;
 
-    public QuickPanel(QuickWindow quickWindow,Candidates candidates) {
+    public QuickPanel(final QuickWindow quickWindow,Candidates candidates) {
         setLayout(new MigLayout("debug", "[32px][grow]", "[][][]"));
         candidatesList = new CandidatesListPanel(candidates);
         
@@ -46,7 +63,7 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         }
         astahIcon = new ImageIcon(image.getScaledInstance(32, 32, Image.SCALE_SMOOTH));
         iconLabel = new JLabel(astahIcon);
-        CommandExecutor executor = quickWindow.getExecutor();
+        final CommandExecutor executor = quickWindow.getExecutor();
         executor.addPropertyChangeListener(this);
         add(iconLabel, "cell 0 0,left");
         
@@ -55,6 +72,8 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         helpField = new HelpField();
         add(helpField, "cell 1 1,growx");
         add(candidatesList,"cell 0 2,span 2,growx");
+        
+        candidatesList.addMouseListener(new CandidateDoubleClickListener(quickWindow,candidatesField));
     }
         
     public void opened(){

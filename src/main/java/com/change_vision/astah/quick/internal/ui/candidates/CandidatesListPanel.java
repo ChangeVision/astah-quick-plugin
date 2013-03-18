@@ -8,8 +8,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -49,11 +48,6 @@ public class CandidatesListPanel extends JPanel {
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();
         candidateList.addListSelectionListener(new CandidateSelectionListener());
-        candidateList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
-        });
         scrollPane.setViewportView(candidateList);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         setLayout(new BorderLayout());
@@ -107,6 +101,10 @@ public class CandidatesListPanel extends JPanel {
     public void setVisible(boolean visible) {
         logger.trace("visible:{}",visible);
         super.setVisible(visible);
+    }
+    
+    public void addMouseListener(MouseListener listener){
+        candidateList.addMouseListener(listener);
     }
 
 }

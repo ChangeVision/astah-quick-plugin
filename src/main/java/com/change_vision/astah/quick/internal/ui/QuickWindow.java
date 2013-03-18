@@ -73,5 +73,9 @@ public class QuickWindow extends JWindow {
     public Commands getCommands() {
         return this.commands;
     }
+
+    public Candidates getCandidates() {
+        return this.candidates;
+    }
     
 }

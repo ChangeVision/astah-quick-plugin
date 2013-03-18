@@ -7,94 +7,26 @@ import javax.swing.AbstractAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.change_vision.astah.quick.command.Candidate;
-import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.annotations.Immediate;
-import com.change_vision.astah.quick.internal.command.Candidates;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
+import com.change_vision.astah.quick.internal.ui.CandidateDecider;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
+@SuppressWarnings("serial")
 final class CommitOrExecuteCommandAction extends AbstractAction {
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommitOrExecuteCommandAction.class);
 
-    private static final long serialVersionUID = 1L;
+    private CandidateDecider decider;
 
-    private final CandidatesField field;
-
-    private final QuickWindow quickWindow;
-
-    private final CandidatesListPanel candidatesList;
-
-    private CommandExecutor executor;
-
-    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow,CandidatesListPanel candidatesList) {
+    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow) {
         super("commit-or-execute-command");
-        this.field = field;
-        this.quickWindow = quickWindow;
-        this.candidatesList = candidatesList;
-        this.executor = field.getExecutor();
+        this.decider = new CandidateDecider(quickWindow, field);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         logger.trace("press enter");
-        commitCandidate();
+        decider.decide();
     }
-
-    private void commitCandidate() {
-        Candidates candidates = candidatesList.getCandidates();
-        Candidate candidate = candidates.current();
-        if (candidate instanceof ValidState) {
-            executeCommand();
-            return;
-        }
-        if (executor.isCommited()) {
-            executor.add(candidate);
-            if (isImmidiateCandidate(candidate)) {
-                executeCommand();
-                return;
-            }
-            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
-            field.setText(commandText);
-            return;
-        }
-        if (candidate instanceof Command) {
-            Command command = (Command) candidate;
-            if (isImmidiateCommand(command)) {
-                executor.commit(command);
-                executeCommand();
-                return;
-            }
-            executor.commit(command);
-            field.setWindowState(CandidateWindowState.ArgumentWait);
-            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
-            field.setText(commandText);
-        }
-    }
-
-    private boolean isImmidiateCandidate(Candidate candidate) {
-        return candidate.getClass().isAnnotationPresent(Immediate.class);
-    }
-    
-    private boolean isImmidiateCommand(Command command) {
-        return command.getClass().isAnnotationPresent(Immediate.class);
-    }
-
-    private void executeCommand() {
-        String candidateText = field.getText();
-        quickWindow.close();
-        try {
-            executor.execute(candidateText);
-        } catch (Exception e) {
-            quickWindow.notifyError("Alert", e.getMessage());
-        }
-        quickWindow.reset();
-    }
-
 }
