@@ -38,6 +38,9 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         setFont(new Font("Dialog", Font.PLAIN, 32));
         setColumns(16);
         setEditable(true);
+        if (candidatesList == null) {
+            return;
+        }
         candidatesList.getCandidates().addPropertyChangeListener(this);
         new CommitOrExecuteCommandAction(this, this.quickWindow);
         new UpCandidatesListAction(this,this.candidatesList);
