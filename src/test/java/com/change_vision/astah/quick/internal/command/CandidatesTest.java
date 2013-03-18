@@ -1,7 +1,6 @@
 package com.change_vision.astah.quick.internal.command;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates.SelectCommandFactory;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
@@ -20,6 +20,9 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCom
 
 public class CandidatesTest {
 
+    private static abstract class CandidatesProviderCommand implements Command, CandidatesProvider {
+
+    }
     private Candidates candidates;
 
     @Mock
@@ -30,6 +33,9 @@ public class CandidatesTest {
 
     @Mock
     private Command two;
+    
+    @Mock
+    private CandidatesProviderCommand providerCommand;
 
     private CommandExecutor executor;
 
@@ -72,7 +78,7 @@ public class CandidatesTest {
     public void filterWithEmpty() throws Exception {
         candidates.filter("");
         Candidate[] actual = candidates.getCandidates();
-        System.out.println(actual.length);
+        assertThat(actual,is(notNullValue()));
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectCommand.class)));
     }
@@ -93,6 +99,26 @@ public class CandidatesTest {
         assertThat(actual.length, is(1));
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectArgument.class)));
+    }
+    
+    @Test
+    public void filterWithNotFoundCommand() throws Exception {
+        candidates.filter("not found");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual,is(notNullValue()));
+        assertThat(actual.length,is(1));
+        CandidateState next = candidates.getState();
+        assertThat(next, is(instanceOf(SelectCommand.class)));
+    }
+    
+    @Test
+    public void filterWithNotFoundArgument() throws Exception {
+        executor.commit(providerCommand);
+        candidates.setState(new SelectArgument(executor));
+        candidates.filter("not found");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual,is(notNullValue()));
+        assertThat(actual.length,is(1));
     }
 
     @Test
