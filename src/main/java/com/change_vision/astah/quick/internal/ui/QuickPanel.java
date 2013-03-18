@@ -37,7 +37,7 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         }
 
         @Override
-        public void mousePressed(MouseEvent e) {
+        public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() > 1) {
                 decider.decide();
             }
