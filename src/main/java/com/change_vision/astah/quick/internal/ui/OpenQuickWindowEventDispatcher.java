@@ -68,7 +68,6 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                 if (id == MouseEvent.MOUSE_CLICKED) {
                     if (event instanceof MouseEvent) {
                         MouseEvent me = (MouseEvent) event;
-                        logger.trace("MouseClicked:{}",me);
                         Object source = me.getSource();
                         if (source instanceof Component) {
                             Component c = (Component) source;
