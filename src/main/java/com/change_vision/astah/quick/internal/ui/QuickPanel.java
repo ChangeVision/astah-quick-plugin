@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -29,13 +27,12 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.Candidate
 public class QuickPanel extends JPanel implements PropertyChangeListener {
 
     private CandidatesField candidatesField;
-    private JButton closeButton;
     private HelpField helpField;
     private JLabel iconLabel;
     private Icon astahIcon;
 
     public QuickPanel(QuickWindow quickWindow,CandidatesListPanel candidatesList) {
-        setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
+        setLayout(new MigLayout("", "[32px][grow]", "[][]"));
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
         BufferedImage image;
@@ -48,20 +45,14 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         iconLabel = new JLabel(astahIcon);
         CommandExecutor executor = quickWindow.getExecutor();
         executor.addPropertyChangeListener(this);
-        add(iconLabel, "cell 0 0");
+        add(iconLabel, "cell 0 0,left");
         
         candidatesField = new CandidatesField(quickWindow,candidatesList);
         add(candidatesField, "cell 1 0,growx");
-        closeButton = new JButton();
-        add(closeButton, "cell 2 0");
         helpField = new HelpField();
         add(helpField, "cell 1 1,growx");
     }
-    
-    public void setCloseAction(Action action){
-        this.closeButton.setAction(action);
-    }
-    
+        
     public void opened(){
         candidatesField.setWindowState(CandidateWindowState.Inputing);
     }

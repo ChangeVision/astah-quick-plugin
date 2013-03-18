@@ -41,7 +41,6 @@ public class QuickWindow extends JWindow {
         this.candidates = new Candidates(this.commands, this.executor);
         this.candidatesList = new CandidatesListPanel(candidates);
         this.quickPanel = new QuickPanel(this, this.candidatesList);
-        this.quickPanel.setCloseAction(closeAction);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         getContentPane().add(quickPanel);
         getContentPane().add(candidatesList);
