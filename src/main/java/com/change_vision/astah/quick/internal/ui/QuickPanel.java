@@ -18,6 +18,7 @@ import net.miginfocom.swing.MigLayout;
 
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
@@ -30,9 +31,11 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
     private HelpField helpField;
     private JLabel iconLabel;
     private Icon astahIcon;
+    private final CandidatesListPanel candidatesList;
 
-    public QuickPanel(QuickWindow quickWindow,CandidatesListPanel candidatesList) {
-        setLayout(new MigLayout("", "[32px][grow]", "[][]"));
+    public QuickPanel(QuickWindow quickWindow,Candidates candidates) {
+        setLayout(new MigLayout("debug", "[32px][grow]", "[][][]"));
+        candidatesList = new CandidatesListPanel(candidates);
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
         BufferedImage image;
@@ -51,9 +54,11 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         add(candidatesField, "cell 1 0,growx");
         helpField = new HelpField();
         add(helpField, "cell 1 1,growx");
+        add(candidatesList,"cell 0 2,span 2,growx");
     }
         
     public void opened(){
+        candidatesList.setCandidateText("");
         candidatesField.setWindowState(CandidateWindowState.Inputing);
     }
     
@@ -78,6 +83,10 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
                 iconLabel.setIcon(new ImageIcon(bufferedImage));
             }
         }
+    }
+
+    public CandidatesListPanel getCandidatesList() {
+        return this.candidatesList;
     }
 
 }

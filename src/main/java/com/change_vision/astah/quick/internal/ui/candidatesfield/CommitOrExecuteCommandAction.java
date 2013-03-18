@@ -38,7 +38,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
 
     private CommandExecutor executor;
 
-    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow) {
+    CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow,CandidatesListPanel candidatesList) {
         super("commit-or-execute-command");
         this.field = field;
         InputMap inputMap = field.getInputMap();
@@ -46,7 +46,7 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
         inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
         actionMap.put(KEY, this);
         this.quickWindow = quickWindow;
-        this.candidatesList = quickWindow.getCandidatesWindowPanel();
+        this.candidatesList = candidatesList;
         this.executor = field.getExecutor();
     }
 

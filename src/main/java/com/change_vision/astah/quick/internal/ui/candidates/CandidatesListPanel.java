@@ -32,8 +32,8 @@ public class CandidatesListPanel extends JPanel {
 
     private JScrollPane scrollPane;
 
-    public CandidatesListPanel(Candidates commands) {
-        this.candidates = commands;
+    public CandidatesListPanel(Candidates candidates) {
+        this.candidates = candidates;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();
         scrollPane.setViewportView(candidateList);

@@ -42,7 +42,7 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
             return;
         }
         candidatesList.getCandidates().addPropertyChangeListener(this);
-        new CommitOrExecuteCommandAction(this, this.quickWindow);
+        new CommitOrExecuteCommandAction(this, this.quickWindow,this.candidatesList);
         new UpCandidatesListAction(this,this.candidatesList);
         new DownCandidatesListAction(this,this.candidatesList);
 
