@@ -1,6 +1,7 @@
 package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.AWTEvent;
+import java.awt.Component;
 import java.awt.KeyEventDispatcher;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
@@ -65,8 +66,16 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
             public void eventDispatched(AWTEvent event) {
                 int id = event.getID();
                 if (id == MouseEvent.MOUSE_CLICKED) {
-                    if(window != null && window.isVisible()){
-                        window.close();
+                    if (event instanceof MouseEvent) {
+                        MouseEvent me = (MouseEvent) event;
+                        logger.trace("MouseClicked:{}",me);
+                        Object source = me.getSource();
+                        if (source instanceof Component) {
+                            Component c = (Component) source;
+                            if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
+                                window.close();
+                            }
+                        }
                     }
                 }
             }
