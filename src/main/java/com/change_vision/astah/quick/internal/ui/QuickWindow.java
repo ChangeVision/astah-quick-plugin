@@ -1,5 +1,6 @@
 package com.change_vision.astah.quick.internal.ui;
 
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -41,7 +42,7 @@ public class QuickWindow extends JWindow {
         this.quickPanel = new QuickPanel(this, this.candidatesList);
         this.quickPanel.setCloseAction(closeAction);
         add(quickPanel);
-        setAlwaysOnTop(true);
+        setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         pack();
     }
 
