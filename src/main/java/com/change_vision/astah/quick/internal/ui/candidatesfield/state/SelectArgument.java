@@ -30,12 +30,17 @@ public class SelectArgument implements CandidateState {
             CandidatesProvider provider = (CandidatesProvider) committed;
             Candidate[] committedCandidates = executor.getCandidates();
             candidates = provider.candidate(committedCandidates,key);
+            if (candidates == null) {
+                return new Candidate[]{
+                        new NotFound()
+                };
+            }
+            return candidates;
         } else {
-            candidates = new Candidate[] {
+            return new Candidate[] {
                     new ValidState(committed,key)
             };
         }
-        return candidates;
     }
 
 }
