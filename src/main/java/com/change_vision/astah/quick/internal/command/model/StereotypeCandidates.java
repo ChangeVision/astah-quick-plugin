@@ -30,6 +30,9 @@ class StereotypeCandidates {
     };
     
     StereotypeCandidate[] find(String key){
+        if (key == null || key.isEmpty()) {
+            return DEFINED_CANDIDATES;
+        }
         List<StereotypeCandidate> candidates = new ArrayList<StereotypeCandidate>();
         for (StereotypeCandidate stereotypeCandidate : DEFINED_CANDIDATES) {
             if (stereotypeCandidate.getName().startsWith(key)) {
