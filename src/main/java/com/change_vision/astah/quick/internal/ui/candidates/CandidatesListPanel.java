@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -25,6 +26,14 @@ import com.change_vision.astah.quick.internal.command.Candidates;
 @SuppressWarnings("serial")
 public class CandidatesListPanel extends JPanel {
 
+    private final class CandidateSelectionListener implements ListSelectionListener {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            int index = candidateList.getSelectedIndex();
+            candidates.setCurrentIndex(index);
+        }
+    }
+
     /**
      * Logger for this class
      */
@@ -39,15 +48,11 @@ public class CandidatesListPanel extends JPanel {
         this.candidates = candidates;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();
-        candidateList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int index = candidateList.getSelectedIndex();
-                CandidatesListPanel.this.candidates.setCurrentIndex(index);
-            }
-        });
+        candidateList.addListSelectionListener(new CandidateSelectionListener());
         candidateList.addMouseListener(new MouseAdapter() {
-            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
         });
         scrollPane.setViewportView(candidateList);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
