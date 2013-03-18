@@ -1,5 +1,7 @@
 package com.change_vision.astah.quick.internal.command;
 
+import static java.lang.String.format;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -61,6 +63,14 @@ public class Candidates {
             setState(newState);
         }
         Candidate[] candidates = state.filter(searchKey);
+        if (candidates == null) {
+            String className = state.getClass().getSimpleName();
+            if (state instanceof SelectArgument) {
+                className = executor.getCommand().getClass().getSimpleName();
+            }
+            String message = format("state returns null candidates. %s",className);
+            throw new IllegalStateException(message);
+        }
         logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates); //$NON-NLS-1$
         selector.setCandidates(candidates);
         if (isChangedToArgumentState(key,candidates)) {
