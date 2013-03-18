@@ -3,9 +3,6 @@ package com.change_vision.astah.quick.internal.ui.candidatesfield;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +25,6 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String KEY = "ENTER";
-
     private final CandidatesField field;
 
     private final QuickWindow quickWindow;
@@ -41,10 +36,6 @@ final class CommitOrExecuteCommandAction extends AbstractAction {
     CommitOrExecuteCommandAction(CandidatesField field, QuickWindow quickWindow,CandidatesListPanel candidatesList) {
         super("commit-or-execute-command");
         this.field = field;
-        InputMap inputMap = field.getInputMap();
-        ActionMap actionMap = field.getActionMap();
-        inputMap.put(KeyStroke.getKeyStroke(KEY), KEY);
-        actionMap.put(KEY, this);
         this.quickWindow = quickWindow;
         this.candidatesList = candidatesList;
         this.executor = field.getExecutor();
