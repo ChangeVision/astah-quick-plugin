@@ -1,6 +1,6 @@
 package com.change_vision.astah.quick.internal.ui.candidatesfield.state;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +54,16 @@ public class SelectArgumentTest {
         when(executor.getCommand()).thenReturn(providerCommand);
         argument.filter("hoge");
         verify(providerCommand).candidate(new Candidate[0], "hoge");
+    }
+    
+    @Test
+    public void filterProviderCommandWhenNotFound() throws Exception {
+        when(executor.getCandidates()).thenReturn(new Candidate[0]);
+        when(executor.getCommand()).thenReturn(providerCommand);
+        Candidate[] candidates = argument.filter("not found");
+        assertThat(candidates,is(notNullValue()));
+        assertThat(candidates.length,is(1));
+        assertThat(candidates[0],is(instanceOf(NotFound.class)));
     }
 
 }

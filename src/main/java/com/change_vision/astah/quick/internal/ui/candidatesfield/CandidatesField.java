@@ -99,14 +99,12 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         logger.trace("closeCandidatesListAndReset");
         Candidates commands = candidatesList.getCandidates();
         commands.setState(new SelectCommand(quickWindow.getCommands()));
-        candidatesList.setVisible(false);
         CommandExecutor executor = quickWindow.getExecutor();
         executor.reset();
     }
 
     private void closeCandidatesList() {
         logger.trace("closeCandidatesList");
-        candidatesList.setVisible(false);
     }
 
     @Override

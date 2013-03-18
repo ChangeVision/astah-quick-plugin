@@ -8,6 +8,7 @@ import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand {
@@ -73,10 +74,12 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
     }
 
     private Candidate[] findTargetElement(String key) {
-        Candidate[] candidates = null;
+        Candidate[] candidates = new Candidate[0];
         INamedElement[] founds = api.find(key);
         if (founds.length == 0) {
-            return candidates;
+            return new Candidate[]{
+                    new NotFound()
+            };
         }
         candidates = new Candidate[founds.length];
         for (int i = 0; i < founds.length; i++) {
