@@ -1,5 +1,6 @@
 package com.change_vision.astah.quick.internal.ui;
 
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -14,14 +15,12 @@ import javax.swing.KeyStroke;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.command.Commands;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
 
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
 
     private final QuickPanel quickPanel;
     private final MessageNotifier notifier;
-    private final CandidatesListWindow candidatesList;
     private final Candidates candidates;
     private final CommandExecutor executor;
     private final Commands commands;
@@ -37,12 +36,11 @@ public class QuickWindow extends JWindow {
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
         this.candidates = new Candidates(this.commands, this.executor);
-        this.candidatesList = new CandidatesListWindow(candidates);
-        this.quickPanel = new QuickPanel(this, this.candidatesList);
-        this.quickPanel.setCloseAction(closeAction);
-        add(quickPanel);
-        setAlwaysOnTop(true);
+        this.quickPanel = new QuickPanel(this, candidates);
+        getContentPane().add(quickPanel);
+        setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         pack();
+        DragMove.install(this);
     }
 
     public void notifyError(String title, String message) {
@@ -50,7 +48,6 @@ public class QuickWindow extends JWindow {
     }
 
     public void close() {
-        candidatesList.close();
         setVisible(false);
     }
 
@@ -66,8 +63,6 @@ public class QuickWindow extends JWindow {
         centerPoint.translate(-size.width / 2, -size.height / 2);
         setLocation(centerPoint);
         setVisible(true);
-        candidatesList.setPanelSize(getSize());
-        candidatesList.setCandidateText("");
         quickPanel.opened();
     }
 
@@ -79,4 +74,8 @@ public class QuickWindow extends JWindow {
         return this.commands;
     }
 
+    public Candidates getCandidates() {
+        return this.candidates;
+    }
+    
 }

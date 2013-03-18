@@ -2,6 +2,8 @@ package com.change_vision.astah.quick.internal.ui;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -9,10 +11,8 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -20,22 +20,39 @@ import net.miginfocom.swing.MigLayout;
 
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
 @SuppressWarnings("serial")
 public class QuickPanel extends JPanel implements PropertyChangeListener {
 
+    private final class CandidateDoubleClickListener extends MouseAdapter {
+        private CandidateDecider decider;
+
+        private CandidateDoubleClickListener(QuickWindow quickWindow, CandidatesField candidatesField) {
+            this.decider = new CandidateDecider(quickWindow,candidatesField);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getClickCount() > 1) {
+                decider.decide();
+            }
+        }
+    }
+
     private CandidatesField candidatesField;
-    private JButton closeButton;
     private HelpField helpField;
     private JLabel iconLabel;
     private Icon astahIcon;
+    private final CandidatesListPanel candidatesList;
 
-    public QuickPanel(QuickWindow quickWindow,CandidatesListWindow candidatesList) {
-        setLayout(new MigLayout("", "[32px][grow][][]", "[]"));
+    public QuickPanel(final QuickWindow quickWindow,Candidates candidates) {
+        setLayout(new MigLayout("debug", "[32px][grow]", "[][][]"));
+        candidatesList = new CandidatesListPanel(candidates);
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
         BufferedImage image;
@@ -46,23 +63,21 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         }
         astahIcon = new ImageIcon(image.getScaledInstance(32, 32, Image.SCALE_SMOOTH));
         iconLabel = new JLabel(astahIcon);
-        CommandExecutor executor = quickWindow.getExecutor();
+        final CommandExecutor executor = quickWindow.getExecutor();
         executor.addPropertyChangeListener(this);
-        add(iconLabel, "cell 0 0");
+        add(iconLabel, "cell 0 0,left");
         
         candidatesField = new CandidatesField(quickWindow,candidatesList);
         add(candidatesField, "cell 1 0,growx");
-        closeButton = new JButton();
-        add(closeButton, "cell 2 0");
         helpField = new HelpField();
         add(helpField, "cell 1 1,growx");
+        add(candidatesList,"cell 0 2,span 2,growx");
+        
+        candidatesList.addMouseListener(new CandidateDoubleClickListener(quickWindow,candidatesField));
     }
-    
-    public void setCloseAction(Action action){
-        this.closeButton.setAction(action);
-    }
-    
+        
     public void opened(){
+        candidatesList.setCandidateText("");
         candidatesField.setWindowState(CandidateWindowState.Inputing);
     }
     
@@ -87,6 +102,10 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
                 iconLabel.setIcon(new ImageIcon(bufferedImage));
             }
         }
+    }
+
+    public CandidatesListPanel getCandidatesList() {
+        return this.candidatesList;
     }
 
 }
