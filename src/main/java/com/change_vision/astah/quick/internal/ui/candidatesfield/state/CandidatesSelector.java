@@ -56,4 +56,10 @@ public class CandidatesSelector<T extends Candidate> {
 	public Candidate[] getCandidates() {
 		return this.candidates;
 	}
+
+    public void setCurrentIndex(int index) {
+        int oldValue = currentIndex;
+        currentIndex = index;
+        firePropertyChange("currentIndex", oldValue, currentIndex);
+    }
 }

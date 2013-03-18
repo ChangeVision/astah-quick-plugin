@@ -147,4 +147,8 @@ public class Candidates {
         this.state = commandFactory.create();
     }
 
+    public void setCurrentIndex(int index) {
+        selector.setCurrentIndex(index);
+    }
+
 }

@@ -8,10 +8,13 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,16 @@ public class CandidatesListPanel extends JPanel {
         this.candidates = candidates;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
         candidateList = new CandidatesList();
+        candidateList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int index = candidateList.getSelectedIndex();
+                CandidatesListPanel.this.candidates.setCurrentIndex(index);
+            }
+        });
+        candidateList.addMouseListener(new MouseAdapter() {
+            
+        });
         scrollPane.setViewportView(candidateList);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         setLayout(new BorderLayout());
