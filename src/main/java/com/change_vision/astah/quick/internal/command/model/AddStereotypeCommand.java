@@ -44,6 +44,9 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
     @Override
     public Candidate[] candidate(Candidate[] committeds,String searchKey) {
         if (searchKey.isEmpty()) {
+            if (committeds == null || committeds.length == 0) {
+                return findTargetElement(searchKey);
+            }
             return new Candidate[0];
         }
         String key = searchKey;
@@ -54,7 +57,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
             key = key.trim();
         }
         if (committeds.length == 0) {
-            return findTargetElement(searchKey, key);
+            return findTargetElement(key);
         }
         return findStereotypes(key);
     }
@@ -69,7 +72,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
         };
     }
 
-    private Candidate[] findTargetElement(String searchKey, String key) {
+    private Candidate[] findTargetElement(String key) {
         Candidate[] candidates = null;
         INamedElement[] founds = api.find(key);
         if (founds.length == 0) {
