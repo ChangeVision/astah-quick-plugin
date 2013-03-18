@@ -14,12 +14,10 @@ import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
-import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
-import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
@@ -162,29 +160,7 @@ public class ModelAPI {
         logger.trace("find:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
-            return getProjectAccessor().findElements(new ModelFinder() {
-                @Override
-                public boolean isTarget(INamedElement element) {
-                    if (not(isClass(element)) && not(isPackage(element))) return false;
-                    String name = element.getName().toLowerCase();
-                    boolean nameStarts = name.startsWith(searchKey.toLowerCase());
-                    boolean alias1Starts = element.getAlias1().startsWith(searchKey);
-                    boolean alias2Starts = element.getAlias2().startsWith(searchKey);
-                    return nameStarts || alias1Starts || alias2Starts;
-                }
-
-                private boolean not(boolean bool) {
-                    return !bool;
-                }
-
-                private boolean isClass(INamedElement element) {
-                    return element instanceof IClass;
-                }
-
-                private boolean isPackage(INamedElement element) {
-                    return element instanceof IPackage;
-                }
-            });
+            return getProjectAccessor().findElements(new ClassOrPackageFinder(searchKey));
         } catch (ProjectNotFoundException e) {
             throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
         }
