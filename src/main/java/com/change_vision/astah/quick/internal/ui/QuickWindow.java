@@ -46,6 +46,7 @@ public class QuickWindow extends JWindow {
         getContentPane().add(candidatesList);
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         pack();
+        DragMove.install(this);
     }
 
     public void notifyError(String title, String message) {
