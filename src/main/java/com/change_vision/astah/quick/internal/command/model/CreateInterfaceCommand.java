@@ -29,7 +29,7 @@ public class CreateInterfaceCommand implements Command{
 		if(args == null || args.length == 0) throw new IllegalArgumentException(Messages.getString("CreateInterfaceCommand.argument_error_message")); //$NON-NLS-1$
 		for (String interfaceName : args) {
 			logger.trace("create interface '{}'",interfaceName); //$NON-NLS-1$
-            INamedElement[] found = api.find(interfaceName);
+            INamedElement[] found = api.findClassOrPackage(interfaceName);
             if (found.length > 0) {
                 String message = format(Messages.getString("CreateInterfaceCommand.already_existed_error_message"),interfaceName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);

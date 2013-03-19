@@ -156,11 +156,12 @@ public class ModelAPI {
         }
     }
 
-    INamedElement[] find(final String searchKey) {
-        logger.trace("find:{}", searchKey); //$NON-NLS-1$
+    INamedElement[] findClassOrPackage(final String searchKey) {
+        logger.trace("findClassOrPackage:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
-            return getProjectAccessor().findElements(new ClassOrPackageFinder(searchKey));
+            ClassOrPackageFinder finder = new ClassOrPackageFinder(searchKey);
+            return getProjectAccessor().findElements(finder);
         } catch (ProjectNotFoundException e) {
             throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
         }

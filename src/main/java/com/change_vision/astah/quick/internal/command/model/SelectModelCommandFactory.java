@@ -12,7 +12,7 @@ public class SelectModelCommandFactory {
     private ModelAPI api = new ModelAPI();
 
     public List<Candidate> create(String key) {
-        INamedElement[] foundModels = api.find(key);
+        INamedElement[] foundModels = api.findClassOrPackage(key);
         if (foundModels == null || foundModels.length == 0) {
             return new ArrayList<Candidate>();
         }

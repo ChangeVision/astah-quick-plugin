@@ -75,7 +75,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
 
     private Candidate[] findTargetElement(String key) {
         Candidate[] candidates = new Candidate[0];
-        INamedElement[] founds = api.find(key);
+        INamedElement[] founds = api.findClassOrPackage(key);
         if (founds.length == 0) {
             return new Candidate[]{
                     new NotFound()

@@ -24,7 +24,7 @@ public class ModelCommands {
 	}
 
 	public static INamedElement[] find(String searchKey) {
-		return api.find(searchKey);
+		return api.findClassOrPackage(searchKey);
 	}
 
 }
