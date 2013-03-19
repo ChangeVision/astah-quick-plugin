@@ -30,11 +30,14 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
     private final QuickWindow quickWindow;
 
+    private final CommandBuilder builder;
+
     private boolean settingText;
 
-    public CandidatesField(QuickWindow quickWindow, CandidatesListPanel candidatesList) {
+    public CandidatesField(QuickWindow quickWindow, CandidatesListPanel candidatesList,CommandBuilder builder) {
         this.quickWindow = quickWindow;
         this.candidatesList = candidatesList;
+        this.builder = builder;
         setFont(new Font("Dialog", Font.PLAIN, 32));
         setColumns(16);
         setEditable(true);
@@ -42,12 +45,12 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
             return;
         }
         candidatesList.getCandidates().addPropertyChangeListener(this);
-        CommitOrExecuteCommandAction commandAction = new CommitOrExecuteCommandAction(this, this.quickWindow);
+        CommitOrExecuteCommandAction commandAction = new CommitOrExecuteCommandAction(this, this.quickWindow,builder);
         setAction(commandAction);
         new UpCandidatesListAction(this,this.candidatesList);
         new DownCandidatesListAction(this,this.candidatesList);
 
-        CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(quickWindow,this,
+        CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(builder,this,
                 this.candidatesList);
         
         Document document = getDocument();
@@ -99,7 +102,6 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         logger.trace("closeCandidatesListAndReset");
         Candidates commands = candidatesList.getCandidates();
         commands.setState(new SelectCommand(quickWindow.getCommands()));
-        CommandBuilder builder = quickWindow.getBuilder();
         builder.reset();
     }
 
@@ -115,7 +117,6 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
     }
 
     public String getCandidateText() {
-        CommandBuilder builder = quickWindow.getBuilder();
         return builder.getCandidateText(getText());
     }
 

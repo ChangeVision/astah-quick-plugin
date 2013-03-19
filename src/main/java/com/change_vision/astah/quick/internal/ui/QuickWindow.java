@@ -22,21 +22,20 @@ public class QuickWindow extends JWindow {
     private final QuickPanel quickPanel;
     private final MessageNotifier notifier;
     private final Candidates candidates;
-    private final CommandBuilder builder;
     private final Commands commands;
 
     public QuickWindow(JFrame parent,Commands commands) {
         super(parent);
         this.commands = commands;
-        this.builder = new CommandBuilder();
         this.notifier = new MessageNotifier(parent);
+        final CommandBuilder builder = new CommandBuilder();;
         InputMap inputMap = getRootPane()
                 .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        this.candidates = new Candidates(this.commands, this.builder);
-        this.quickPanel = new QuickPanel(this, candidates);
+        this.candidates = new Candidates(this.commands, builder);
+        this.quickPanel = new QuickPanel(this, candidates, builder);
         getContentPane().add(quickPanel);
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         pack();
@@ -72,10 +71,6 @@ public class QuickWindow extends JWindow {
 
     public Candidates getCandidates() {
         return this.candidates;
-    }
-
-    public CommandBuilder getBuilder() {
-        return this.builder;
     }
     
 }

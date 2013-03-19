@@ -30,16 +30,18 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.Candidate
 public class QuickPanel extends JPanel implements PropertyChangeListener {
 
     private final class CandidateDoubleClickListener extends MouseAdapter {
-        private CandidateDecider decider;
+        private final CandidateDecider decider;
+        private final CommandBuilder builder;
 
-        private CandidateDoubleClickListener(QuickWindow quickWindow, CandidatesField candidatesField) {
+        private CandidateDoubleClickListener(QuickWindow quickWindow, CandidatesField candidatesField,CommandBuilder builder) {
             this.decider = new CandidateDecider(quickWindow,candidatesField);
+            this.builder = builder;
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() > 1) {
-                decider.decide();
+                decider.decide(builder);
             }
         }
     }
@@ -50,7 +52,7 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
     private Icon astahIcon;
     private final CandidatesListPanel candidatesList;
 
-    public QuickPanel(final QuickWindow quickWindow,Candidates candidates) {
+    public QuickPanel(final QuickWindow quickWindow,Candidates candidates,CommandBuilder builder) {
         setLayout(new MigLayout("debug", "[32px][grow]", "[][][]"));
         candidatesList = new CandidatesListPanel(candidates);
         
@@ -63,17 +65,16 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         }
         astahIcon = new ImageIcon(image.getScaledInstance(32, 32, Image.SCALE_SMOOTH));
         iconLabel = new JLabel(astahIcon);
-        CommandBuilder builder = quickWindow.getBuilder();
         builder.addPropertyChangeListener(this);
         add(iconLabel, "cell 0 0,left");
         
-        candidatesField = new CandidatesField(quickWindow,candidatesList);
+        candidatesField = new CandidatesField(quickWindow,candidatesList,builder);
         add(candidatesField, "cell 1 0,growx");
         helpField = new HelpField();
         add(helpField, "cell 1 1,growx");
         add(candidatesList,"cell 0 2,span 2,growx");
         
-        candidatesList.addMouseListener(new CandidateDoubleClickListener(quickWindow,candidatesField));
+        candidatesList.addMouseListener(new CandidateDoubleClickListener(quickWindow,candidatesField,builder));
     }
         
     public void opened(){
