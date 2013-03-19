@@ -29,7 +29,7 @@ public class CreatePackageCommand implements Command{
 		if(args == null || args.length == 0) throw new IllegalArgumentException(Messages.getString("CreatePackageCommand.argument_error_message")); //$NON-NLS-1$
 		for (String packageName : args) {
 			logger.trace("create package '{}'",packageName); //$NON-NLS-1$
-            INamedElement[] found = api.find(packageName);
+            INamedElement[] found = api.findByFQCN(packageName);
             if (found.length > 0) {
                 String message = format(Messages.getString("CreatePackageCommand.already_existed_error_message"),packageName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);

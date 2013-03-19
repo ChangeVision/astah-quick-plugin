@@ -35,4 +35,8 @@ final class ClassOrPackageFinder implements ModelFinder {
     private boolean isPackage(INamedElement element) {
         return element instanceof IPackage;
     }
+
+    public String getSearchKey() {
+        return this.searchKey;
+    }
 }

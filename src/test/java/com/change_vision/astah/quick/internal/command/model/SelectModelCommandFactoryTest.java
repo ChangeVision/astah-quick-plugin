@@ -57,7 +57,7 @@ public class SelectModelCommandFactoryTest {
 		INamedElement[] elements = new INamedElement[]{
 				element
 		};
-		when(api.find(dummyKey)).thenReturn(elements);
+		when(api.findClassOrPackage(dummyKey)).thenReturn(elements);
 
 		List<Candidate> candidates = factory.create(dummyKey);
 		assertThat(candidates.size(),is(1));
@@ -73,7 +73,7 @@ public class SelectModelCommandFactoryTest {
 				element,
 				packaze
 		};
-		when(api.find(dummyKey)).thenReturn(elements);
+		when(api.findClassOrPackage(dummyKey)).thenReturn(elements);
 		
 		List<Candidate> candidates = factory.create(dummyKey);
 		assertThat(candidates.size(),is(4));		
