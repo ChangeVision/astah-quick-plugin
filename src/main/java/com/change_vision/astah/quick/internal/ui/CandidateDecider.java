@@ -14,6 +14,7 @@ public class CandidateDecider {
     
     private final QuickWindow quickWindow;
     private final CandidatesField candidatesField;
+    private final CommandExecutor executor = new CommandExecutor();
 
     public CandidateDecider(QuickWindow quickWindow,CandidatesField field){
         this.quickWindow = quickWindow;
@@ -28,7 +29,6 @@ public class CandidateDecider {
             executeCommand(builder);
             return;
         }
-        CommandExecutor executor = quickWindow.getExecutor();
         if (builder.isCommitted()) {
             builder.add(candidate);
             if (isImmidiateCandidate(candidate)) {
@@ -64,7 +64,6 @@ public class CandidateDecider {
     private void executeCommand(CommandBuilder builder) {
         String candidateText = candidatesField.getText();
         quickWindow.close();
-        CommandExecutor executor = quickWindow.getExecutor();
         try {
             executor.execute(builder,candidateText);
         } catch (Exception e) {
