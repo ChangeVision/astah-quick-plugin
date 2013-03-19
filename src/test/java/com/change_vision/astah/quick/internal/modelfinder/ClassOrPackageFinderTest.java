@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
 import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
@@ -38,7 +37,7 @@ public class ClassOrPackageFinderTest {
         when(clazz.getName()).thenReturn("");
         ClassOrPackageFinder finder = new ClassOrPackageFinder("");
         boolean target = finder.isTarget(clazz);
-        assertThat(target,is(true));
+        assertThat(target,is(false));
     }
 
     @Test

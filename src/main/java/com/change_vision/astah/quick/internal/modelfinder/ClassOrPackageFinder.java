@@ -17,6 +17,7 @@ public final class ClassOrPackageFinder implements ModelFinder {
     public boolean isTarget(INamedElement element) {
         if (not(isClass(element)) && not(isPackage(element))) return false;
         String name = element.getName().toLowerCase();
+        if (name.isEmpty()) return false;
         String lowerCaseKey = searchKey.toLowerCase();
         boolean nameStarts = name.startsWith(lowerCaseKey);
         boolean alias1Starts = element.getAlias1().startsWith(searchKey);

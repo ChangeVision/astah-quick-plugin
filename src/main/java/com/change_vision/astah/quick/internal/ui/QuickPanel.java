@@ -53,7 +53,7 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
     private final CandidatesListPanel candidatesList;
 
     public QuickPanel(final QuickWindow quickWindow,Candidates candidates) {
-        setLayout(new MigLayout("debug", "[32px][grow]", "[][][]"));
+        setLayout(new MigLayout("", "[32px][grow]", "[][][]"));
         candidatesList = new CandidatesListPanel(candidates);
         
         URL astahIconURL = this.getClass().getResource("/icons/astah_icon_professional.png");
