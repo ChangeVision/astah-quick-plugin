@@ -14,7 +14,7 @@ import com.change_vision.astah.quick.internal.command.AstahCommandIconDescriptio
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class CreateClassCommand implements Command {
+class CreateClassCommand implements Command {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateClassCommand.class);
 

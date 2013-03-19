@@ -14,7 +14,7 @@ import com.change_vision.astah.quick.internal.command.AstahCommandIconDescriptio
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class CreateInterfaceCommand implements Command{
+class CreateInterfaceCommand implements Command{
 
 	private ModelAPI api = new ModelAPI();
 
