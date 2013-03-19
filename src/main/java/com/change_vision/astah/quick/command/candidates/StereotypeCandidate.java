@@ -2,8 +2,10 @@ package com.change_vision.astah.quick.command.candidates;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 
+@Immediate
 public class StereotypeCandidate implements Candidate {
 
     private String key;

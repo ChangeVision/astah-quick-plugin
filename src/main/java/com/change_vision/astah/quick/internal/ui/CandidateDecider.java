@@ -7,7 +7,6 @@ import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
 public class CandidateDecider {
@@ -30,25 +29,23 @@ public class CandidateDecider {
         }
         if (builder.isCommitted()) {
             builder.add(candidate);
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            candidatesField.setText(commandText);
             if (isImmidiateCandidate(candidate)) {
                 executeCommand(builder);
                 return;
             }
-            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
-            candidatesField.setText(commandText);
             return;
         }
         if (candidate instanceof Command) {
             Command command = (Command) candidate;
+            builder.commit(command);
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            candidatesField.setText(commandText);
             if (isImmidiateCommand(command)) {
-                builder.commit(command);
                 executeCommand(builder);
                 return;
             }
-            builder.commit(command);
-            candidatesField.setWindowState(CandidateWindowState.ArgumentWait);
-            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
-            candidatesField.setText(commandText);
         }
     }
 

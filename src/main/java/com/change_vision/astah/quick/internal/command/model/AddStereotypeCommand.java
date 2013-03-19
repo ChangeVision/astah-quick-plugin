@@ -7,7 +7,9 @@ import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.astah.quick.internal.exception.NotImplementationException;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
@@ -40,6 +42,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
 
     @Override
     public void execute(String... args) throws ExecuteCommandException {
+        throw new NotImplementationException();
     }
 
     @Override
@@ -107,6 +110,11 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
                 api.addStereotype(element, stereotype.getName());
             }
         }
+    }
+    
+    @TestForMethod
+    void setAPI(ModelAPI api) {
+        this.api = api;
     }
 
 }

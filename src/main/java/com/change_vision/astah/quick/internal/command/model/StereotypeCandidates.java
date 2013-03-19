@@ -7,7 +7,7 @@ import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 
 class StereotypeCandidates {
     
-    private static final StereotypeCandidate[] DEFINED_CANDIDATES = new StereotypeCandidate[]{
+    static final StereotypeCandidate[] DEFINED_CANDIDATES = new StereotypeCandidate[]{
         new StereotypeCandidate("actor"), //$NON-NLS-1$
         new StereotypeCandidate("auxiliary"), //$NON-NLS-1$
         new StereotypeCandidate("boundary"), //$NON-NLS-1$
