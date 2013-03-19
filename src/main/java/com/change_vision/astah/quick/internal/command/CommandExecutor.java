@@ -77,6 +77,7 @@ public class CommandExecutor {
             executreByCandidates();
             return;
         }
+        throw new IllegalStateException("candidates are not supported.");
     }
 
     private boolean isImmediateCommand() {

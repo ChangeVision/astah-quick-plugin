@@ -198,6 +198,15 @@ public class CommandExecutorTest {
         verify(selectModelCommand).execute();
     }
     
+    @Test(expected=IllegalStateException.class)
+    public void callExecuteWhenCandidateIsAddedButNotSupported() throws Exception {
+        executor.commit(command);
+        executor.add(one);
+        String candidateText = COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME;
+        executor.execute(candidateText);
+        verify(command).execute(candidateText);
+    }
+    
     @Test
     public void removeCandidateCommand() throws Exception {
         executor.commit(candidateCommand);
