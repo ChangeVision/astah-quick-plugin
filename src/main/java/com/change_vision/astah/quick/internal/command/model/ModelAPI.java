@@ -167,6 +167,17 @@ public class ModelAPI {
         }
     }
 
+    INamedElement[] findByFQCN(String searchKey) {
+        logger.trace("findFQCN:{}", searchKey); //$NON-NLS-1$
+        if (isClosedProject()) return new INamedElement[0];
+        try {
+            FQCNFinder finder = new FQCNFinder(searchKey);
+            return getProjectAccessor().findElements(finder);
+        } catch (ProjectNotFoundException e) {
+            throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
+        }
+    }
+
     private boolean isClosedProject() {
         return wrapper.isClosedProject();
     }

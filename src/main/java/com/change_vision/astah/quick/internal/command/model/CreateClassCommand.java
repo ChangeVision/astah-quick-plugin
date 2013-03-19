@@ -30,7 +30,7 @@ public class CreateClassCommand implements Command {
             throw new IllegalArgumentException(Messages.getString("CreateClassCommand.argument_error_message")); //$NON-NLS-1$
         for (String className : args) {
             logger.trace("create class '{}'", className); //$NON-NLS-1$
-            INamedElement[] found = api.findClassOrPackage(className);
+            INamedElement[] found = api.findByFQCN(className);
             if (found.length > 0) {
                 String message = format(Messages.getString("CreateClassCommand.already_existed_error_message"),className); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
