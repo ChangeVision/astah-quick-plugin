@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.model;
+package com.change_vision.astah.quick.internal.modelfinder;
 
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.project.ModelFinder;

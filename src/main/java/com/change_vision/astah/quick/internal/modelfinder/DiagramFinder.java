@@ -1,13 +1,13 @@
-package com.change_vision.astah.quick.internal.command.diagram;
+package com.change_vision.astah.quick.internal.modelfinder;
 
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 
-final class DiagramFinder implements ModelFinder {
+public final class DiagramFinder implements ModelFinder {
     final String key;
 
-    DiagramFinder(String key) {
+    public DiagramFinder(String key) {
         this.key = key;
     }
 

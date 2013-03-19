@@ -1,14 +1,15 @@
-package com.change_vision.astah.quick.internal.command.model;
+package com.change_vision.astah.quick.internal.modelfinder;
 
 import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.project.ModelFinder;
 
-final class ClassOrPackageFinder implements ModelFinder {
+public final class ClassOrPackageFinder implements ModelFinder {
     private final String searchKey;
 
-    ClassOrPackageFinder(String searchKey) {
+    public ClassOrPackageFinder(String searchKey) {
+        if (searchKey == null) throw new IllegalArgumentException("searchKey is null.");
         this.searchKey = searchKey;
     }
 

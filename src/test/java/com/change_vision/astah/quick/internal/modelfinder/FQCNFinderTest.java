@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.model;
+package com.change_vision.astah.quick.internal.modelfinder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.change_vision.astah.quick.internal.modelfinder.FQCNFinder;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class FQCNFinderTest {

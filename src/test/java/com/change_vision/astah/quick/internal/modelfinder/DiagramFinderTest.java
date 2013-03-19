@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.command.diagram;
+package com.change_vision.astah.quick.internal.modelfinder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
