@@ -35,7 +35,7 @@ public class CandidateDecider {
                 executeCommand(builder);
                 return;
             }
-            String commandText = executor.getCommandText(builder) + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             candidatesField.setText(commandText);
             return;
         }
@@ -48,7 +48,7 @@ public class CandidateDecider {
             }
             builder.commit(command);
             candidatesField.setWindowState(CandidateWindowState.ArgumentWait);
-            String commandText = executor.getCommandText(builder) + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             candidatesField.setText(commandText);
         }
     }

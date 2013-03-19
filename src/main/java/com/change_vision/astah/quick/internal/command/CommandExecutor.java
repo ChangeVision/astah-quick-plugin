@@ -86,42 +86,6 @@ public class CommandExecutor {
         return args;
     }
 
-    public String getCommandText(CommandBuilder builder) {
-        if (builder.isUncommited()) {
-            return ""; //$NON-NLS-1$
-        }
-        Command command = builder.getCommand();
-        StringBuilder textBuilder = new StringBuilder(command.getName());
-        Candidate[] candidates = builder.getCandidates();
-        for (Candidate candidate : candidates) {
-            textBuilder.append(SEPARATE_COMMAND_CHAR);
-            textBuilder.append(candidate.getName());
-        }
-        return textBuilder.toString();
-    }
-
-    public String getCandidateText(CommandBuilder commandBuilder,String candidateText) {
-        if (commandBuilder.isUncommited()) {
-            return candidateText;
-        }
-        Command command = commandBuilder.getCommand();
-        String commandName = command.getName();
-        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
-        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
-        if (candidateWords.length > commandWords.length) {
-            StringBuilder builder = new StringBuilder();
-            for(int i = commandWords.length; i < candidateWords.length; i++){
-                builder.append(candidateWords[i]);
-                builder.append(SEPARATE_COMMAND_CHAR);
-            }
-            return builder.toString().trim();
-        }
-        if (candidateText.length() > commandName.length()) {
-            return candidateText.substring(commandName.length());
-        }
-        return ""; //$NON-NLS-1$
-    }
-
     public boolean isValid(CommandBuilder builder) {
         return builder.isCommitted();
     }

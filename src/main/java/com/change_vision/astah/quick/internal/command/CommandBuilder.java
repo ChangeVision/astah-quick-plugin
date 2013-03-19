@@ -14,6 +14,7 @@ import com.change_vision.astah.quick.command.annotations.Immediate;
 public class CommandBuilder {
     public static final String PROP_OF_COMMAND = "command"; //$NON-NLS-1$
     public static final String PROP_OF_CANDIDATE = "candidate"; //$NON-NLS-1$
+    public static final String SEPARATE_COMMAND_CHAR = " "; //$NON-NLS-1$
 
     private Command command;
     private List<Candidate> candidates = new ArrayList<Candidate>();
@@ -64,6 +65,43 @@ public class CommandBuilder {
         return candidates.remove(candidates.size() - 1);
     }
 
+    public String getCandidateText(String candidateText) {
+        if (isUncommited()) {
+            return candidateText;
+        }
+        Command command = getCommand();
+        String commandName = command.getName();
+        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
+        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
+        if (candidateWords.length > commandWords.length) {
+            StringBuilder builder = new StringBuilder();
+            for(int i = commandWords.length; i < candidateWords.length; i++){
+                builder.append(candidateWords[i]);
+                builder.append(SEPARATE_COMMAND_CHAR);
+            }
+            return builder.toString().trim();
+        }
+        if (candidateText.length() > commandName.length()) {
+            return candidateText.substring(commandName.length());
+        }
+        return ""; //$NON-NLS-1$
+    }
+    
+
+    public String getCommandText() {
+        if (isUncommited()) {
+            return ""; //$NON-NLS-1$
+        }
+        Command command = getCommand();
+        StringBuilder textBuilder = new StringBuilder(command.getName());
+        Candidate[] candidates = getCandidates();
+        for (Candidate candidate : candidates) {
+            textBuilder.append(SEPARATE_COMMAND_CHAR);
+            textBuilder.append(candidate.getName());
+        }
+        return textBuilder.toString();
+    }
+    
     public boolean isCommitted() {
         return command != null;
     }

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -46,9 +45,8 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
     @Override
     public void removeUpdate(DocumentEvent e) {
         logger.trace("removeUpdate");
-        CommandExecutor executor = quickWindow.getExecutor();
         CommandBuilder builder = quickWindow.getBuilder();
-        String commandText = executor.getCommandText(builder);
+        String commandText = builder.getCommandText();
         String text = field.getText();
         if (text.isEmpty() == false && commandText.length() > text.length()) {
             builder.removeCandidate();

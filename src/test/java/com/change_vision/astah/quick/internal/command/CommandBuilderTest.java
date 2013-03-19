@@ -2,8 +2,7 @@ package com.change_vision.astah.quick.internal.command;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -18,7 +17,15 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 
 public class CommandBuilderTest {
+    
+    private static final String COMMAND_NAME = "create command";
+    
+    private static final String COMMAND_SEPARATOR = " ";
 
+    private static final String CANDIDATE_ONE_NAME = "one";
+
+    private static final String CANDIDATE_TWO_NAME = "two";
+    
     @Mock
     private Command command;
     
@@ -37,6 +44,10 @@ public class CommandBuilderTest {
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
         builder = new CommandBuilder();
+        when(command.getName()).thenReturn(COMMAND_NAME);
+        when(one.getName()).thenReturn(CANDIDATE_ONE_NAME);
+        when(two.getName()).thenReturn(CANDIDATE_TWO_NAME);
+
     }
     
     @Test
@@ -60,6 +71,8 @@ public class CommandBuilderTest {
         Command actual = builder.getCommand();
         assertThat(actual,is(notNullValue()));
         assertThat(builder.isCommitted(),is(true));
+        assertThat(builder.getCommandText(),is(COMMAND_NAME));
+
     }
     
     @Test
@@ -74,15 +87,18 @@ public class CommandBuilderTest {
     
     @Test
     public void addCandidate() throws Exception {
+        builder.commit(command);
         builder.add(one);
         Candidate[] candidates = builder.getCandidates();
         assertThat(candidates,is(notNullValue()));
         assertThat(candidates.length,is(1));
+        assertThat(builder.getCommandText(),is(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME));
 
         builder.add(two);
         candidates = builder.getCandidates();
         assertThat(candidates,is(notNullValue()));
         assertThat(candidates.length,is(2));
+        assertThat(builder.getCommandText(),is(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME + COMMAND_SEPARATOR + CANDIDATE_TWO_NAME));
     }
 
     @Test
@@ -140,5 +156,40 @@ public class CommandBuilderTest {
         builder.removeCandidate();
         assertThat(builder.getCommand(),is(nullValue()));
     }
+    
+    @Test
+    public void candidateTextWhenUncommitted() throws Exception {
+        String candidateText = builder.getCandidateText("hoge");
+        assertThat(candidateText,is("hoge"));
+    }
+
+    @Test
+    public void candidateTextWhenCommitted() throws Exception {
+        builder.commit(command);
+        String candidateText = builder.getCandidateText(COMMAND_NAME);
+        assertThat(candidateText,is(""));
+    }
+    
+    @Test
+    public void candidateTextWhenCommittedAndSpace() throws Exception {
+        builder.commit(command);
+        String candidateText = builder.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR);
+        assertThat(candidateText,is(COMMAND_SEPARATOR));
+    }
+
+    @Test
+    public void candidateTextAfterCommitted() throws Exception {
+        builder.commit(command);
+        String candidateText = builder.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
+        assertThat(candidateText,is("hoge"));
+    }
+    
+    @Test
+    public void candidateTextHasSpaceSequence() throws Exception {
+        builder.commit(command);
+        String candidateText = builder.getCandidateText(COMMAND_NAME + COMMAND_SEPARATOR + COMMAND_SEPARATOR + "hoge");
+        assertThat(candidateText,is("hoge"));
+    }
+
 
 }

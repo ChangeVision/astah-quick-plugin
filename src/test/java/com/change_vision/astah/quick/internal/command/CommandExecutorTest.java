@@ -1,8 +1,5 @@
 package com.change_vision.astah.quick.internal.command;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -68,62 +65,11 @@ public class CommandExecutorTest {
         builder = new CommandBuilder();
     }
     
-    @Test
-    public void candidateTextWhenUncommitted() throws Exception {
-        String candidateText = executor.getCandidateText(builder,"hoge");
-        assertThat(candidateText,is("hoge"));
-    }
-
-    @Test
-    public void candidateTextWhenCommitted() throws Exception {
-        builder.commit(command);
-        String candidateText = executor.getCandidateText(builder,COMMAND_NAME);
-        assertThat(candidateText,is(""));
-    }
-    
-    @Test
-    public void candidateTextWhenCommittedAndSpace() throws Exception {
-        builder.commit(command);
-        String candidateText = executor.getCandidateText(builder,COMMAND_NAME + COMMAND_SEPARATOR);
-        assertThat(candidateText,is(COMMAND_SEPARATOR));
-    }
-
-    @Test
-    public void candidateTextAfterCommitted() throws Exception {
-        builder.commit(command);
-        String candidateText = executor.getCandidateText(builder,COMMAND_NAME + COMMAND_SEPARATOR + "hoge");
-        assertThat(candidateText,is("hoge"));
-    }
-    
-    @Test
-    public void candidateTextHasSpaceSequence() throws Exception {
-        builder.commit(command);
-        String candidateText = executor.getCandidateText(builder,COMMAND_NAME + COMMAND_SEPARATOR + COMMAND_SEPARATOR + "hoge");
-        assertThat(candidateText,is("hoge"));
-    }
-
     @Test(expected=UncommitedCommandExcepition.class)
     public void throwExceptionWhenExecuteCommandIsNotCommitted() throws UncommitedCommandExcepition, ExecuteCommandException {
         executor.execute(builder,"");
     }
 
-    @Test
-    public void commitCommand() {
-        
-        builder.commit(command);
-
-        Command actual = builder.getCommand();
-        assertThat(actual,is(notNullValue()));
-        assertThat(executor.getCommandText(builder),is(COMMAND_NAME));
-    }
-    
-    @Test
-    public void addArgument() throws Exception {
-        builder.commit(candidateCommand);
-        builder.add(one);
-        assertThat(executor.getCommandText(builder),is(COMMAND_NAME + COMMAND_SEPARATOR + CANDIDATE_ONE_NAME));
-    }
-    
     @Test
     public void callExecuteWhenArgumentIsNull() throws Exception {
         builder.commit(command);

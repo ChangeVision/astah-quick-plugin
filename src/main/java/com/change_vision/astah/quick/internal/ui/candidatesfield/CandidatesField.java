@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -116,9 +115,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
     }
 
     public String getCandidateText() {
-        CommandExecutor executor = quickWindow.getExecutor();
         CommandBuilder builder = quickWindow.getBuilder();
-        return executor.getCandidateText(builder,getText());
+        return builder.getCandidateText(getText());
     }
 
 }
