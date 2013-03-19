@@ -64,8 +64,8 @@ class DiagramAPI {
     
     boolean isOpenDiagrams() {
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
-        IDiagram currentDiagram = diagramViewManager.getCurrentDiagram();
-        return currentDiagram != null;
+        IDiagram[] openDiagrams = diagramViewManager.getOpenDiagrams();
+        return openDiagrams.length != 0;
     }
 
     void closeCurrentDiagram() {
@@ -81,5 +81,10 @@ class DiagramAPI {
     IDiagram getCurrentDiagram() {
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         return diagramViewManager.getCurrentDiagram();
+    }
+
+    public void closeAll() {
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        diagramViewManager.closeAll();
     }
 }
