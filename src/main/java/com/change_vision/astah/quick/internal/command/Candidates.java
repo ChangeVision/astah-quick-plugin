@@ -4,6 +4,8 @@ import static java.lang.String.format;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +122,16 @@ public class Candidates {
     }
 
     public Candidate[] getCandidates() {
-        return selector.getCandidates();
+        Candidate[] candidates = selector.getCandidates();
+        if (isCommitted()) {
+            Arrays.sort(candidates, new Comparator<Candidate>() {
+                @Override
+                public int compare(Candidate o1, Candidate o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+        }
+        return candidates;
     }
 
     public void up() {
