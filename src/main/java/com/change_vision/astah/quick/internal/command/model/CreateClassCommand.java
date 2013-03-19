@@ -9,6 +9,7 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -17,7 +18,7 @@ public class CreateClassCommand implements Command {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateClassCommand.class);
 
-    private final ModelAPI api = new ModelAPI();
+    private ModelAPI api = new ModelAPI();
 
     @Override
     public String getName() {
@@ -52,6 +53,11 @@ public class CreateClassCommand implements Command {
     @Override
     public CandidateIconDescription getIconDescription() {
         return new AstahCommandIconDescription(IconDescription.UML_CLASS_CLASS);
+    }
+
+    @TestForMethod
+    void setAPI(ModelAPI api) {
+        this.api = api;
     }
 
 }
