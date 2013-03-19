@@ -1,10 +1,6 @@
 package com.change_vision.astah.quick.internal.command;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,97 +9,65 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.exception.UncommitedCommandExcepition;
 
 public class CommandExecutor {
-    public static final String PROP_OF_COMMAND = "command"; //$NON-NLS-1$
     public static final String SEPARATE_COMMAND_CHAR = " "; //$NON-NLS-1$
     /**
      * Logger for this class
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
 
-    private Command command;
-    private List<Candidate> candidates = new ArrayList<Candidate>();
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-
-    public Command getCommand() {
-        return command;
-    }
-
-    public void commit(Command command) {
-        Command old = this.command;
-        this.command = command;
-        support.firePropertyChange(PROP_OF_COMMAND, old, command);
-    }
-
-    public boolean isCommited() {
-        return command != null;
-    }
-
-    public void add(Candidate candidate) {
-        this.candidates.add(candidate);
-    }
-
-    public boolean remove(Candidate candidate) {
-        return candidates.remove(candidate);
-    }
-
-    public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
+    public void execute(CommandBuilder builder,String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
         logger.trace("execute:'{}'",candidateText); //$NON-NLS-1$
-        if (isUncommited()) throw new UncommitedCommandExcepition();
+        if (builder.isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
         candidateText = candidateText.replaceAll("\\s+", SEPARATE_COMMAND_CHAR); //$NON-NLS-1$
-        doExcecute(candidateText);
-        reset();
+        doExcecute(builder,candidateText);
+        builder.reset();
     }
 
-    private void doExcecute(String candidateText) throws ExecuteCommandException {
-        if (candidates.isEmpty()) {
-            if (isImmediateCommand()) {
+    private void doExcecute(CommandBuilder builder,String candidateText) throws ExecuteCommandException {
+        Command command = builder.getCommand();
+        Candidate[] candidates = builder.getCandidates();
+        if (candidates.length == 0) {
+            if (builder.isImmediateCommand()) {
                 command.execute();
                 return;
             }
-            executeByArguments(candidateText);
+            executeByArguments(command, candidateText);
             return;
         }
-        if (command instanceof CandidateAndArgumentSupportCommand) {
-            executeByCandidatesAndArguments(candidateText);
+        if (builder.isSupportedCandidateAndArgument()) {
+            executeByCandidatesAndArguments(command, candidates, candidateText);
             return;
         }
-        if (command instanceof CandidateSupportCommand) {
-            executreByCandidates();
+        if (builder.isSupportedCandidate()) {
+            executreByCandidates(command, candidates);
             return;
         }
+        throw new IllegalStateException("candidates are not supported.");
     }
 
-    private boolean isImmediateCommand() {
-        return command.getClass().isAnnotationPresent(Immediate.class);
-    }
 
-    private void executreByCandidates() throws ExecuteCommandException {
-        Candidate[] arguments = candidates.toArray(new Candidate[]{});
-
+    private void executreByCandidates(Command command,Candidate[] candidates) throws ExecuteCommandException {
         CandidateSupportCommand candidateCommand = (CandidateSupportCommand) command;
-        candidateCommand.execute(arguments);
+        candidateCommand.execute(candidates);
     }
 
-    private void executeByCandidatesAndArguments(String candidateText) throws ExecuteCommandException{
-        Candidate[] candidateArguments = candidates.toArray(new Candidate[]{});
-        
+    private void executeByCandidatesAndArguments(Command command,Candidate[] candidates, String candidateText) throws ExecuteCommandException{
         String commandName = command.getName();
         String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
         String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
-        int commitedLength = commandWords.length + candidates.size();
+        int commitedLength = commandWords.length + candidates.length;
         String[] args = calcArgs(candidateText, commandName, candidateWords, commitedLength);
 
         CandidateAndArgumentSupportCommand argumentCommand = (CandidateAndArgumentSupportCommand) command;
-        argumentCommand.execute(candidateArguments,args);
+        argumentCommand.execute(candidates,args);
     }
 
-    private void executeByArguments(String candidateText) throws ExecuteCommandException {
+    private void executeByArguments(Command command,String candidateText) throws ExecuteCommandException {
         String commandName = command.getName();
         String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
         String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
@@ -122,79 +86,8 @@ public class CommandExecutor {
         return args;
     }
 
-    private boolean isUncommited() {
-        return command == null;
-    }
-
-    public String getCommandText() {
-        if (isUncommited()) {
-            return ""; //$NON-NLS-1$
-        }
-        StringBuilder builder = new StringBuilder(command.getName());
-        for (Candidate candidate : candidates) {
-            builder.append(SEPARATE_COMMAND_CHAR);
-            builder.append(candidate.getName());
-        }
-        return builder.toString();
-    }
-
-    public String getCandidateText(String candidateText) {
-        if (isUncommited()) {
-            return candidateText;
-        }
-        String commandName = command.getName();
-        String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
-        String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
-        if (candidateWords.length > commandWords.length) {
-            StringBuilder builder = new StringBuilder();
-            for(int i = commandWords.length; i < candidateWords.length; i++){
-                builder.append(candidateWords[i]);
-                builder.append(SEPARATE_COMMAND_CHAR);
-            }
-            return builder.toString().trim();
-        }
-        if (candidateText.length() > commandName.length()) {
-            return candidateText.substring(commandName.length());
-        }
-        return ""; //$NON-NLS-1$
-    }
-
-    public void reset() {
-        this.command = null;
-        this.candidates.clear();
+    public boolean isValid(CommandBuilder builder) {
+        return builder.isCommitted();
     }
     
-    public Candidate[] getCandidates() {
-        if (candidates.size() == 0) {
-            return new Candidate[0];
-        }
-        return candidates.toArray(new Candidate[0]);
-    }
-
-    public boolean isValid() {
-        return isCommited();
-    }
-
-    public Candidate removeCandidate() {
-        if (candidates.size() == 0) {
-            if (isCommited()) {
-                Command old = this.command;
-                this.command = null;
-                return old;
-            }
-            return null;
-        }
-        return candidates.remove(candidates.size() - 1);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        support.removePropertyChangeListener(listener);
-    }
-    
-    
-
 }

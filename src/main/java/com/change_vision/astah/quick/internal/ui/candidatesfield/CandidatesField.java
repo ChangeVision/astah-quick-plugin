@@ -12,11 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.Candidates;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCommand;
 
 @SuppressWarnings("serial")
 public final class CandidatesField extends JTextField implements PropertyChangeListener {
@@ -32,7 +31,9 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
     private boolean settingText;
 
-    public CandidatesField(QuickWindow quickWindow, CandidatesListPanel candidatesList) {
+    private Candidates candidates;
+
+    public CandidatesField(QuickWindow quickWindow, CandidatesListPanel candidatesList,Candidates candidates) {
         this.quickWindow = quickWindow;
         this.candidatesList = candidatesList;
         setFont(new Font("Dialog", Font.PLAIN, 32));
@@ -41,14 +42,15 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         if (candidatesList == null) {
             return;
         }
-        candidatesList.getCandidates().addPropertyChangeListener(this);
-        CommitOrExecuteCommandAction commandAction = new CommitOrExecuteCommandAction(this, this.quickWindow);
+        this.candidates = candidates;
+        this.candidates.addPropertyChangeListener(this);
+        CommitOrExecuteCommandAction commandAction = new CommitOrExecuteCommandAction(this, this.quickWindow,candidates);
         setAction(commandAction);
         new UpCandidatesListAction(this,this.candidatesList);
         new DownCandidatesListAction(this,this.candidatesList);
 
         CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(this,
-                this.candidatesList);
+                this.candidatesList,candidates);
         
         Document document = getDocument();
         if (document instanceof AbstractDocument) {
@@ -97,10 +99,7 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
     private void closeCandidatesListAndReset() {
         logger.trace("closeCandidatesListAndReset");
-        Candidates commands = candidatesList.getCandidates();
-        commands.setState(new SelectCommand(quickWindow.getCommands()));
-        CommandExecutor executor = quickWindow.getExecutor();
-        executor.reset();
+        candidates.reset();
     }
 
     private void closeCandidatesList() {
@@ -115,12 +114,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
     }
 
     public String getCandidateText() {
-        CommandExecutor executor = quickWindow.getExecutor();
-        return executor.getCandidateText(getText());
-    }
-
-    public CommandExecutor getExecutor() {
-        return quickWindow.getExecutor();
+        CommandBuilder builder = candidates.getCommandBuilder();
+        return builder.getCandidateText(getText());
     }
 
 }

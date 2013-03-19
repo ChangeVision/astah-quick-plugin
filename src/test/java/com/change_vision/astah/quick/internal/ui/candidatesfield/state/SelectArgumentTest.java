@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 
 public class SelectArgumentTest {
 
@@ -28,7 +28,7 @@ public class SelectArgumentTest {
     private CandidatesProviderCommand providerCommand;
 
     @Mock
-    private CommandExecutor executor;
+    private CommandBuilder builder;
 
     private SelectArgument argument;
 
@@ -38,28 +38,28 @@ public class SelectArgumentTest {
 
         when(committed.getName()).thenReturn("committed command");
         when(providerCommand.getName()).thenReturn("provider command");
-        argument = new SelectArgument(executor);
+        argument = new SelectArgument(builder);
     }
 
     @Test
     public void filterCommitted() {
-        when(executor.getCommand()).thenReturn(committed);
+        when(builder.getCommand()).thenReturn(committed);
         Candidate[] candidates = argument.filter("committed command");
         assertThat(candidates.length, is(1));
     }
 
     @Test
     public void filterProviderCommand() throws Exception {
-        when(executor.getCandidates()).thenReturn(new Candidate[0]);
-        when(executor.getCommand()).thenReturn(providerCommand);
+        when(builder.getCandidates()).thenReturn(new Candidate[0]);
+        when(builder.getCommand()).thenReturn(providerCommand);
         argument.filter("hoge");
         verify(providerCommand).candidate(new Candidate[0], "hoge");
     }
     
     @Test
     public void filterProviderCommandWhenNotFound() throws Exception {
-        when(executor.getCandidates()).thenReturn(new Candidate[0]);
-        when(executor.getCommand()).thenReturn(providerCommand);
+        when(builder.getCandidates()).thenReturn(new Candidate[0]);
+        when(builder.getCommand()).thenReturn(providerCommand);
         Candidate[] candidates = argument.filter("not found");
         assertThat(candidates,is(notNullValue()));
         assertThat(candidates.length,is(1));

@@ -92,10 +92,6 @@ public class CandidatesListPanel extends JPanel {
         logger.trace("down : current '{}'", candidate);
         candidateList.setSelectedValue(candidate, true);
     }
-
-    public Candidates getCandidates() {
-        return candidates;
-    }
     
     @Override
     public void setVisible(boolean visible) {

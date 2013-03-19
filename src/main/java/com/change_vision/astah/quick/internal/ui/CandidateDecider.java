@@ -4,6 +4,7 @@ import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -13,40 +14,40 @@ public class CandidateDecider {
     
     private final QuickWindow quickWindow;
     private final CandidatesField candidatesField;
+    private final CommandExecutor executor = new CommandExecutor();
 
     public CandidateDecider(QuickWindow quickWindow,CandidatesField field){
         this.quickWindow = quickWindow;
         this.candidatesField = field;
     }
     
-    public void decide() {
-        Candidates candidates = quickWindow.getCandidates();
+    public void decide(Candidates candidates) {
+        CommandBuilder builder = candidates.getCommandBuilder();
         Candidate candidate = candidates.current();
         if (candidate instanceof ValidState) {
-            executeCommand();
+            executeCommand(builder);
             return;
         }
-        CommandExecutor executor = quickWindow.getExecutor();
-        if (executor .isCommited()) {
-            executor.add(candidate);
+        if (builder.isCommitted()) {
+            builder.add(candidate);
             if (isImmidiateCandidate(candidate)) {
-                executeCommand();
+                executeCommand(builder);
                 return;
             }
-            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             candidatesField.setText(commandText);
             return;
         }
         if (candidate instanceof Command) {
             Command command = (Command) candidate;
             if (isImmidiateCommand(command)) {
-                executor.commit(command);
-                executeCommand();
+                builder.commit(command);
+                executeCommand(builder);
                 return;
             }
-            executor.commit(command);
+            builder.commit(command);
             candidatesField.setWindowState(CandidateWindowState.ArgumentWait);
-            String commandText = executor.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
+            String commandText = builder.getCommandText() + CommandExecutor.SEPARATE_COMMAND_CHAR;
             candidatesField.setText(commandText);
         }
     }
@@ -59,12 +60,11 @@ public class CandidateDecider {
         return command.getClass().isAnnotationPresent(Immediate.class);
     }
 
-    private void executeCommand() {
+    private void executeCommand(CommandBuilder builder) {
         String candidateText = candidatesField.getText();
         quickWindow.close();
-        CommandExecutor executor = quickWindow.getExecutor();
         try {
-            executor.execute(candidateText);
+            executor.execute(builder,candidateText);
         } catch (Exception e) {
             quickWindow.notifyError("Alert", e.getMessage());
         }
