@@ -22,7 +22,6 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -64,8 +63,8 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         }
         astahIcon = new ImageIcon(image.getScaledInstance(32, 32, Image.SCALE_SMOOTH));
         iconLabel = new JLabel(astahIcon);
-        final CommandExecutor executor = quickWindow.getExecutor();
-        executor.addPropertyChangeListener(this);
+        CommandBuilder builder = quickWindow.getBuilder();
+        builder.addPropertyChangeListener(this);
         add(iconLabel, "cell 0 0,left");
         
         candidatesField = new CandidatesField(quickWindow,candidatesList);

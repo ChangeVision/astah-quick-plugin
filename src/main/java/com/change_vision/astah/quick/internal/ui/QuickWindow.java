@@ -13,6 +13,7 @@ import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.command.Commands;
 
@@ -23,19 +24,21 @@ public class QuickWindow extends JWindow {
     private final MessageNotifier notifier;
     private final Candidates candidates;
     private final CommandExecutor executor;
+    private final CommandBuilder builder;
     private final Commands commands;
 
     public QuickWindow(JFrame parent,Commands commands) {
         super(parent);
         this.commands = commands;
         this.executor = new CommandExecutor();
+        this.builder = new CommandBuilder();
         this.notifier = new MessageNotifier(parent);
         InputMap inputMap = getRootPane()
                 .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
-        this.candidates = new Candidates(this.commands, this.executor);
+        this.candidates = new Candidates(this.commands, this.builder);
         this.quickPanel = new QuickPanel(this, candidates);
         getContentPane().add(quickPanel);
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
@@ -76,6 +79,10 @@ public class QuickWindow extends JWindow {
 
     public Candidates getCandidates() {
         return this.candidates;
+    }
+
+    public CommandBuilder getBuilder() {
+        return this.builder;
     }
     
 }

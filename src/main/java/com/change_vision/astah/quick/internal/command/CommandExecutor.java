@@ -1,6 +1,5 @@
 package com.change_vision.astah.quick.internal.command;
 
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -20,38 +19,16 @@ public class CommandExecutor {
      */
     private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
 
-    private CommandBuilder builder = new CommandBuilder();
-
-    public Command getCommand() {
-        return builder.getCommand();
-    }
-
-    public void commit(Command command) {
-        builder.commit(command);
-    }
-
-    public boolean isCommited() {
-        return builder.isCommitted();
-    }
-
-    public void add(Candidate candidate) {
-        this.builder.add(candidate);
-    }
-
-    public boolean remove(Candidate candidate) {
-        return builder.remove(candidate);
-    }
-
-    public void execute(String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
+    public void execute(CommandBuilder builder,String candidateText) throws UncommitedCommandExcepition, ExecuteCommandException {
         logger.trace("execute:'{}'",candidateText); //$NON-NLS-1$
         if (builder.isUncommited()) throw new UncommitedCommandExcepition();
         candidateText = candidateText.trim();
         candidateText = candidateText.replaceAll("\\s+", SEPARATE_COMMAND_CHAR); //$NON-NLS-1$
-        doExcecute(candidateText);
-        reset();
+        doExcecute(builder,candidateText);
+        builder.reset();
     }
 
-    private void doExcecute(String candidateText) throws ExecuteCommandException {
+    private void doExcecute(CommandBuilder builder,String candidateText) throws ExecuteCommandException {
         Command command = builder.getCommand();
         Candidate[] candidates = builder.getCandidates();
         if (candidates.length == 0) {
@@ -109,7 +86,7 @@ public class CommandExecutor {
         return args;
     }
 
-    public String getCommandText() {
+    public String getCommandText(CommandBuilder builder) {
         if (builder.isUncommited()) {
             return ""; //$NON-NLS-1$
         }
@@ -123,11 +100,11 @@ public class CommandExecutor {
         return textBuilder.toString();
     }
 
-    public String getCandidateText(String candidateText) {
-        if (builder.isUncommited()) {
+    public String getCandidateText(CommandBuilder commandBuilder,String candidateText) {
+        if (commandBuilder.isUncommited()) {
             return candidateText;
         }
-        Command command = builder.getCommand();
+        Command command = commandBuilder.getCommand();
         String commandName = command.getName();
         String[] commandWords = commandName.split(SEPARATE_COMMAND_CHAR);
         String[] candidateWords = candidateText.split(SEPARATE_COMMAND_CHAR);
@@ -145,28 +122,8 @@ public class CommandExecutor {
         return ""; //$NON-NLS-1$
     }
 
-    public void reset() {
-        builder.reset();
-    }
-    
-    public Candidate[] getCandidates() {
-        return builder.getCandidates();
-    }
-
-    public boolean isValid() {
-        return isCommited();
-    }
-
-    public Candidate removeCandidate() {
-        return builder.removeCandidate();
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        builder.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        builder.removePropertyChangeListener(listener);
+    public boolean isValid(CommandBuilder builder) {
+        return builder.isCommitted();
     }
     
 }

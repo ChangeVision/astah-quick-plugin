@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
@@ -47,7 +48,7 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         new UpCandidatesListAction(this,this.candidatesList);
         new DownCandidatesListAction(this,this.candidatesList);
 
-        CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(this,
+        CandidatesFieldDocumentListener listener = new CandidatesFieldDocumentListener(quickWindow,this,
                 this.candidatesList);
         
         Document document = getDocument();
@@ -99,8 +100,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
         logger.trace("closeCandidatesListAndReset");
         Candidates commands = candidatesList.getCandidates();
         commands.setState(new SelectCommand(quickWindow.getCommands()));
-        CommandExecutor executor = quickWindow.getExecutor();
-        executor.reset();
+        CommandBuilder builder = quickWindow.getBuilder();
+        builder.reset();
     }
 
     private void closeCandidatesList() {
@@ -116,11 +117,8 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
 
     public String getCandidateText() {
         CommandExecutor executor = quickWindow.getExecutor();
-        return executor.getCandidateText(getText());
-    }
-
-    public CommandExecutor getExecutor() {
-        return quickWindow.getExecutor();
+        CommandBuilder builder = quickWindow.getBuilder();
+        return executor.getCandidateText(builder,getText());
     }
 
 }

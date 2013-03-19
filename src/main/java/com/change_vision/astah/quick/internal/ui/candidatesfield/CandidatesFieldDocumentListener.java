@@ -6,7 +6,9 @@ import javax.swing.event.DocumentListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
+import com.change_vision.astah.quick.internal.ui.QuickWindow;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
@@ -20,8 +22,11 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
     private CandidatesListPanel candidatesList;
 
-    public CandidatesFieldDocumentListener(CandidatesField candidatesField,
+    private QuickWindow quickWindow;
+
+    public CandidatesFieldDocumentListener(QuickWindow quickWindow, CandidatesField candidatesField,
             CandidatesListPanel candidatesList) {
+        this.quickWindow = quickWindow;
         this.field = candidatesField;
         this.candidatesList = candidatesList;
     }
@@ -41,14 +46,15 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
     @Override
     public void removeUpdate(DocumentEvent e) {
         logger.trace("removeUpdate");
-        CommandExecutor executor = field.getExecutor();
-        String commandText = executor.getCommandText();
+        CommandExecutor executor = quickWindow.getExecutor();
+        CommandBuilder builder = quickWindow.getBuilder();
+        String commandText = executor.getCommandText(builder);
         String text = field.getText();
         if (text.isEmpty() == false && commandText.length() > text.length()) {
-            executor.removeCandidate();
+            builder.removeCandidate();
         }
         if (text.isEmpty() && field.isSettingText() == false) {
-            executor.reset();
+            builder.reset();
         }
         String candidateText = field.getCandidateText();
         candidatesList.setCandidateText(candidateText);
