@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
@@ -89,19 +90,23 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(CommandExecutor.PROP_OF_COMMAND)) {
+        if (evt.getPropertyName().equals(CommandBuilder.PROP_OF_COMMAND)) {
             Object newValue = evt.getNewValue();
             if (newValue instanceof Command) {
-                Command command = (Command) newValue;
-                CandidateIconDescription iconDescription = command.getIconDescription();
-                Icon icon = iconDescription.getIcon();
-                BufferedImage bufferedImage = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
-                Graphics2D graphics = bufferedImage.createGraphics();
-                icon.paintIcon(null, graphics, 8, 8);
-                graphics.dispose();
-                iconLabel.setIcon(new ImageIcon(bufferedImage));
+                updateIcon(newValue);
             }
         }
+    }
+
+    private void updateIcon(Object newValue) {
+        Command command = (Command) newValue;
+        CandidateIconDescription iconDescription = command.getIconDescription();
+        Icon icon = iconDescription.getIcon();
+        BufferedImage bufferedImage = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = bufferedImage.createGraphics();
+        icon.paintIcon(null, graphics, 8, 8);
+        graphics.dispose();
+        iconLabel.setIcon(new ImageIcon(bufferedImage));
     }
 
     public CandidatesListPanel getCandidatesList() {

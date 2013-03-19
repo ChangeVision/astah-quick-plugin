@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
+import com.change_vision.astah.quick.command.CandidateSupportCommand;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.annotations.Immediate;
 
 public class CommandBuilder {
     public static final String PROP_OF_COMMAND = "command"; //$NON-NLS-1$
@@ -17,7 +20,7 @@ public class CommandBuilder {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public void commit(Command command){
-        if (command == null) throw new IllegalArgumentException("command is null.");
+        if (command == null) throw new IllegalArgumentException("command is null.");//$NON-NLS-1$
         Command old = this.command;
         this.command = command;
         support.firePropertyChange(PROP_OF_COMMAND, old, command);
@@ -46,7 +49,7 @@ public class CommandBuilder {
 
     @Override
     public String toString() {
-        return "CommandBuilder [command=" + command + ", candidates=" + candidates + "]";
+        return "CommandBuilder [command=" + command + ", candidates=" + candidates + "]";//$NON-NLS-1$
     }
 
     public Candidate removeCandidate() {
@@ -65,12 +68,33 @@ public class CommandBuilder {
         return command != null;
     }
     
+    public boolean isSupportedCandidate(){
+        return command instanceof CandidateSupportCommand;
+    }
+    
+    public boolean isSupportedCandidateAndArgument(){
+        return command instanceof CandidateAndArgumentSupportCommand;
+    }
+    
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
+    }
+
+    public boolean isImmediateCommand() {
+        return command.getClass().isAnnotationPresent(Immediate.class);
+    }
+
+    public boolean isUncommited() {
+        return ! isCommitted();
+    }
+
+    public void reset() {
+        this.command = null;
+        this.candidates.clear();
     }
     
 }
