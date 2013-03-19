@@ -35,7 +35,7 @@ public class QuickWindow extends JWindow {
         CloseAction closeAction = new CloseAction(this);
         getRootPane().getActionMap().put("close-it", closeAction);
         this.candidates = new Candidates(this.commands, builder);
-        this.quickPanel = new QuickPanel(this, candidates, builder);
+        this.quickPanel = new QuickPanel(this, candidates);
         getContentPane().add(quickPanel);
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         pack();
@@ -64,13 +64,4 @@ public class QuickWindow extends JWindow {
         setVisible(true);
         quickPanel.opened();
     }
-
-    public Commands getCommands() {
-        return this.commands;
-    }
-
-    public Candidates getCandidates() {
-        return this.candidates;
-    }
-    
 }

@@ -41,7 +41,7 @@ public class Candidates {
 
     private CandidatesSelector<Candidate> selector;
 
-    private CommandBuilder commandBuilder;
+    private final CommandBuilder commandBuilder;
         
     public Candidates(Commands commands, CommandBuilder commandBuilder) {
         this.commands = commands;
@@ -105,7 +105,7 @@ public class Candidates {
     public void setState(CandidateState newState) {
         CandidateState oldState = this.state;
         this.state = newState;
-        firePropertyChange(PROP_STATE, oldState, newState);
+        support.firePropertyChange(PROP_STATE, oldState, newState);
     }
 
     public CandidateState getState() {
@@ -139,10 +139,6 @@ public class Candidates {
         return state instanceof SelectArgument;
     }
 
-    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        support.firePropertyChange(propertyName, oldValue, newValue);
-    }
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
@@ -159,6 +155,15 @@ public class Candidates {
 
     public void setCurrentIndex(int index) {
         selector.setCurrentIndex(index);
+    }
+    
+    public CommandBuilder getCommandBuilder() {
+        return commandBuilder;
+    }
+
+    public void reset() {
+        this.state = commandFactory.create();
+        this.commandBuilder.reset();
     }
 
 }

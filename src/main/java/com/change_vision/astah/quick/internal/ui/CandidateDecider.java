@@ -21,8 +21,8 @@ public class CandidateDecider {
         this.candidatesField = field;
     }
     
-    public void decide(CommandBuilder builder) {
-        Candidates candidates = quickWindow.getCandidates();
+    public void decide(Candidates candidates) {
+        CommandBuilder builder = candidates.getCommandBuilder();
         Candidate candidate = candidates.current();
         if (candidate instanceof ValidState) {
             executeCommand(builder);

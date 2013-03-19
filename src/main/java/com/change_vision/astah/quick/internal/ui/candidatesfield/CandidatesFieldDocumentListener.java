@@ -6,6 +6,7 @@ import javax.swing.event.DocumentListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
@@ -18,16 +19,17 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
     private final CandidatesField field;
 
-    private final CommandBuilder builder;
-
     private final CandidatesListPanel candidatesList;
 
-    public CandidatesFieldDocumentListener(CommandBuilder builder,
+    private final Candidates candidates;
+
+    public CandidatesFieldDocumentListener(
             CandidatesField candidatesField,
-            CandidatesListPanel candidatesList) {
-        this.builder = builder;
+            CandidatesListPanel candidatesList,
+            Candidates candidates) {
         this.field = candidatesField;
         this.candidatesList = candidatesList;
+        this.candidates = candidates;
     }
 
     @Override
@@ -45,6 +47,7 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
     @Override
     public void removeUpdate(DocumentEvent e) {
         logger.trace("removeUpdate");
+        CommandBuilder builder = candidates.getCommandBuilder();
         String commandText = builder.getCommandText();
         String text = field.getText();
         if (text.isEmpty() == false && commandText.length() > text.length()) {
