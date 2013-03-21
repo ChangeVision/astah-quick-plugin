@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import com.change_vision.jude.api.inf.editor.ClassDiagramEditor;
 import com.change_vision.jude.api.inf.editor.IDiagramEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
+import com.change_vision.jude.api.inf.editor.StateMachineDiagramEditor;
 import com.change_vision.jude.api.inf.editor.UseCaseDiagramEditor;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.LicenseNotFoundException;
@@ -112,5 +113,12 @@ public class AstahAPIWrapper {
             throw new IllegalStateException("This API doesn't support in community edition.",e);
         }
     }
+
+    public StateMachineDiagramEditor getStateMachineDiagramEditor() {
+        try {
+            return getDiagramEditorFactory().getStateMachineDiagramEditor();
+        } catch (InvalidUsingException e) {
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+        }    }
 
 }

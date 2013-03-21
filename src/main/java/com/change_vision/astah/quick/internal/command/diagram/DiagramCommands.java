@@ -14,6 +14,7 @@ public class DiagramCommands {
         commands.add(new CloseDiagramCommand());
         commands.add(new CreateClassDiagramCommand());
         commands.add(new CreateUseCaseDiagramCommand());
+        commands.add(new CreateStateMachineDiagramCommand());
     }
 
     public static List<Command> commands() {
