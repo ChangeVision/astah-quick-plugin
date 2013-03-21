@@ -11,6 +11,8 @@ import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.astah.quick.command.candidates.InvalidState;
 import com.change_vision.astah.quick.command.candidates.NotFound;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
@@ -20,7 +22,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
     private CommittedNameTrimer trimer = new CommittedNameTrimer();
 
     @Immediate
-    private class ClassDiagramCandidate implements Candidate {
+    class ClassDiagramCandidate implements Candidate {
 
         private final ElementCandidate owner;
         private final String name;
@@ -37,7 +39,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
         @Override
         public String getDescription() {
-            String description = format("create class diagram in %s", owner.getName());
+            String description = format(Messages.getString("CreateClassDiagramCommand.ClassDiagramCandidate.description"), owner.getName()); //$NON-NLS-1$
             return description;
         }
 
@@ -61,12 +63,12 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
     @Override
     public String getName() {
-        return "create class diagram";
+        return "create class diagram"; //$NON-NLS-1$
     }
 
     @Override
     public String getDescription() {
-        return "create class diagram [owner] [name]";
+        return Messages.getString("CreateClassDiagramCommand.description"); //$NON-NLS-1$
     }
 
     @Override
@@ -87,7 +89,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
         String name = trimer.trim(committed,searchKey);
         if (name.isEmpty()) {
             return new Candidate[]{
-                    new InvalidState(this,"needs name.")
+                    new InvalidState(this,Messages.getString("CreateClassDiagramCommand.invalid_message")) //$NON-NLS-1$
             };
         }
         Candidate owner = committed[0];
@@ -119,17 +121,22 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
     @Override
     public void execute(Candidate[] candidates) throws ExecuteCommandException {
         if (candidates.length != 2) {
-            throw new IllegalArgumentException("arguments are invalid.");
+            throw new IllegalArgumentException(Messages.getString("CreateClassDiagramCommand.argument_length_error")); //$NON-NLS-1$
         }
         INamedElement owner;
         if ( (candidates[0] instanceof ElementCandidate) == false) {
-            String message = format("candidates[0] is invalid. %s",candidates[0]);
+            String message = format(Messages.getString("CreateClassDiagramCommand.candidate_error"),candidates[0]); //$NON-NLS-1$
             throw new IllegalArgumentException(message);
         }
         ElementCandidate ownerCandidate = (ElementCandidate) candidates[0];
         owner = ownerCandidate.getElement();
         Candidate nameCandidate = candidates[1];
         api.createClassDiagram(owner,nameCandidate.getName());
+    }
+    
+    @TestForMethod
+    void setApi(DiagramAPI api) {
+        this.api = api;
     }
 
 }
