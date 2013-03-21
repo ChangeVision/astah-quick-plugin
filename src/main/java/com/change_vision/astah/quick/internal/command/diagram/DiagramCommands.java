@@ -15,6 +15,8 @@ public class DiagramCommands {
         commands.add(new CreateClassDiagramCommand());
         commands.add(new CreateUseCaseDiagramCommand());
         commands.add(new CreateStateMachineDiagramCommand());
+//        commands.add(new CreateActivityiagramCommand());  Activity Diagram is not supported by API.
+        commands.add(new CreateSequenceDiagramCommand());
     }
 
     public static List<Command> commands() {
