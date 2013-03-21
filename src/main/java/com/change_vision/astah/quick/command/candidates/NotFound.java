@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.candidatesfield.state;
+package com.change_vision.astah.quick.command.candidates;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateIconDescription;

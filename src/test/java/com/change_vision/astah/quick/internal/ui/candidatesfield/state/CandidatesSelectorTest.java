@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.candidates.NotFound;
 
 public class CandidatesSelectorTest {
 

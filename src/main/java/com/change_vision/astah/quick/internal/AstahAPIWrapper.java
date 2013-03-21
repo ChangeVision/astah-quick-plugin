@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import com.change_vision.jude.api.inf.editor.ClassDiagramEditor;
+import com.change_vision.jude.api.inf.editor.IDiagramEditorFactory;
+import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.LicenseNotFoundException;
 import com.change_vision.jude.api.inf.exception.ProjectLockedException;
@@ -63,6 +66,18 @@ public class AstahAPIWrapper {
         return getViewManager().getDiagramViewManager();
     }
     
+    public IDiagramEditorFactory getDiagramEditorFactory() {
+        return getProjectAccessor().getDiagramEditorFactory();
+    }
+    
+    public ClassDiagramEditor getClassDiagramEditor(){
+        try {
+            return getDiagramEditorFactory().getClassDiagramEditor();
+        } catch (InvalidUsingException e) {
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+        }
+    }
+    
     public SystemPropertyAccessor getSystemPropertyAccessor(){
         try {
             return SystemPropertyAccessorFactory.getSystemPropertyAccessor();
@@ -83,6 +98,10 @@ public class AstahAPIWrapper {
         } catch (IOException e) {
             throw new IllegalStateException("IOException is occurred.",e);
         }
+    }
+
+    public ITransactionManager getTransactionManager() {
+        return getProjectAccessor().getTransactionManager();
     }
 
 }

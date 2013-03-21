@@ -1,4 +1,4 @@
-package com.change_vision.astah.quick.internal.ui.candidatesfield.state;
+package com.change_vision.astah.quick.command.candidates;
 
 import static java.lang.String.format;
 
@@ -7,25 +7,25 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.Messages;
 
-public class ValidState implements Candidate {
+public class InvalidState implements Candidate {
 
     private Command command;
     
-    private String args;
-    public ValidState(Command command,String args) {
+    private String message;
+    
+    public InvalidState(Command command,String message) {
         this.command = command;
-        this.args = args;
+        this.message = message;
     }
 
     @Override
     public String getName() {
-        String message = Messages.getString("ValidState.name"); //$NON-NLS-1$
-        return format(message,command.getName(), args);
+        return format(Messages.getString("InvalidState.name"),command.getName()); //$NON-NLS-1$
     }
 
     @Override
     public String getDescription() {
-        return Messages.getString("ValidState.description"); //$NON-NLS-1$
+        return message;
     }
 
     @Override

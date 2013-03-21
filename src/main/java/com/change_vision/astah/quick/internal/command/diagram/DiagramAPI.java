@@ -6,7 +6,11 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
+import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
 import com.change_vision.astah.quick.internal.modelfinder.DiagramFinder;
+import com.change_vision.jude.api.inf.editor.ClassDiagramEditor;
+import com.change_vision.jude.api.inf.editor.ITransactionManager;
+import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
@@ -86,8 +90,40 @@ class DiagramAPI {
         return diagramViewManager.getCurrentDiagram();
     }
 
-    public void closeAll() {
+    void closeAll() {
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         diagramViewManager.closeAll();
+    }
+    
+    private ProjectAccessor getProjectAccessor() {
+        return wrapper.getProjectAccessor();
+    }
+    
+    private boolean isClosedProject() {
+        return wrapper.isClosedProject();
+    }
+
+    INamedElement[] findClassOrPackage(final String searchKey) {
+        logger.trace("findClassOrPackage:{}", searchKey); //$NON-NLS-1$
+        if (isClosedProject()) return new INamedElement[0];
+        try {
+            ClassOrPackageFinder finder = new ClassOrPackageFinder(searchKey);
+            return getProjectAccessor().findElements(finder);
+        } catch (ProjectNotFoundException e) {
+            throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
+        }
+    }
+
+    public void createClassDiagram(INamedElement owner, String name) {
+        ClassDiagramEditor classDiagramEditor = wrapper.getClassDiagramEditor();
+        ITransactionManager transactionManager = wrapper.getTransactionManager();
+        try {
+            transactionManager.beginTransaction();
+            classDiagramEditor.createClassDiagram(owner, name);
+            transactionManager.endTransaction();
+        } catch (InvalidEditingException e) {
+            transactionManager.abortTransaction();
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+        }
     }
 }

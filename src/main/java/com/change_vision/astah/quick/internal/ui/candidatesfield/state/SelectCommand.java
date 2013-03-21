@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.candidates.NotFound;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.command.model.SelectModelCommandFactory;

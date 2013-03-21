@@ -12,8 +12,8 @@ import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.candidates.ElementCandidate;
+import com.change_vision.astah.quick.command.candidates.NotFound;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
