@@ -13,7 +13,7 @@ import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
 
-public class ClassOrPackageFinderTest {
+public class ClassFinderTest {
     
     @Mock
     private INamedElement element;
@@ -34,15 +34,16 @@ public class ClassOrPackageFinderTest {
         when(packaze.getAlias2()).thenReturn("");
         when(packaze.getFullName(".")).thenReturn("");
     }
+    
     @Test(expected=IllegalArgumentException.class)
     public void withNull() throws Exception {
-        new ClassOrPackageFinder(null);
+        new ClassFinder(null);
     }
     
     @Test
     public void emptyNameClass() {
         when(clazz.getName()).thenReturn("");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("");
+        ClassFinder finder = new ClassFinder("");
         boolean target = finder.isTarget(clazz);
         assertThat(target,is(false));
     }
@@ -50,7 +51,7 @@ public class ClassOrPackageFinderTest {
     @Test
     public void emptyNameElement() {
         when(element.getName()).thenReturn("");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("");
+        ClassFinder finder = new ClassFinder("");
         boolean target = finder.isTarget(element);
         assertThat(target,is(false));
     }
@@ -59,35 +60,26 @@ public class ClassOrPackageFinderTest {
     public void namedClass() throws Exception {
         when(clazz.getName()).thenReturn("hoge");
         when(clazz.getFullName(".")).thenReturn("hoge");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
+        ClassFinder finder = new ClassFinder("ho");
         boolean target = finder.isTarget(clazz);
         assertThat(target,is(true));
     }
     
     @Test
-    public void namedPackage() throws Exception {
+    public void namedPackageIsNotTarget() throws Exception {
         when(packaze.getName()).thenReturn("hoge");
         when(packaze.getFullName(".")).thenReturn("hoge");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
+        ClassFinder finder = new ClassFinder("ho");
         boolean target = finder.isTarget(packaze);
-        assertThat(target,is(true));
+        assertThat(target,is(false));
     }
     
     @Test
     public void namedClassInNamespace() throws Exception {
         when(clazz.getName()).thenReturn("Fuga");
         when(clazz.getFullName(".")).thenReturn("hoge.Fuga");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
+        ClassFinder finder = new ClassFinder("ho");
         boolean target = finder.isTarget(clazz);
-        assertThat(target,is(true));
-    }
-    
-    @Test
-    public void namedPackageInNamespace() throws Exception {
-        when(packaze.getName()).thenReturn("fuga");
-        when(packaze.getFullName(".")).thenReturn("hoge.fuga");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
-        boolean target = finder.isTarget(packaze);
         assertThat(target,is(true));
     }
 
