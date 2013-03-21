@@ -29,6 +29,9 @@ public class CreateClassDiagramCommandTest {
     public ElementCandidate elementCandidate;
     
     @Mock
+    public INamedElement elem;
+    
+    @Mock
     public INamedElement element;
     
     @Mock
@@ -51,6 +54,26 @@ public class CreateClassDiagramCommandTest {
         Candidate[] candidates = command.candidate(new Candidate[0], "");
         assertThat(candidates.length,is(1));
         assertThat(candidates[0],is(NotFound.class));
+    }
+    
+    @Test
+    public void candidateWithFoundElement() throws Exception {
+        when(api.findClassOrPackage("element")).thenReturn(new INamedElement[]{
+                element
+        });
+        Candidate[] candidates = command.candidate(new Candidate[0], "element");
+        assertThat(candidates.length,is(1));
+        assertThat(candidates[0],is(ElementCandidate.class));
+    }
+    
+    @Test
+    public void candidateWithFoundElements() throws Exception {
+        when(api.findClassOrPackage("elem")).thenReturn(new INamedElement[]{
+                elem,
+                element
+        });
+        Candidate[] candidates = command.candidate(new Candidate[0], "elem");
+        assertThat(candidates.length,is(2));
     }
 
     @Test

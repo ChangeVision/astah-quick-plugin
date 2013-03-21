@@ -14,21 +14,21 @@ import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
-import com.change_vision.jude.api.inf.model.IClassDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IUseCaseDiagram;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class CreateClassDiagramCommand implements CandidateSupportCommand {
+public class CreateUseCaseDiagramCommand implements CandidateSupportCommand {
     
     private CommittedNameTrimer trimer = new CommittedNameTrimer();
 
     @Immediate
-    class ClassDiagramCandidate implements Candidate {
+    class UseCaseDiagramCandidate implements Candidate {
 
         private final ElementCandidate owner;
         private final String name;
 
-        public ClassDiagramCandidate(ElementCandidate owner, String name) {
+        public UseCaseDiagramCandidate(ElementCandidate owner, String name) {
             this.owner = owner;
             this.name = name;
         }
@@ -40,7 +40,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
         @Override
         public String getDescription() {
-            String description = format(Messages.getString("CreateClassDiagramCommand.ClassDiagramCandidate.description"), owner.getName()); //$NON-NLS-1$
+            String description = format(Messages.getString("CreateUseCaseDiagramCommand.UseCaseDiagramCandidate.description"), owner.getName()); //$NON-NLS-1$
             return description;
         }
 
@@ -51,7 +51,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
         @Override
         public CandidateIconDescription getIconDescription() {
-            return new AstahCommandIconDescription(IconDescription.UML_DGM_CLASS);
+            return new AstahCommandIconDescription(IconDescription.UML_DGM_USECASE);
         }
 
     }
@@ -64,12 +64,12 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
     @Override
     public String getName() {
-        return "create class diagram"; //$NON-NLS-1$
+        return "create usecase diagram"; //$NON-NLS-1$
     }
 
     @Override
     public String getDescription() {
-        return Messages.getString("CreateClassDiagramCommand.description"); //$NON-NLS-1$
+        return Messages.getString("CreateUseCaseDiagramCommand.description"); //$NON-NLS-1$
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
 
     @Override
     public CandidateIconDescription getIconDescription() {
-        return new AstahCommandIconDescription(IconDescription.UML_DGM_CLASS);
+        return new AstahCommandIconDescription(IconDescription.UML_DGM_USECASE);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
         String name = trimer.trim(committed,searchKey);
         if (name.isEmpty()) {
             return new Candidate[]{
-                    new InvalidState(this,Messages.getString("CreateClassDiagramCommand.invalid_message")) //$NON-NLS-1$
+                    new InvalidState(this,Messages.getString("CreateUseCaseDiagramCommand.invalid_message")) //$NON-NLS-1$
             };
         }
         Candidate owner = committed[0];
@@ -99,7 +99,7 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
         }
         ElementCandidate elementCandidate = (ElementCandidate) owner;
         return new Candidate[]{
-                new ClassDiagramCandidate(elementCandidate,name)
+                new UseCaseDiagramCandidate(elementCandidate,name)
         };
     }
 
@@ -122,18 +122,18 @@ public class CreateClassDiagramCommand implements CandidateSupportCommand {
     @Override
     public void execute(Candidate[] candidates) throws ExecuteCommandException {
         if (candidates.length != 2) {
-            throw new IllegalArgumentException(Messages.getString("CreateClassDiagramCommand.argument_length_error")); //$NON-NLS-1$
+            throw new IllegalArgumentException(Messages.getString("CreateUseCaseDiagramCommand.argument_length_error")); //$NON-NLS-1$
         }
         INamedElement owner;
         if ( (candidates[0] instanceof ElementCandidate) == false) {
-            String message = format(Messages.getString("CreateClassDiagramCommand.candidate_error"),candidates[0]); //$NON-NLS-1$
+            String message = format(Messages.getString("CreateUseCaseDiagramCommand.candidate_error"),candidates[0]); //$NON-NLS-1$
             throw new IllegalArgumentException(message);
         }
         ElementCandidate ownerCandidate = (ElementCandidate) candidates[0];
         owner = ownerCandidate.getElement();
         Candidate nameCandidate = candidates[1];
-        IClassDiagram classDiagram = api.createClassDiagram(owner,nameCandidate.getName());
-        api.open(classDiagram);
+        IUseCaseDiagram diagram = api.createUseCaseDiagram(owner,nameCandidate.getName());
+        api.open(diagram);
     }
     
     @TestForMethod

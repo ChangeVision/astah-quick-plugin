@@ -10,10 +10,13 @@ import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
 import com.change_vision.astah.quick.internal.modelfinder.DiagramFinder;
 import com.change_vision.jude.api.inf.editor.ClassDiagramEditor;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
+import com.change_vision.jude.api.inf.editor.UseCaseDiagramEditor;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IClassDiagram;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IUseCaseDiagram;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IDiagramViewManager;
 
@@ -114,16 +117,33 @@ class DiagramAPI {
         }
     }
 
-    public void createClassDiagram(INamedElement owner, String name) {
+    IClassDiagram createClassDiagram(INamedElement owner, String name) {
         ClassDiagramEditor classDiagramEditor = wrapper.getClassDiagramEditor();
         ITransactionManager transactionManager = wrapper.getTransactionManager();
+        IClassDiagram diagram;
         try {
             transactionManager.beginTransaction();
-            classDiagramEditor.createClassDiagram(owner, name);
+            diagram = classDiagramEditor.createClassDiagram(owner, name);
             transactionManager.endTransaction();
         } catch (InvalidEditingException e) {
             transactionManager.abortTransaction();
             throw new IllegalStateException("This API doesn't support in community edition.",e);
         }
+        return diagram;
+    }
+
+    IUseCaseDiagram createUseCaseDiagram(INamedElement owner, String name) {
+        UseCaseDiagramEditor usecaseDiagramEditor = wrapper.getUseCaseDiagramEditor();
+        ITransactionManager transactionManager = wrapper.getTransactionManager();
+        IUseCaseDiagram diagram;
+        try {
+            transactionManager.beginTransaction();
+            diagram = usecaseDiagramEditor.createUseCaseDiagram(owner, name);
+            transactionManager.endTransaction();
+        } catch (InvalidEditingException e) {
+            transactionManager.abortTransaction();
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+        }
+        return diagram;
     }
 }

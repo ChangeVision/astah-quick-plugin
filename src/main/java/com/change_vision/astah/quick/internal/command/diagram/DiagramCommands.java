@@ -7,17 +7,17 @@ import com.change_vision.astah.quick.command.Command;
 
 public class DiagramCommands {
 
-	private static final List<Command> commands = new ArrayList<Command>(); 
-	
-	static {
-		commands.add(new OpenDiagramCommand());
+    private static final List<Command> commands = new ArrayList<Command>();
+
+    static {
+        commands.add(new OpenDiagramCommand());
         commands.add(new CloseDiagramCommand());
         commands.add(new CreateClassDiagramCommand());
-	}
-	
-	public static List<Command> commands(){
-		return commands;
-	}
+        commands.add(new CreateUseCaseDiagramCommand());
+    }
+
+    public static List<Command> commands() {
+        return commands;
+    }
 
 }
-
