@@ -3,11 +3,12 @@ package com.change_vision.astah.quick.internal.ui;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.annotations.Immediate;
+import com.change_vision.astah.quick.command.candidates.InvalidState;
+import com.change_vision.astah.quick.command.candidates.ValidState;
 import com.change_vision.astah.quick.internal.command.Candidates;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
 import com.change_vision.astah.quick.internal.command.CommandExecutor;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.ValidState;
 
 public class CandidateDecider {
     
@@ -23,6 +24,9 @@ public class CandidateDecider {
     public void decide(Candidates candidates) {
         CommandBuilder builder = candidates.getCommandBuilder();
         Candidate candidate = candidates.current();
+        if (candidate instanceof InvalidState) {
+            return;
+        }
         if (candidate instanceof ValidState) {
             executeCommand(builder);
             return;
