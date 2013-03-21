@@ -14,54 +14,57 @@ import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IDiagramViewManager;
 
 class DiagramAPI {
-	
-    private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
-	
-	private final AstahAPIWrapper wrapper;
-	
-	DiagramAPI(){
-	    this.wrapper = new AstahAPIWrapper();
-	}
-	
-	@TestForMethod
-	DiagramAPI(AstahAPIWrapper wrapper){
-	    this.wrapper = wrapper;
-	}
-	
-	void open(IDiagram diagram){
-		if(diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.open_null_argument")); //$NON-NLS-1$
-		IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
-		diagramViewManager.open(diagram);
-	}
-	
-	IDiagram[] find(final String name){
-        if(name == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.find_null_argument")); //$NON-NLS-1$
-		logger.trace("find:{}",name); //$NON-NLS-1$
-		ProjectAccessor projectAccessor = wrapper.getProjectAccessor();
-		DiagramFinder diagramFinder = new DiagramFinder(name);
-		INamedElement[] elements = null;
-		try {
-            elements = projectAccessor.findElements(diagramFinder);
-		} catch (ProjectNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
-		IDiagram[] diagrams = new IDiagram[elements.length];
-		for (int i = 0; i < elements.length; i++) {
-			diagrams[i] = (IDiagram)elements[i];
-		}
-		return diagrams;
-	}
 
-	boolean isOpenedProject(){
-		return wrapper.isOpenedProject();
-	}
+    private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
+
+    private final AstahAPIWrapper wrapper;
+
+    DiagramAPI() {
+        this.wrapper = new AstahAPIWrapper();
+    }
+
+    @TestForMethod
+    DiagramAPI(AstahAPIWrapper wrapper) {
+        this.wrapper = wrapper;
+    }
+
+    void open(IDiagram diagram) {
+        if (diagram == null)
+            throw new IllegalArgumentException(Messages.getString("DiagramAPI.open_null_argument")); //$NON-NLS-1$
+        IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
+        diagramViewManager.open(diagram);
+    }
+
+    IDiagram[] find(final String name) {
+        if (name == null)
+            throw new IllegalArgumentException(Messages.getString("DiagramAPI.find_null_argument")); //$NON-NLS-1$
+        logger.trace("find:{}", name); //$NON-NLS-1$
+        ProjectAccessor projectAccessor = wrapper.getProjectAccessor();
+        DiagramFinder diagramFinder = new DiagramFinder(name);
+        INamedElement[] elements = null;
+        try {
+            elements = projectAccessor.findElements(diagramFinder);
+        } catch (ProjectNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+        IDiagram[] diagrams = new IDiagram[elements.length];
+        for (int i = 0; i < elements.length; i++) {
+            diagrams[i] = (IDiagram) elements[i];
+        }
+        return diagrams;
+    }
+
+    boolean isOpenedProject() {
+        return wrapper.isOpenedProject();
+    }
 
     void close(IDiagram diagram) {
-        if (diagram == null) throw new IllegalArgumentException(Messages.getString("DiagramAPI.close_null_argument")); //$NON-NLS-1$
+        if (diagram == null)
+            throw new IllegalArgumentException(Messages.getString("DiagramAPI.close_null_argument")); //$NON-NLS-1$
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         diagramViewManager.close(diagram);
     }
-    
+
     boolean isOpenDiagrams() {
         IDiagramViewManager diagramViewManager = wrapper.getDiagramViewManager();
         IDiagram[] openDiagrams = diagramViewManager.getOpenDiagrams();
