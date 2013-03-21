@@ -24,6 +24,19 @@ Quick Windowには1行の入力フィールドがあり、予め定義された�
 2. プラグイン一覧からインストールする ([ヘルプ]-[プラグイン一覧])
 3. インストール後、再起動するとQuick Windowを表示するための設定画面が開かれます。
 
+コマンド
+-----------------
+
+ * create class
+ * create interface
+ * create pacakge
+ * add stereotype
+ * find models (ex.モデル名検索)
+ * open diagram
+ * close diagram
+ * open project
+ * close project
+ * quit astah
 ライセンス
 ---------------
 Copyright 2013 Change Vision, Inc.

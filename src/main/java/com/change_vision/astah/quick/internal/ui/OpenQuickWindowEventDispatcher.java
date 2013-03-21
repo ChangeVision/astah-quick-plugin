@@ -1,7 +1,12 @@
 package com.change_vision.astah.quick.internal.ui;
 
+import java.awt.AWTEvent;
+import java.awt.Component;
 import java.awt.KeyEventDispatcher;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
@@ -10,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.model.QuickProperties;
 
 class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
@@ -24,6 +30,12 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     private final QuickProperties properties = new QuickProperties();
 
     private QuickWindow window;
+    
+    private final Commands commands;
+    
+    OpenQuickWindowEventDispatcher(Commands commands) {
+        this.commands = commands;
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -48,6 +60,25 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
     private void createQuickWindow() {
         JFrame frame = wrapper.getMainFrame();
-        window = new QuickWindow(frame);
+        window = new QuickWindow(frame,commands);
+        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener(){
+            @Override
+            public void eventDispatched(AWTEvent event) {
+                int id = event.getID();
+                if (id == MouseEvent.MOUSE_CLICKED) {
+                    if (event instanceof MouseEvent) {
+                        MouseEvent me = (MouseEvent) event;
+                        Object source = me.getSource();
+                        if (source instanceof Component) {
+                            Component c = (Component) source;
+                            if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
+                                window.close();
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }, AWTEvent.MOUSE_EVENT_MASK);
     }
 }

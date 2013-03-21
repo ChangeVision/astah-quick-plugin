@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
+import com.change_vision.astah.quick.internal.Activator;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.ui.QuickInterfaceUI;
 import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
@@ -17,7 +18,8 @@ public class ConfigureQuickAction implements IPluginActionDelegate {
     
     @Override
     public Object run(IWindow arg0) throws UnExpectedException {
-        final QuickInterfaceUI ui = new QuickInterfaceUI();
+        Activator instance = Activator.getInstance();
+        final QuickInterfaceUI ui = instance.getUI();
         ui.uninstall();
         JFrame frame = wrapper.getMainFrame();
         ConfigWindow window = new ConfigWindow(frame);

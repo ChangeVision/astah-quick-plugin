@@ -6,36 +6,15 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
+import com.change_vision.astah.quick.internal.modelfinder.DiagramFinder;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.INamedElement;
-import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IDiagramViewManager;
 
 class DiagramAPI {
 	
-	private final class DiagramFinder implements ModelFinder {
-        private final String name;
-
-        private DiagramFinder(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public boolean isTarget(INamedElement element) {
-            if (name.isEmpty()) {
-                return isDiagram(element);
-            }
-        	String targetName = element.getName().toLowerCase();
-        	return isDiagram(element) && targetName.startsWith(name);
-        }
-
-        private boolean isDiagram(INamedElement element) {
-        	return element instanceof IDiagram;
-        }
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
 	
 	private final AstahAPIWrapper wrapper;

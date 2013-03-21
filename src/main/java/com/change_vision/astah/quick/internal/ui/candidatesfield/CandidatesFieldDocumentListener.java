@@ -6,8 +6,9 @@ import javax.swing.event.DocumentListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.change_vision.astah.quick.internal.command.CommandExecutor;
-import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListWindow;
+import com.change_vision.astah.quick.internal.command.Candidates;
+import com.change_vision.astah.quick.internal.command.CommandBuilder;
+import com.change_vision.astah.quick.internal.ui.candidates.CandidatesListPanel;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateWindowState;
 
 final class CandidatesFieldDocumentListener implements DocumentListener {
@@ -18,12 +19,17 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
 
     private final CandidatesField field;
 
-    private CandidatesListWindow candidatesList;
+    private final CandidatesListPanel candidatesList;
 
-    public CandidatesFieldDocumentListener(CandidatesField candidatesField,
-            CandidatesListWindow candidatesList) {
+    private final Candidates candidates;
+
+    public CandidatesFieldDocumentListener(
+            CandidatesField candidatesField,
+            CandidatesListPanel candidatesList,
+            Candidates candidates) {
         this.field = candidatesField;
         this.candidatesList = candidatesList;
+        this.candidates = candidates;
     }
 
     @Override
@@ -41,14 +47,14 @@ final class CandidatesFieldDocumentListener implements DocumentListener {
     @Override
     public void removeUpdate(DocumentEvent e) {
         logger.trace("removeUpdate");
-        CommandExecutor executor = field.getExecutor();
-        String commandText = executor.getCommandText();
+        CommandBuilder builder = candidates.getCommandBuilder();
+        String commandText = builder.getCommandText();
         String text = field.getText();
         if (text.isEmpty() == false && commandText.length() > text.length()) {
-            executor.removeCandidate();
+            builder.removeCandidate();
         }
         if (text.isEmpty() && field.isSettingText() == false) {
-            executor.reset();
+            builder.reset();
         }
         String candidateText = field.getCandidateText();
         candidatesList.setCandidateText(candidateText);

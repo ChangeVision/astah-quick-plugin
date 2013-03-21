@@ -1,14 +1,20 @@
 package com.change_vision.astah.quick.internal.command.model;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
+import com.change_vision.astah.quick.internal.modelfinder.FQCNFinder;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
@@ -158,6 +164,32 @@ public class ModelAPITest {
         verify(transactionManager, atLeastOnce()).beginTransaction();
         verify(transactionManager, atLeastOnce()).endTransaction();
         verify(basicModelEditor).createInterface(fugaPackage, "Hoge");
+    }
+    
+    @Test
+    public void findClassOrPackage() throws Exception {
+        api.findClassOrPackage("");
+        ArgumentCaptor<ModelFinder> finderCaptor = ArgumentCaptor.forClass(ModelFinder.class);
+        verify(prjAccessor).findElements(finderCaptor.capture());
+        ModelFinder finder = finderCaptor.getValue();
+        assertThat(finder,is(instanceOf(ClassOrPackageFinder.class)));
+        if (finder instanceof ClassOrPackageFinder) {
+            ClassOrPackageFinder finderObject = (ClassOrPackageFinder) finder;
+            assertThat(finderObject.getSearchKey(),is(""));
+        }
+    }
+    
+    @Test
+    public void findFQCN() throws Exception {
+       api.findByFQCN("hoge.Hoge"); 
+       ArgumentCaptor<ModelFinder> finderCaptor = ArgumentCaptor.forClass(ModelFinder.class);
+       verify(prjAccessor).findElements(finderCaptor.capture());
+       ModelFinder finder = finderCaptor.getValue();
+       assertThat(finder,is(instanceOf(FQCNFinder.class)));
+       if (finder instanceof FQCNFinder) {
+           FQCNFinder finderObject = (FQCNFinder) finder;
+           assertThat(finderObject.getSearchKey(),is("hoge.Hoge"));
+       }
     }
 
 }

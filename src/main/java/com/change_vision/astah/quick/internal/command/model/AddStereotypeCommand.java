@@ -7,7 +7,10 @@ import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
+import com.change_vision.astah.quick.internal.exception.NotImplementationException;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand {
@@ -39,11 +42,15 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
 
     @Override
     public void execute(String... args) throws ExecuteCommandException {
+        throw new NotImplementationException();
     }
 
     @Override
     public Candidate[] candidate(Candidate[] committeds,String searchKey) {
         if (searchKey.isEmpty()) {
+            if (committeds == null || committeds.length == 0) {
+                return findTargetElement(searchKey);
+            }
             return new Candidate[0];
         }
         String key = searchKey;
@@ -54,7 +61,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
             key = key.trim();
         }
         if (committeds.length == 0) {
-            return findTargetElement(searchKey, key);
+            return findTargetElement(key);
         }
         return findStereotypes(key);
     }
@@ -69,11 +76,13 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
         };
     }
 
-    private Candidate[] findTargetElement(String searchKey, String key) {
-        Candidate[] candidates = null;
-        INamedElement[] founds = api.find(key);
+    private Candidate[] findTargetElement(String key) {
+        Candidate[] candidates = new Candidate[0];
+        INamedElement[] founds = api.findClassOrPackage(key);
         if (founds.length == 0) {
-            return candidates;
+            return new Candidate[]{
+                    new NotFound()
+            };
         }
         candidates = new Candidate[founds.length];
         for (int i = 0; i < founds.length; i++) {
@@ -101,6 +110,11 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
                 api.addStereotype(element, stereotype.getName());
             }
         }
+    }
+    
+    @TestForMethod
+    void setAPI(ModelAPI api) {
+        this.api = api;
     }
 
 }

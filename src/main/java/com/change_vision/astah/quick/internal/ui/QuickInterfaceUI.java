@@ -8,17 +8,21 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
+import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.model.QuickProperties;
 import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
 
 public class QuickInterfaceUI {
 
     private KeyboardFocusManager focusManager;
-    private static final OpenQuickWindowEventDispatcher dispatcher = new OpenQuickWindowEventDispatcher();
+    private final Commands commands;
+    private final OpenQuickWindowEventDispatcher dispatcher;
     private final QuickProperties properties = new QuickProperties();
 
-    public QuickInterfaceUI() {
-        focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    public QuickInterfaceUI(Commands commands) {
+        this.commands = commands;
+        this.dispatcher = new OpenQuickWindowEventDispatcher(commands);
+        this.focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
     }
 
     public void install() {

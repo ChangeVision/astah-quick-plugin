@@ -1,7 +1,11 @@
 package com.change_vision.astah.quick.internal.command;
 
+import static java.lang.String.format;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +20,11 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCom
 
 public class Candidates {
 
+    private Commands commands;
+
     class SelectCommandFactory {
         SelectCommand create() {
-            return new SelectCommand();
+            return new SelectCommand(commands);
         }
     }
 
@@ -31,16 +37,18 @@ public class Candidates {
 
     private SelectCommandFactory commandFactory = new SelectCommandFactory();
 
-    private CandidateState state = commandFactory.create();
+    private CandidateState state;
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     private CandidatesSelector<Candidate> selector;
 
-    private CommandExecutor executor;
-    
-    public Candidates(CommandExecutor executor) {
-        this.executor = executor;
+    private final CommandBuilder commandBuilder;
+        
+    public Candidates(Commands commands, CommandBuilder commandBuilder) {
+        this.commands = commands;
+        this.commandBuilder = commandBuilder;
+        this.state = commandFactory.create();
         this.selector = new CandidatesSelector<Candidate>();
     }
 
@@ -52,19 +60,27 @@ public class Candidates {
             SelectCommand newState = commandFactory.create();
             setState(newState);
         }
-        if (state instanceof SelectCommand && executor.isCommited()) {
-            SelectArgument newState = new SelectArgument(executor);
+        if (state instanceof SelectCommand && commandBuilder.isCommitted()) {
+            SelectArgument newState = new SelectArgument(commandBuilder);
             setState(newState);
         }
         Candidate[] candidates = state.filter(searchKey);
+        if (candidates == null) {
+            String className = state.getClass().getSimpleName();
+            if (state instanceof SelectArgument) {
+                className = commandBuilder.getCommand().getClass().getSimpleName();
+            }
+            String message = format("state returns null candidates. %s",className);
+            throw new IllegalStateException(message);
+        }
         logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates); //$NON-NLS-1$
         selector.setCandidates(candidates);
         if (isChangedToArgumentState(key,candidates)) {
             Command committed = (Command) candidates[0];
-            if (executor.isCommited() == false) {
-                executor.commit(committed);
+            if (commandBuilder.isCommitted() == false) {
+                commandBuilder.commit(committed);
             }
-            SelectArgument newState = new SelectArgument(executor);
+            SelectArgument newState = new SelectArgument(commandBuilder);
             setState(newState);
             candidates = state.filter(searchKey);
             logger.trace("candidates:'{}'", candidates); //$NON-NLS-1$
@@ -81,17 +97,17 @@ public class Candidates {
         Command committed = (Command) candidates[0];
         String commandName = committed.getName().toLowerCase();
         boolean isCommittedByKey = key.startsWith(commandName);
-        return isCurrentCommandState && isFoundOnlyOneCommand && (isCommittedByKey || executor.isCommited());
+        return isCurrentCommandState && isFoundOnlyOneCommand && (isCommittedByKey || commandBuilder.isCommitted());
     }
 
     private boolean isChangedToCommandState(String key) {
-        return (state instanceof SelectArgument) && executor.isCommited() == false;
+        return (state instanceof SelectArgument) && commandBuilder.isCommitted() == false;
     }
 
     public void setState(CandidateState newState) {
         CandidateState oldState = this.state;
         this.state = newState;
-        firePropertyChange(PROP_STATE, oldState, newState);
+        support.firePropertyChange(PROP_STATE, oldState, newState);
     }
 
     public CandidateState getState() {
@@ -102,11 +118,20 @@ public class Candidates {
         if (state instanceof SelectCommand) {
             return (Command) selector.current();
         }
-        return executor.getCommand();
+        return commandBuilder.getCommand();
     }
 
     public Candidate[] getCandidates() {
-        return selector.getCandidates();
+        Candidate[] candidates = selector.getCandidates();
+        if (isCommitted()) {
+            Arrays.sort(candidates, new Comparator<Candidate>() {
+                @Override
+                public int compare(Candidate o1, Candidate o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+        }
+        return candidates;
     }
 
     public void up() {
@@ -125,10 +150,6 @@ public class Candidates {
         return state instanceof SelectArgument;
     }
 
-    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        support.firePropertyChange(propertyName, oldValue, newValue);
-    }
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
@@ -141,6 +162,19 @@ public class Candidates {
     void setCommandFactory(SelectCommandFactory commandFactory) {
         this.commandFactory = commandFactory;
         this.state = commandFactory.create();
+    }
+
+    public void setCurrentIndex(int index) {
+        selector.setCurrentIndex(index);
+    }
+    
+    public CommandBuilder getCommandBuilder() {
+        return commandBuilder;
+    }
+
+    public void reset() {
+        this.state = commandFactory.create();
+        this.commandBuilder.reset();
     }
 
 }

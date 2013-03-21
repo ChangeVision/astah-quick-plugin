@@ -8,18 +8,18 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
+import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
+import com.change_vision.astah.quick.internal.modelfinder.FQCNFinder;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
-import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
-import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
@@ -158,33 +158,23 @@ public class ModelAPI {
         }
     }
 
-    INamedElement[] find(final String searchKey) {
-        logger.trace("find:{}", searchKey); //$NON-NLS-1$
+    INamedElement[] findClassOrPackage(final String searchKey) {
+        logger.trace("findClassOrPackage:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
-            return getProjectAccessor().findElements(new ModelFinder() {
-                @Override
-                public boolean isTarget(INamedElement element) {
-                    if (not(isClass(element)) && not(isPackage(element))) return false;
-                    String name = element.getName().toLowerCase();
-                    boolean nameStarts = name.startsWith(searchKey.toLowerCase());
-                    boolean alias1Starts = element.getAlias1().startsWith(searchKey);
-                    boolean alias2Starts = element.getAlias2().startsWith(searchKey);
-                    return nameStarts || alias1Starts || alias2Starts;
-                }
+            ClassOrPackageFinder finder = new ClassOrPackageFinder(searchKey);
+            return getProjectAccessor().findElements(finder);
+        } catch (ProjectNotFoundException e) {
+            throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
+        }
+    }
 
-                private boolean not(boolean bool) {
-                    return !bool;
-                }
-
-                private boolean isClass(INamedElement element) {
-                    return element instanceof IClass;
-                }
-
-                private boolean isPackage(INamedElement element) {
-                    return element instanceof IPackage;
-                }
-            });
+    INamedElement[] findByFQCN(String searchKey) {
+        logger.trace("findFQCN:{}", searchKey); //$NON-NLS-1$
+        if (isClosedProject()) return new INamedElement[0];
+        try {
+            FQCNFinder finder = new FQCNFinder(searchKey);
+            return getProjectAccessor().findElements(finder);
         } catch (ProjectNotFoundException e) {
             throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
         }

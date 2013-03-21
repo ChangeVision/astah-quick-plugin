@@ -9,13 +9,14 @@ import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
+import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-public class CreateInterfaceCommand implements Command{
+class CreateInterfaceCommand implements Command{
 
-	private final ModelAPI api = new ModelAPI();
+	private ModelAPI api = new ModelAPI();
 
 	private static final Logger logger = LoggerFactory.getLogger(CreateInterfaceCommand.class);
 
@@ -29,7 +30,7 @@ public class CreateInterfaceCommand implements Command{
 		if(args == null || args.length == 0) throw new IllegalArgumentException(Messages.getString("CreateInterfaceCommand.argument_error_message")); //$NON-NLS-1$
 		for (String interfaceName : args) {
 			logger.trace("create interface '{}'",interfaceName); //$NON-NLS-1$
-            INamedElement[] found = api.find(interfaceName);
+            INamedElement[] found = api.findByFQCN(interfaceName);
             if (found.length > 0) {
                 String message = format(Messages.getString("CreateInterfaceCommand.already_existed_error_message"),interfaceName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
@@ -52,5 +53,10 @@ public class CreateInterfaceCommand implements Command{
 	public CandidateIconDescription getIconDescription() {
 		return new AstahCommandIconDescription(IconDescription.UML_CLASS_INTERFACE);
 	}
+
+	@TestForMethod
+    void setAPI(ModelAPI api) {
+	    this.api = api;
+    }
 
 }

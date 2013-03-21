@@ -1,7 +1,6 @@
 package com.change_vision.astah.quick.internal.command;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -9,8 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.change_vision.astah.quick.command.Candidate;
+import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.internal.command.Candidates.SelectCommandFactory;
 import com.change_vision.astah.quick.internal.ui.candidatesfield.state.CandidateState;
@@ -19,6 +20,9 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCom
 
 public class CandidatesTest {
 
+    private static abstract class CandidatesProviderCommand implements Command, CandidatesProvider {
+
+    }
     private Candidates candidates;
 
     @Mock
@@ -29,26 +33,33 @@ public class CandidatesTest {
 
     @Mock
     private Command two;
+    
+    @Mock
+    private CandidatesProviderCommand providerCommand;
 
-    private CommandExecutor executor;
+    private CommandBuilder commandBuilder;
+
+    @Mock
+    private ServiceTracker tracker;
 
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        SelectCommand commandState = new SelectCommand();
-        commandState.clear();
+        Commands commands = new Commands(tracker);
+        SelectCommand commandState = new SelectCommand(commands);
+        commands.clear();
         when(commandFactory.create()).thenReturn(commandState);
 
         when(one.getName()).thenReturn("new project");
         when(one.isEnabled()).thenReturn(true);
         when(two.getName()).thenReturn("new diagram");
         when(two.isEnabled()).thenReturn(true);
-        commandState.add(one);
-        commandState.add(two);
+        commands.add(one);
+        commands.add(two);
 
-        executor = new CommandExecutor();
-        candidates = new Candidates(executor);
+        commandBuilder = new CommandBuilder();
+        candidates = new Candidates(commands,commandBuilder);
         candidates.setCommandFactory(commandFactory);
     }
 
@@ -67,7 +78,7 @@ public class CandidatesTest {
     public void filterWithEmpty() throws Exception {
         candidates.filter("");
         Candidate[] actual = candidates.getCandidates();
-        System.out.println(actual.length);
+        assertThat(actual,is(notNullValue()));
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectCommand.class)));
     }
@@ -89,11 +100,31 @@ public class CandidatesTest {
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectArgument.class)));
     }
+    
+    @Test
+    public void filterWithNotFoundCommand() throws Exception {
+        candidates.filter("not found");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual,is(notNullValue()));
+        assertThat(actual.length,is(1));
+        CandidateState next = candidates.getState();
+        assertThat(next, is(instanceOf(SelectCommand.class)));
+    }
+    
+    @Test
+    public void filterWithNotFoundArgument() throws Exception {
+        commandBuilder.commit(providerCommand);
+        candidates.setState(new SelectArgument(commandBuilder));
+        candidates.filter("not found");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual,is(notNullValue()));
+        assertThat(actual.length,is(1));
+    }
 
     @Test
     public void changeStateWhenRemoveTheNameString() throws Exception {
         candidates.filter("new project");
-        executor.removeCandidate();
+        commandBuilder.removeCandidate();
         candidates.filter("new");
         Candidate[] actual = candidates.getCandidates();
         System.out.println(actual);
@@ -105,7 +136,7 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenResetTargetCommandName() throws Exception {
         candidates.filter("new project");
-        executor.removeCandidate();
+        commandBuilder.removeCandidate();
         candidates.filter("new");
         candidates.filter("new diagram");
         Candidate[] actual = candidates.getCandidates();
@@ -117,7 +148,7 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenPasteIncludeSpaceNameString() throws Exception {
         candidates.filter("new project");
-        executor.removeCandidate();
+        commandBuilder.removeCandidate();
         candidates.filter("new           ");
         Candidate[] actual = candidates.getCandidates();
         assertThat(actual.length, is(2));
@@ -128,7 +159,7 @@ public class CandidatesTest {
     @Test
     public void changeStateWhenPasteIncludeTabNameString() throws Exception {
         candidates.filter("new project");
-        executor.removeCandidate();
+        commandBuilder.removeCandidate();
         candidates.filter("new\t\t\t");
         Candidate[] actual = candidates.getCandidates();
         assertThat(actual.length, is(2));

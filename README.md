@@ -24,6 +24,20 @@ How to install
 2. Install the plug-in at the Plugin List Dialog ([help]-[Plugin List] menu)
 3. You find the configuration window to display Quick Window
 
+Commands
+-----------------
+
+ * create class
+ * create interface
+ * create pacakge
+ * add stereotype
+ * find models (ex.search by model's name)
+ * open diagram
+ * close diagram
+ * open project
+ * close project
+ * quit astah
+
 License
 ---------------
 Copyright 2013 Change Vision, Inc.

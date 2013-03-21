@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
 import com.change_vision.astah.quick.command.Command;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.astah.quick.internal.Activator;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.astah.quick.internal.ui.QuickInterfaceUI;
@@ -39,7 +40,8 @@ class ConfigCommand implements Command {
 
 	@Override
 	public void execute(String... args) throws ExecuteCommandException {
-		final QuickInterfaceUI ui = new QuickInterfaceUI();
+		Activator instance = Activator.getInstance();
+        final QuickInterfaceUI ui = instance.getUI();
 		ui.uninstall();
 		JFrame frame = api.getMainFrame();
 		ConfigWindow window = new ConfigWindow(frame);

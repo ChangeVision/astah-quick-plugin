@@ -7,7 +7,7 @@ import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 
 class StereotypeCandidates {
     
-    private static final StereotypeCandidate[] DEFINED_CANDIDATES = new StereotypeCandidate[]{
+    static final StereotypeCandidate[] DEFINED_CANDIDATES = new StereotypeCandidate[]{
         new StereotypeCandidate("actor"), //$NON-NLS-1$
         new StereotypeCandidate("auxiliary"), //$NON-NLS-1$
         new StereotypeCandidate("boundary"), //$NON-NLS-1$
@@ -30,6 +30,9 @@ class StereotypeCandidates {
     };
     
     StereotypeCandidate[] find(String key){
+        if (key == null || key.isEmpty()) {
+            return DEFINED_CANDIDATES;
+        }
         List<StereotypeCandidate> candidates = new ArrayList<StereotypeCandidate>();
         for (StereotypeCandidate stereotypeCandidate : DEFINED_CANDIDATES) {
             if (stereotypeCandidate.getName().startsWith(key)) {
