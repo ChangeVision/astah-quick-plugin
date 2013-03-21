@@ -3,7 +3,6 @@ package com.change_vision.astah.quick.internal.command.model;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -14,7 +13,9 @@ import org.mockito.MockitoAnnotations;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.candidates.ElementCandidate;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.IClass;
+import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class AddStereotypeCommandTest {
     
@@ -35,8 +36,10 @@ public class AddStereotypeCommandTest {
 
     @Test
     public void findFirstCandidateIsModel() {
-        command.candidate(new Candidate[0], "");
-        verify(api).findClassOrPackage("");
+        when(api.findClassOrPackage("")).thenReturn(new INamedElement[0]);
+        Candidate[] candidates = command.candidate(new Candidate[0], "");
+        assertThat(candidates.length,is(1));
+        assertThat(candidates[0],is(instanceOf(NotFound.class)));
     }
 
     @Test
