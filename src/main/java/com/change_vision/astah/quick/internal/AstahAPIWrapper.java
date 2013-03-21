@@ -4,12 +4,15 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import com.change_vision.jude.api.inf.editor.BasicModelEditor;
 import com.change_vision.jude.api.inf.editor.ClassDiagramEditor;
 import com.change_vision.jude.api.inf.editor.IDiagramEditorFactory;
+import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.editor.SequenceDiagramEditor;
 import com.change_vision.jude.api.inf.editor.StateMachineDiagramEditor;
 import com.change_vision.jude.api.inf.editor.UseCaseDiagramEditor;
+import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.LicenseNotFoundException;
 import com.change_vision.jude.api.inf.exception.ProjectLockedException;
@@ -131,4 +134,15 @@ public class AstahAPIWrapper {
         }
     }
 
+    private IModelEditorFactory getModelEditorFactory() {
+        return getProjectAccessor().getModelEditorFactory();
+    }
+    
+    public BasicModelEditor getBasicModelEditor() {
+        try {
+            return getModelEditorFactory().getBasicModelEditor();
+        } catch (InvalidEditingException e) {
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+        }
+    }
 }

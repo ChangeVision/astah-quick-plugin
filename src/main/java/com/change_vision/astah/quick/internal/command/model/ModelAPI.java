@@ -8,18 +8,21 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
+import com.change_vision.astah.quick.internal.modelfinder.ClassFinder;
 import com.change_vision.astah.quick.internal.modelfinder.ClassOrPackageFinder;
 import com.change_vision.astah.quick.internal.modelfinder.FQCNFinder;
 import com.change_vision.jude.api.inf.editor.BasicModelEditor;
-import com.change_vision.jude.api.inf.editor.IModelEditorFactory;
 import com.change_vision.jude.api.inf.editor.ITransactionManager;
 import com.change_vision.jude.api.inf.exception.InvalidEditingException;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IOperation;
 import com.change_vision.jude.api.inf.model.IPackage;
+import com.change_vision.jude.api.inf.project.ModelFinder;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.view.IProjectViewManager;
 import com.change_vision.jude.api.inf.view.IViewManager;
@@ -49,15 +52,11 @@ public class ModelAPI {
         
     }
     
-    private ProjectAccessor getProjectAccessor() {
-        return wrapper.getProjectAccessor();
-    }
-
     void createClass(String className) {
         if (className == null) throw new IllegalArgumentException(Messages.getString("ModelAPI.createClass_null_argument_message")); //$NON-NLS-1$
         IPackage parent = getProject();
         ITransactionManager transactionManager = getTransactionManager();
-        BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+        BasicModelEditor basicModelEditorFactory = getBasicModelEditor();
 
         String[] namespaces = className.split(PACKAGE_SEPARATOR_REGEX);
         if (namespaces.length != 1) {
@@ -79,7 +78,7 @@ public class ModelAPI {
         if (interfaceName == null) throw new IllegalArgumentException(Messages.getString("ModelAPI.createInterface_null_argument_message")); //$NON-NLS-1$
         IPackage parent = getProject();
         ITransactionManager transactionManager = getTransactionManager();
-        BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
+        BasicModelEditor basicModelEditorFactory = getBasicModelEditor();
 
         String[] namespaces = interfaceName.split(PACKAGE_SEPARATOR_REGEX);
         if (namespaces.length != 1) {
@@ -103,66 +102,22 @@ public class ModelAPI {
         createPackage(project, namespaces);
     }
 
-    private IPackage createPackage(IPackage parent, String[] namespaces) {
-        ITransactionManager transactionManager = getTransactionManager();
-        BasicModelEditor basicModelEditorFactory = getBasicModelEditorFactory();
-        for (int i = 0; i < namespaces.length; i++) {
-            String namespace = namespaces[i];
-            INamedElement[] ownedElements = parent.getOwnedElements();
-            boolean found = false;
-            for (INamedElement element : ownedElements) {
-                logger.trace("check exist package {}", element.getName()); //$NON-NLS-1$
-                if (element.getName().equals(namespace)) {
-                    if (element instanceof IPackage) {
-                        parent = (IPackage) element;
-                        found = true;
-                    } else {
-                        throw new IllegalArgumentException(Messages.getString("ModelAPI.sameName_existed_error_message")); //$NON-NLS-1$
-                    }
-                }
-            }
-            if (found) continue;
-            try {
-                transactionManager.beginTransaction();
-                parent = basicModelEditorFactory.createPackage(parent, namespace);
-                transactionManager.endTransaction();
-            } catch (InvalidEditingException e) {
-                transactionManager.abortTransaction();
-                throw new IllegalStateException(e);
-            }
-        }
-        return parent;
-    }
+    INamedElement[] findClass(String searchKey) {
+	    logger.trace("findClass:{}", searchKey); //$NON-NLS-1$
+	    if (isClosedProject()) return new INamedElement[0];
+	    try {
+	        ModelFinder finder = new ClassFinder(searchKey);
+	        return getProjectAccessor().findElements(finder);
+	    } catch (ProjectNotFoundException e) {
+	        throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
+	    }
+	}
 
-    private ITransactionManager getTransactionManager() {
-        return wrapper.getTransactionManager();
-    }
-
-    private BasicModelEditor getBasicModelEditorFactory() {
-        try {
-            return getModelEditorFactory().getBasicModelEditor();
-        } catch (InvalidEditingException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private IModelEditorFactory getModelEditorFactory() {
-        return getProjectAccessor().getModelEditorFactory();
-    }
-
-    private IModel getProject() {
-        try {
-            return getProjectAccessor().getProject();
-        } catch (ProjectNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    INamedElement[] findClassOrPackage(final String searchKey) {
+	INamedElement[] findClassOrPackage(final String searchKey) {
         logger.trace("findClassOrPackage:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
-            ClassOrPackageFinder finder = new ClassOrPackageFinder(searchKey);
+        	ModelFinder finder = new ClassOrPackageFinder(searchKey);
             return getProjectAccessor().findElements(finder);
         } catch (ProjectNotFoundException e) {
             throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
@@ -173,15 +128,11 @@ public class ModelAPI {
         logger.trace("findFQCN:{}", searchKey); //$NON-NLS-1$
         if (isClosedProject()) return new INamedElement[0];
         try {
-            FQCNFinder finder = new FQCNFinder(searchKey);
+        	ModelFinder finder = new FQCNFinder(searchKey);
             return getProjectAccessor().findElements(finder);
         } catch (ProjectNotFoundException e) {
             throw new IllegalArgumentException("It maybe occurred by class path issue."); //$NON-NLS-1$
         }
-    }
-
-    private boolean isClosedProject() {
-        return wrapper.isClosedProject();
     }
 
     void showInStructureTree(INamedElement model) {
@@ -189,17 +140,102 @@ public class ModelAPI {
         projectViewManager.showInStructureTree(model);
     }
 
-    private IViewManager getViewManager() {
-        try {
-            return getProjectAccessor().getViewManager();
-        } catch (InvalidUsingException e) {
-            throw new IllegalStateException(e);
-        }
+    IOperation createOperation(IClass owner, String name, IClass retType){
+    	BasicModelEditor editor = getBasicModelEditor();
+        ITransactionManager transactionManager = getTransactionManager();
+
+    	try {
+    		transactionManager.beginTransaction();
+			IOperation operation = editor.createOperation(owner, name, retType);
+			transactionManager.endTransaction();
+			return operation;
+		} catch (InvalidEditingException e) {
+			transactionManager.abortTransaction();
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+		}
     }
 
-    @TestForMethod
-    public void setWrapper(AstahAPIWrapper wrapper) {
+    IOperation createOperation(IClass owner, String name, String retType){
+    	BasicModelEditor editor = getBasicModelEditor();
+        ITransactionManager transactionManager = getTransactionManager();
+
+    	try {
+    		transactionManager.beginTransaction();
+			IOperation operation = editor.createOperation(owner, name, retType);
+			transactionManager.endTransaction();
+			return operation;
+		} catch (InvalidEditingException e) {
+			transactionManager.abortTransaction();
+            throw new IllegalStateException("This API doesn't support in community edition.",e);
+		}
+    }
+
+	@TestForMethod
+    void setWrapper(AstahAPIWrapper wrapper) {
         this.wrapper = wrapper;
     }
+
+	private ProjectAccessor getProjectAccessor() {
+	    return wrapper.getProjectAccessor();
+	}
+
+	private IPackage createPackage(IPackage parent, String[] namespaces) {
+	    ITransactionManager transactionManager = getTransactionManager();
+	    BasicModelEditor basicModelEditorFactory = getBasicModelEditor();
+	    for (int i = 0; i < namespaces.length; i++) {
+	        String namespace = namespaces[i];
+	        INamedElement[] ownedElements = parent.getOwnedElements();
+	        boolean found = false;
+	        for (INamedElement element : ownedElements) {
+	            logger.trace("check exist package {}", element.getName()); //$NON-NLS-1$
+	            if (element.getName().equals(namespace)) {
+	                if (element instanceof IPackage) {
+	                    parent = (IPackage) element;
+	                    found = true;
+	                } else {
+	                    throw new IllegalArgumentException(Messages.getString("ModelAPI.sameName_existed_error_message")); //$NON-NLS-1$
+	                }
+	            }
+	        }
+	        if (found) continue;
+	        try {
+	            transactionManager.beginTransaction();
+	            parent = basicModelEditorFactory.createPackage(parent, namespace);
+	            transactionManager.endTransaction();
+	        } catch (InvalidEditingException e) {
+	            transactionManager.abortTransaction();
+	            throw new IllegalStateException(e);
+	        }
+	    }
+	    return parent;
+	}
+
+	private ITransactionManager getTransactionManager() {
+	    return wrapper.getTransactionManager();
+	}
+
+	private IModel getProject() {
+	    try {
+	        return getProjectAccessor().getProject();
+	    } catch (ProjectNotFoundException e) {
+	        throw new IllegalStateException(e);
+	    }
+	}
+
+	private boolean isClosedProject() {
+	    return wrapper.isClosedProject();
+	}
+
+	private BasicModelEditor getBasicModelEditor() {
+		return wrapper.getBasicModelEditor();
+	}
+
+	private IViewManager getViewManager() {
+	    try {
+	        return getProjectAccessor().getViewManager();
+	    } catch (InvalidUsingException e) {
+	        throw new IllegalStateException(e);
+	    }
+	}
 
 }

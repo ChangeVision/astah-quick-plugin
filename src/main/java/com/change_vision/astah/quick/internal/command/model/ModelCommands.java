@@ -17,6 +17,7 @@ public class ModelCommands {
 		commands.add(new CreateInterfaceCommand());
 		commands.add(new CreatePackageCommand());
 		commands.add(new AddStereotypeCommand());
+		commands.add(new CreateOperationCommand());
 	}
 	
 	public static List<Command> commands(){
