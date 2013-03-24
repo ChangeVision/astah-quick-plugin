@@ -1,7 +1,5 @@
 package com.change_vision.astah.quick.internal.ui.installed;
 
-import java.awt.CardLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -28,16 +26,16 @@ public class InstalledWizardPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LayoutManager layout = contentPane.getLayout();
-            if (layout instanceof CardLayout) {
-                CardLayout card = (CardLayout) layout;
-                card.next(contentPane);
-                current++;
-                if (current == 6) {
-                    setEnabled(false);
-                }
-                backAction.setEnabled(true);
+            current++;
+            if (images[current] == null) {
+                images[current] = loadImage(IMAGE_PATHS[current]);
             }
+            ImageIcon imageIcon = images[current];
+            imageLabel.setIcon(imageIcon);
+            if (current == IMAGE_PATHS.length - 1) {
+                setEnabled(false);
+            }
+            backAction.setEnabled(true);
         }
     }
 
@@ -50,16 +48,16 @@ public class InstalledWizardPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LayoutManager layout = contentPane.getLayout();
-            if (layout instanceof CardLayout) {
-                CardLayout card = (CardLayout) layout;
-                card.previous(contentPane);
-                current--;
-                if(current == 1){
-                    setEnabled(false);
-                }
-                nextAction.setEnabled(true);
+            current--;
+            if (images[current] == null) {
+                images[current] = loadImage(IMAGE_PATHS[current]);
             }
+            ImageIcon imageIcon = images[current];
+            imageLabel.setIcon(imageIcon);
+            if(current == 0){
+                setEnabled(false);
+            }
+            nextAction.setEnabled(true);
         }
     }
     
@@ -76,28 +74,32 @@ public class InstalledWizardPanel extends JPanel {
         }
     }
 
-    private JPanel contentPane;
     private int current = 1;
     private BackAction backAction;
     private NextAction nextAction;
     private FinishAction finishAction;
     private JDialog dialog;
 
+    private static String[] IMAGE_PATHS = new String[]{
+        "/slide/en/slide1.png",
+        "/slide/en/slide2.png",
+        "/slide/en/slide3.png",
+        "/slide/en/slide4.png",
+        "/slide/en/slide5.png",
+        "/slide/en/slide6.png"        
+    };
+    private JLabel imageLabel;
+    private ImageIcon[] images = new ImageIcon[IMAGE_PATHS.length];
+    
     public InstalledWizardPanel(JDialog dialog) {
         this.dialog = dialog;
         setLayout(new MigLayout("", "[]push[][][]", "[][]"));
         
-        contentPane = new JPanel();
-        contentPane.setLayout(new CardLayout());
-        
-        addContentImage("/slide/en/slide1.png");
-        addContentImage("/slide/en/slide2.png");
-        addContentImage("/slide/en/slide3.png");
-        addContentImage("/slide/en/slide4.png");
-        addContentImage("/slide/en/slide5.png");
-        addContentImage("/slide/en/slide6.png");
-        
-        add(contentPane, "cell 0 0 4 1,width 480px,height 360px");
+        imageLabel = new JLabel();
+        ImageIcon image = loadImage(IMAGE_PATHS[0]);
+        images[0] = image;
+        imageLabel.setIcon(image);
+        add(imageLabel, "cell 0 0 4 1,width 480px,height 360px");
         
         backAction = new BackAction();
         backAction.setEnabled(false);
@@ -114,7 +116,7 @@ public class InstalledWizardPanel extends JPanel {
       
     }
 
-    private void addContentImage(String contentPath) {
+    private ImageIcon loadImage(String contentPath) {
         InputStream stream = getClass().getResourceAsStream(contentPath);
         BufferedImage image;
         try {
@@ -122,10 +124,7 @@ public class InstalledWizardPanel extends JPanel {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        ImageIcon imageIcon = new ImageIcon(image);
-        contentPane.add(new JLabel(imageIcon),contentPath);
+        return new ImageIcon(image);
     }
-
-    
     
 }
