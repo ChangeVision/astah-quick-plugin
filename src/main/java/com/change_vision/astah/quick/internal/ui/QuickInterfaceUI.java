@@ -10,17 +10,15 @@ import javax.swing.SwingUtilities;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.model.QuickProperties;
-import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
+import com.change_vision.astah.quick.internal.ui.installed.InstalledWizardDialog;
 
 public class QuickInterfaceUI {
 
     private KeyboardFocusManager focusManager;
-    private final Commands commands;
     private final OpenQuickWindowEventDispatcher dispatcher;
     private final QuickProperties properties = new QuickProperties();
 
     public QuickInterfaceUI(Commands commands) {
-        this.commands = commands;
         this.dispatcher = new OpenQuickWindowEventDispatcher(commands);
         this.focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
     }
@@ -31,14 +29,16 @@ public class QuickInterfaceUI {
                 public void run() {
                     AstahAPIWrapper wrapper = new AstahAPIWrapper();
                     JFrame parent = wrapper.getMainFrame();
-                    final ConfigWindow window = new ConfigWindow(parent);
-                    window.addWindowListener(new WindowAdapter() {
+                    
+                    InstalledWizardDialog dialog = new InstalledWizardDialog(parent);
+                    dialog.setVisible(true);
+                    dialog.addWindowListener(new WindowAdapter() {
                         @Override
                         public void windowClosed(WindowEvent e) {
+                            properties.store();
                             focusManager.addKeyEventDispatcher(dispatcher);
                         }
                     });
-                    window.open();
                 }
             });
         } else {
