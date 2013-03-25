@@ -13,9 +13,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.change_vision.astah.quick.internal.Messages;
-
 import net.miginfocom.swing.MigLayout;
+
+import com.change_vision.astah.quick.internal.Messages;
 
 @SuppressWarnings("serial")
 public class InstalledWizardPanel extends JPanel {
@@ -82,8 +82,7 @@ public class InstalledWizardPanel extends JPanel {
     private FinishAction finishAction;
     private JDialog dialog;
 
-    private static String[] IMAGE_PATHS = 
-        Messages.getString("InstalledWizardPanel.contentPath").split(","); //$NON-NLS-1$ //$NON-NLS-2$
+    private static String[] IMAGE_PATHS = Messages.getString("InstalledWizardPanel.contentPath").split(","); //$NON-NLS-1$ //$NON-NLS-2$
     private JLabel imageLabel;
     private ImageIcon[] images = new ImageIcon[IMAGE_PATHS.length];
     

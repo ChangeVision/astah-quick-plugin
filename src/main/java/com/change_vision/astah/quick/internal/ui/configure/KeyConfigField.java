@@ -34,7 +34,6 @@ final class KeyConfigField extends JTextField {
         setFocusable(true);
         Caret caret2 = getCaret();
         caret2.setVisible(true);
-        setFont(getFont().deriveFont(32.0f));
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -61,7 +60,7 @@ final class KeyConfigField extends JTextField {
             g.setColor(UIManager.getColor("textInactiveText"));
             int h = g.getFontMetrics().getHeight();
             int textBottom = (height - h) / 2 + h - 2;
-            int x = this.getInsets().left + 20;
+            int x = this.getInsets().left + 10;
             Graphics2D g2d = (Graphics2D) g;
             RenderingHints hints = g2d.getRenderingHints();
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

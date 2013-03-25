@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import com.change_vision.astah.quick.internal.Messages;
+
 @SuppressWarnings("serial")
 public class InstalledWizardDialog extends JDialog {
 
@@ -16,12 +18,15 @@ public class InstalledWizardDialog extends JDialog {
         InstalledWizardPanel panel = new InstalledWizardPanel(this);
         getContentPane().add(panel);
         pack();
+
+        // for dialog unique(sometimes license dialog is opened.)
+        setModal(true);
         Rectangle parentBounds = parent.getBounds();
         Point centerPoint = new Point();
         centerPoint.setLocation(parentBounds.getCenterX(), parentBounds.getCenterY());
         Dimension size = getSize();
         centerPoint.translate(-size.width / 2, -size.height / 2);
         setLocation(centerPoint);
-        setTitle("Welcome!");
+        setTitle(Messages.getString("InstalledWizardDialog.title")); //$NON-NLS-1$
     }
 }
