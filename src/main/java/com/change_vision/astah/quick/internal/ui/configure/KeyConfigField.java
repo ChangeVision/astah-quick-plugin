@@ -14,8 +14,15 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.text.Caret;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SuppressWarnings("serial")
 final class KeyConfigField extends JTextField {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(KeyConfigField.class);
     
     private String defaultString;
 
@@ -35,6 +42,7 @@ final class KeyConfigField extends JTextField {
                 JTextField source = (JTextField) e.getSource();
                 String strokeString = keyStroke.toString();
                 strokeString = strokeString.replace("pressed ", "");
+                logger.trace("pressed:{}",strokeString);
                 source.setText(strokeString);
             }
         });
