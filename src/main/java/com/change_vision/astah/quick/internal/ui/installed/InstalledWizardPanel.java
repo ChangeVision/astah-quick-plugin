@@ -13,6 +13,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.change_vision.astah.quick.internal.Messages;
+
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
@@ -21,7 +23,7 @@ public class InstalledWizardPanel extends JPanel {
     private class NextAction extends AbstractAction {
         
         private NextAction() {
-            super("next");
+            super(Messages.getString("InstalledWizardPanel.next_button_label")); //$NON-NLS-1$
         }
 
         @Override
@@ -43,7 +45,7 @@ public class InstalledWizardPanel extends JPanel {
     private class BackAction extends AbstractAction {
         
         private BackAction() {
-            super("back");
+            super(Messages.getString("InstalledWizardPanel.back_button_label")); //$NON-NLS-1$
         }
 
         @Override
@@ -64,7 +66,7 @@ public class InstalledWizardPanel extends JPanel {
     private class FinishAction extends AbstractAction {
         
         private FinishAction() {
-            super("finish");
+            super(Messages.getString("InstalledWizardPanel.finish_button_label")); //$NON-NLS-1$
         }
 
         @Override
@@ -80,39 +82,33 @@ public class InstalledWizardPanel extends JPanel {
     private FinishAction finishAction;
     private JDialog dialog;
 
-    private static String[] IMAGE_PATHS = new String[]{
-        "/slide/en/slide1.png",
-        "/slide/en/slide2.png",
-        "/slide/en/slide3.png",
-        "/slide/en/slide4.png",
-        "/slide/en/slide5.png",
-        "/slide/en/slide6.png"        
-    };
+    private static String[] IMAGE_PATHS = 
+        Messages.getString("InstalledWizardPanel.contentPath").split(","); //$NON-NLS-1$ //$NON-NLS-2$
     private JLabel imageLabel;
     private ImageIcon[] images = new ImageIcon[IMAGE_PATHS.length];
     
     public InstalledWizardPanel(JDialog dialog) {
         this.dialog = dialog;
-        setLayout(new MigLayout("", "[]push[][][]", "[][]"));
+        setLayout(new MigLayout("", "[]push[][][]", "[][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         
         imageLabel = new JLabel();
         ImageIcon image = loadImage(IMAGE_PATHS[0]);
         images[0] = image;
         imageLabel.setIcon(image);
-        add(imageLabel, "cell 0 0 4 1,width 480px,height 360px");
+        add(imageLabel, "cell 0 0 4 1,width 480px,height 360px"); //$NON-NLS-1$
         
         backAction = new BackAction();
         backAction.setEnabled(false);
         JButton btnBack = new JButton(backAction);
-        add(btnBack, "cell 1 1");
+        add(btnBack, "cell 1 1"); //$NON-NLS-1$
         
         nextAction = new NextAction();
         JButton btnNext = new JButton(nextAction);
-        add(btnNext, "cell 2 1");
+        add(btnNext, "cell 2 1"); //$NON-NLS-1$
         
         finishAction = new FinishAction();
         JButton btnFinish = new JButton(finishAction);
-        add(btnFinish, "cell 3 1");
+        add(btnFinish, "cell 3 1"); //$NON-NLS-1$
       
     }
 
