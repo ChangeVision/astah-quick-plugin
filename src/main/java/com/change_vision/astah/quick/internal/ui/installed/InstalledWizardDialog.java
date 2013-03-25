@@ -22,5 +22,6 @@ public class InstalledWizardDialog extends JDialog {
         Dimension size = getSize();
         centerPoint.translate(-size.width / 2, -size.height / 2);
         setLocation(centerPoint);
+        setTitle("Welcome!");
     }
 }
