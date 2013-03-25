@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import java.awt.Font;
+
 import net.miginfocom.swing.MigLayout;
 
 import com.change_vision.astah.quick.internal.Messages;
@@ -23,9 +25,12 @@ public class ConfigPanel extends JPanel {
     public ConfigPanel(JDialog window){
         this.window = window;
         setLayout(new MigLayout("", "[][300px][][]", "[][]")); //$NON-NLS-1$
+        Font font = getFont().deriveFont(20.0f);
         JLabel keyLabel = new JLabel(Messages.getString("ConfigPanel.key_label")); //$NON-NLS-1$
+        keyLabel.setFont(font);
         String keyStroke = properties.getKeyStroke();
         keyField = new KeyConfigField(LABEL_OF_CURRENT + keyStroke);
+        keyField.setFont(font);
         Action saveAction = new SaveAction(this);
         JButton saveButton = new JButton(saveAction);
         Action cancelAction = new CancelAction(window);
