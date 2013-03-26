@@ -15,43 +15,43 @@ import com.change_vision.astah.quick.internal.ui.QuickInterfaceUI;
 import com.change_vision.astah.quick.internal.ui.configure.ConfigWindow;
 
 class ConfigCommand implements Command {
-	
-	private EnvironmentAPI api = new EnvironmentAPI();
 
-	@Override
-	public String getName() {
-		return "config"; //$NON-NLS-1$
-	}
+    private EnvironmentAPI api = new EnvironmentAPI();
 
-	@Override
-	public String getDescription() {
-		return Messages.getString("ConfigCommand.description"); //$NON-NLS-1$
-	}
+    @Override
+    public String getName() {
+        return "config"; //$NON-NLS-1$
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public String getDescription() {
+        return Messages.getString("ConfigCommand.description"); //$NON-NLS-1$
+    }
 
-	@Override
-	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_136_cogwheel.png"); //$NON-NLS-1$
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-	@Override
-	public void execute(String... args) throws ExecuteCommandException {
-		Activator instance = Activator.getInstance();
+    @Override
+    public CandidateIconDescription getIconDescription() {
+        return new ResourceCommandIconDescription("/icons/glyphicons_136_cogwheel.png"); //$NON-NLS-1$
+    }
+
+    @Override
+    public void execute(String... args) throws ExecuteCommandException {
+        Activator instance = Activator.getInstance();
         final QuickInterfaceUI ui = instance.getUI();
-		ui.uninstall();
-		JFrame frame = api.getMainFrame();
-		ConfigWindow window = new ConfigWindow(frame);
-		window.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent e) {
-				ui.install();
-			}
-		});
-		window.open();
-	}
+        ui.uninstall();
+        JFrame frame = api.getMainFrame();
+        ConfigWindow window = new ConfigWindow(frame);
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                ui.install();
+            }
+        });
+        window.open();
+    }
 
 }

@@ -12,7 +12,6 @@ public class ConfigWindowTest {
     public static void main(String[] args) {
         final JFrame parent = new JFrame();
         parent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        parent.setVisible(true);
         JButton button = new JButton("push");
         parent.add(button);
         button.setAction(new AbstractAction("push") {
@@ -25,5 +24,7 @@ public class ConfigWindowTest {
             }
         });
         parent.pack();
+        parent.setLocationRelativeTo(null);
+        parent.setVisible(true);
     }
 }

@@ -23,6 +23,11 @@ public class QuickProperties {
     public void setKeyStroke(String keyStroke){
         Properties properties = getProperties();
         properties.setProperty(ASTAH_PLUGIN_QUICK_KEY_STROKE, keyStroke);
+        store();
+    }
+
+    public void store() {
+        Properties properties = getProperties();
         try {
             properties.store(FileUtils.openOutputStream(getPropertyFile(), false), "");
         } catch (IOException e) {
@@ -55,7 +60,7 @@ public class QuickProperties {
     
     private File getPropertyFile() {
         File directory = userConfigDirectory.getDirectory();
-        File propertyFile = new File(directory, "quick.propreties");
+        File propertyFile = new File(directory, "quick.properties");
         return propertyFile;
     }
 }
