@@ -17,9 +17,9 @@ import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescrip
 import com.change_vision.jude.api.inf.view.IconDescription;
 
 public class OpenProjectCommand implements CandidateSupportCommand {
-	
+
     @Immediate
-	private final class FileChooserCandidate implements Candidate {
+    private final class FileChooserCandidate implements Candidate {
         @Override
         public boolean isEnabled() {
             return true;
@@ -42,62 +42,62 @@ public class OpenProjectCommand implements CandidateSupportCommand {
     }
 
     private final class AstahFileFilter extends FileFilter {
-		@Override
-		public String getDescription() {
-			return Messages.getString("OpenProjectCommand.astah_file_filter_description"); //$NON-NLS-1$
-		}
+        @Override
+        public String getDescription() {
+            return Messages.getString("OpenProjectCommand.astah_file_filter_description"); //$NON-NLS-1$
+        }
 
-		@Override
-		public boolean accept(File targetFile) {
-			String fileName = targetFile.getName();
-			boolean isAstaFile = fileName.endsWith(".asta"); //$NON-NLS-1$
-			boolean isJudeFile = fileName.endsWith(".jude"); //$NON-NLS-1$
-			return isAstaFile || isJudeFile || targetFile.isDirectory();
-		}
-	}
+        @Override
+        public boolean accept(File targetFile) {
+            String fileName = targetFile.getName();
+            boolean isAstaFile = fileName.endsWith(".asta"); //$NON-NLS-1$
+            boolean isJudeFile = fileName.endsWith(".jude"); //$NON-NLS-1$
+            return isAstaFile || isJudeFile || targetFile.isDirectory();
+        }
+    }
 
-	private ProjectAPI api = new ProjectAPI();
+    private ProjectAPI api = new ProjectAPI();
 
-	@Override
-	public String getName() {
-		return "open project"; //$NON-NLS-1$
-	}
+    @Override
+    public String getName() {
+        return "open project"; //$NON-NLS-1$
+    }
 
-	@Override
-	public void execute(String... args) {
-		openProjectByFileChooser();
-	}
+    @Override
+    public void execute(String... args) {
+        openProjectByFileChooser();
+    }
 
     protected void openProjectByFileChooser() {
         JFrame mainFrame = api.getMainFrame();
 
-		JFileChooser filechooser = new JFileChooser();
-		filechooser.setAcceptAllFileFilterUsed(false);
-		filechooser.setFileFilter(new AstahFileFilter());
-		int opened = filechooser.showOpenDialog(mainFrame);
-		if (opened == JFileChooser.APPROVE_OPTION) {
-			File file = filechooser.getSelectedFile();
-			api.openProject(file);
-		}
+        JFileChooser filechooser = new JFileChooser();
+        filechooser.setAcceptAllFileFilterUsed(false);
+        filechooser.setFileFilter(new AstahFileFilter());
+        int opened = filechooser.showOpenDialog(mainFrame);
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            File file = filechooser.getSelectedFile();
+            api.openProject(file);
+        }
     }
 
-	@Override
-	public String getDescription() {
-		return Messages.getString("OpenProjectCommand.description"); //$NON-NLS-1$
-	}
-	
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-	
-	@Override
-	public CandidateIconDescription getIconDescription() {
-		return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png"); //$NON-NLS-1$
-	}
+    @Override
+    public String getDescription() {
+        return Messages.getString("OpenProjectCommand.description"); //$NON-NLS-1$
+    }
 
     @Override
-    public Candidate[] candidate(Candidate[] committed,String searchKey) {
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public CandidateIconDescription getIconDescription() {
+        return new ResourceCommandIconDescription("/icons/glyphicons_144_folder_open.png"); //$NON-NLS-1$
+    }
+
+    @Override
+    public Candidate[] candidate(Candidate[] committed, String searchKey) {
         File[] recentFiles = api.getRecentFiles();
         Candidate[] candidates = new Candidate[recentFiles.length + 1];
         candidates[0] = new FileChooserCandidate();

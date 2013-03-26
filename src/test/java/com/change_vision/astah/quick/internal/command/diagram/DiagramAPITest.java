@@ -87,9 +87,9 @@ public class DiagramAPITest {
     
     @Test
     public void isOpenDiagrams() throws Exception {
-        when(diagramViewManager.getCurrentDiagram()).thenReturn(null);
+        when(diagramViewManager.getOpenDiagrams()).thenReturn(new IDiagram[0]);
         assertThat(api.isOpenDiagrams(),is(false));
-        when(diagramViewManager.getCurrentDiagram()).thenReturn(diagram);
+        when(diagramViewManager.getOpenDiagrams()).thenReturn(new IDiagram[1]);
         assertThat(api.isOpenDiagrams(),is(true));
     }
     

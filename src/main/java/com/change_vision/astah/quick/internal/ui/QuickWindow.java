@@ -28,7 +28,7 @@ public class QuickWindow extends JWindow {
         super(parent);
         this.commands = commands;
         this.notifier = new MessageNotifier(parent);
-        final CommandBuilder builder = new CommandBuilder();;
+        final CommandBuilder builder = new CommandBuilder();
         InputMap inputMap = getRootPane()
                 .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close-it");

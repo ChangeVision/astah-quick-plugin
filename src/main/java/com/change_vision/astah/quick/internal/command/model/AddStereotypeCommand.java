@@ -3,19 +3,22 @@ package com.change_vision.astah.quick.internal.command.model;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidateAndArgumentSupportCommand;
 import com.change_vision.astah.quick.command.CandidateIconDescription;
+import com.change_vision.astah.quick.command.CommittedNameTrimer;
 import com.change_vision.astah.quick.command.candidates.ElementCandidate;
+import com.change_vision.astah.quick.command.candidates.NotFound;
 import com.change_vision.astah.quick.command.candidates.StereotypeCandidate;
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.ResourceCommandIconDescription;
 import com.change_vision.astah.quick.internal.exception.NotImplementationException;
-import com.change_vision.astah.quick.internal.ui.candidatesfield.state.NotFound;
 import com.change_vision.jude.api.inf.model.INamedElement;
 
 public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand {
     
     private ModelAPI api = new ModelAPI();
+    
+    private CommittedNameTrimer trimer = new CommittedNameTrimer();
     
     private final StereotypeCandidates definedStereotypes = new StereotypeCandidates();
 
@@ -53,13 +56,7 @@ public class AddStereotypeCommand implements CandidateAndArgumentSupportCommand 
             }
             return new Candidate[0];
         }
-        String key = searchKey;
-        for (Candidate committed : committeds) {
-            String name = committed.getName();
-            int index = name.length();
-            key = key.substring(index);
-            key = key.trim();
-        }
+        String key = trimer.trim(committeds,searchKey);
         if (committeds.length == 0) {
             return findTargetElement(key);
         }

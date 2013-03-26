@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.command.Candidate;
 import com.change_vision.astah.quick.command.CandidatesProvider;
 import com.change_vision.astah.quick.command.Command;
+import com.change_vision.astah.quick.command.candidates.NotFound;
+import com.change_vision.astah.quick.command.candidates.ValidState;
 import com.change_vision.astah.quick.internal.command.CommandBuilder;
 
 public class SelectArgument implements CandidateState {

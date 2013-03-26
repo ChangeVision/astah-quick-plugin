@@ -1,10 +1,9 @@
 package com.change_vision.astah.quick.internal.ui.configure;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JWindow;
+import javax.swing.JDialog;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +30,10 @@ class SaveAction extends AbstractAction {
         logger.trace("save:{}",keyStroke);
         QuickProperties properties = configPanel.getProperties();
         properties.setKeyStroke(keyStroke);
-        JWindow window = configPanel.getWindow();
+        properties.store();
+        JDialog window = configPanel.getWindow();
         window.setVisible(false);
-        window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSED));
+        window.dispose();
     }
     
 }

@@ -135,7 +135,7 @@ public class ModelAPI {
     }
 
     private ITransactionManager getTransactionManager() {
-        return getProjectAccessor().getTransactionManager();
+        return wrapper.getTransactionManager();
     }
 
     private BasicModelEditor getBasicModelEditorFactory() {

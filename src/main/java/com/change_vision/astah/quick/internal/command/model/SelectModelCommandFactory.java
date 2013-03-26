@@ -1,6 +1,8 @@
 package com.change_vision.astah.quick.internal.command.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.change_vision.astah.quick.command.Candidate;
@@ -21,6 +23,13 @@ public class SelectModelCommandFactory {
             Command selectCommand = createSelectCommand(foundModel);
             candidates.add(selectCommand);
         }
+        Collections.sort(candidates, new Comparator<Candidate>() {
+            @Override
+            public int compare(Candidate o1, Candidate o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+            
+        });
         return candidates;
     }
 

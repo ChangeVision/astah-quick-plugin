@@ -9,7 +9,7 @@
 			   label="%quick_list"
                class="com.change_vision.astah.quick.internal.ui.actions.ConfigureQuickAction"
                tooltip="%quick_list_tooltip"
-               menubarPath="help/version"
+               menubarPath="tool/check_license"
                id="com.change_vision.astah.quick.setting">
          </action>
      </actionSet>

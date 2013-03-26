@@ -27,14 +27,15 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     
     private final AstahAPIWrapper wrapper = new AstahAPIWrapper();
     
-    private final QuickProperties properties = new QuickProperties();
+    private final QuickProperties properties;
 
     private QuickWindow window;
     
     private final Commands commands;
     
-    OpenQuickWindowEventDispatcher(Commands commands) {
+    OpenQuickWindowEventDispatcher(QuickProperties properties, Commands commands) {
         this.commands = commands;
+        this.properties = properties;
     }
 
     @Override
@@ -48,10 +49,10 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                 createQuickWindow();
             }
             if(window.isVisible()){
-                logger.trace("window is already visible.");
-                return false;
+                window.close();
+            }else{
+                window.open();
             }
-            window.open();
             return true;
         }
         return false;
