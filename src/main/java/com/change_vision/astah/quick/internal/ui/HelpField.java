@@ -13,6 +13,8 @@ import com.change_vision.astah.quick.internal.Messages;
 public class HelpField extends JLabel {
     
     private final String[] messages = new String[]{
+            Messages.getString("HelpField.cursor_message"), //$NON-NLS-1$
+            Messages.getString("HelpField.enter_message"), //$NON-NLS-1$
             Messages.getString("HelpField.esc_message"), //$NON-NLS-1$
             Messages.getString("HelpField.double_click_message"), //$NON-NLS-1$
             Messages.getString("HelpField.move_window_message"), //$NON-NLS-1$
