@@ -63,7 +63,7 @@ public class ModelAPITest {
         api = new ModelAPI();
         api.setWrapper(wrapper);
         when(wrapper.getProjectAccessor()).thenReturn(prjAccessor);
-        when(prjAccessor.getTransactionManager()).thenReturn(transactionManager);
+        when(wrapper.getTransactionManager()).thenReturn(transactionManager);
         when(prjAccessor.getModelEditorFactory()).thenReturn(modelEditorFactory);
         when(modelEditorFactory.getBasicModelEditor()).thenReturn(basicModelEditor);
         when(prjAccessor.getProject()).thenReturn(project);
