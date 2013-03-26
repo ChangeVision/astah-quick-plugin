@@ -2,6 +2,8 @@ package com.change_vision.astah.quick.internal.command;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -42,6 +44,15 @@ public class CandidatesTest {
     @Mock
     private ServiceTracker tracker;
 
+    @Mock
+    private Candidate first;
+
+    @Mock
+    private Candidate second;
+
+    @Mock
+    private Candidate third;
+
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -57,7 +68,11 @@ public class CandidatesTest {
         when(two.isEnabled()).thenReturn(true);
         commands.add(one);
         commands.add(two);
-
+        
+        when(first.getName()).thenReturn("EventObject");
+        when(second.getName()).thenReturn("EnumSet");
+        when(third.getName()).thenReturn("EventListener");
+        
         commandBuilder = new CommandBuilder();
         candidates = new Candidates(commands,commandBuilder);
         candidates.setCommandFactory(commandFactory);
@@ -165,5 +180,18 @@ public class CandidatesTest {
         assertThat(actual.length, is(2));
         CandidateState next = candidates.getState();
         assertThat(next, is(instanceOf(SelectCommand.class)));
+    }
+    
+    @Test
+    public void sortCandidates() throws Exception {
+        when(providerCommand.candidate((Candidate[])any(), anyString())).thenReturn(new Candidate[]{
+                first,second,third
+        });
+        commandBuilder.commit(providerCommand);
+        candidates.filter("");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual[0].getName(),is("EnumSet"));
+        assertThat(actual[1].getName(),is("EventListener"));
+        assertThat(actual[2].getName(),is("EventObject"));
     }
 }

@@ -20,6 +20,13 @@ import com.change_vision.astah.quick.internal.ui.candidatesfield.state.SelectCom
 
 public class Candidates {
 
+    private final class NameComparator implements Comparator<Candidate> {
+        @Override
+        public int compare(Candidate o1, Candidate o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    }
+
     private Commands commands;
 
     class SelectCommandFactory {
@@ -44,7 +51,7 @@ public class Candidates {
     private CandidatesSelector<Candidate> selector;
 
     private final CommandBuilder commandBuilder;
-        
+
     public Candidates(Commands commands, CommandBuilder commandBuilder) {
         this.commands = commands;
         this.commandBuilder = commandBuilder;
@@ -124,12 +131,7 @@ public class Candidates {
     public Candidate[] getCandidates() {
         Candidate[] candidates = selector.getCandidates();
         if (isCommitted()) {
-            Arrays.sort(candidates, new Comparator<Candidate>() {
-                @Override
-                public int compare(Candidate o1, Candidate o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
+            Arrays.sort(candidates, new NameComparator());
         }
         return candidates;
     }
