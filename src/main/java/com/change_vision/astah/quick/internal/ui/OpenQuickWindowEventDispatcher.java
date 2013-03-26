@@ -49,10 +49,10 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                 createQuickWindow();
             }
             if(window.isVisible()){
-                logger.trace("window is already visible.");
-                return false;
+                window.close();
+            }else{
+                window.open();
             }
-            window.open();
             return true;
         }
         return false;
