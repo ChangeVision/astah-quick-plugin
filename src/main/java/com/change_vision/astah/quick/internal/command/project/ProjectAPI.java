@@ -17,16 +17,50 @@ import com.change_vision.jude.api.inf.view.IViewManager;
 
 class ProjectAPI {
 
+
+    private static final String DEFAULT_TEMPLATE_NAME = "Java6.asta"; //$NON-NLS-1$
+
+    private static final String SYSTEM_PROPERTY_OF_FILE_NEW_PROJECT_TEMPLATE_FILE = "file.new_project_template_file"; //$NON-NLS-1$
+
+    private static final String SYSTEM_PROPERTY_OF_JUDE_RECENT_FILE_NUMBER = "jude.recent_file_number"; //$NON-NLS-1$
+
+    private static final String PATH_TO_TEMPLATE_PROJECT = "template/project"; //$NON-NLS-1$
+
     private static final Logger logger = LoggerFactory.getLogger(ProjectAPI.class);
 
     private AstahAPIWrapper wrapper = new AstahAPIWrapper();
 
     void createProject() {
+        ProjectAccessor projectAccessor = getProjectAccessor();
         try {
-            getProjectAccessor().create();
+            projectAccessor.create();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+        mergeTemplate();
+    }
+
+    private void mergeTemplate() {
+        ProjectAccessor projectAccessor = getProjectAccessor();
+        String installPath = projectAccessor.getAstahInstallPath();
+        StringBuilder pathBuilder = new StringBuilder(installPath);
+        String templateName = getTemplateName();
+        pathBuilder.append(PATH_TO_TEMPLATE_PROJECT);
+        pathBuilder.append(File.separator);
+        pathBuilder.append(templateName);
+        String path = pathBuilder.toString();
+        logger.trace("template:{}",path); //$NON-NLS-1$
+        try {
+            projectAccessor.easyMerge(path, true);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private String getTemplateName() {
+        SystemPropertyAccessor accessor = wrapper.getSystemPropertyAccessor();
+        Properties systemProperties = accessor.getSystemProperties();
+        return systemProperties.getProperty(SYSTEM_PROPERTY_OF_FILE_NEW_PROJECT_TEMPLATE_FILE,DEFAULT_TEMPLATE_NAME);
     }
 
     void closeProject() {
@@ -74,7 +108,7 @@ class ProjectAPI {
         SystemPropertyAccessor systemPropertyAccessor = wrapper.getSystemPropertyAccessor();
         Properties systemProperties = systemPropertyAccessor.getSystemProperties();
         int recentFileNumber = 0;
-        String recentFileNumberString = systemProperties.getProperty("jude.recent_file_number"); //$NON-NLS-1$
+        String recentFileNumberString = systemProperties.getProperty(SYSTEM_PROPERTY_OF_JUDE_RECENT_FILE_NUMBER);
         if (recentFileNumberString == null || recentFileNumberString.isEmpty()) {
             return new File[recentFileNumber];
         }
