@@ -23,10 +23,10 @@ public class QuickInterfaceUI {
 
     private KeyboardFocusManager focusManager;
     private final OpenQuickWindowEventDispatcher dispatcher;
-    private final QuickProperties properties = new QuickProperties();
+    private final QuickProperties properties = QuickProperties.getInstance();
 
     public QuickInterfaceUI(Commands commands) {
-        this.dispatcher = new OpenQuickWindowEventDispatcher(commands);
+        this.dispatcher = new OpenQuickWindowEventDispatcher(properties,commands);
         this.focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
     }
 

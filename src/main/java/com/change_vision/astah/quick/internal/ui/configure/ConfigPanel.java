@@ -1,13 +1,13 @@
 package com.change_vision.astah.quick.internal.ui.configure;
 
+import java.awt.Font;
+
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import java.awt.Font;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -20,7 +20,7 @@ public class ConfigPanel extends JPanel {
     private static final String LABEL_OF_CURRENT = Messages.getString("ConfigPanel.current_label"); //$NON-NLS-1$
     final private JDialog window;
     private JTextField keyField;
-    private final QuickProperties properties = new QuickProperties();
+    private final QuickProperties properties = QuickProperties.getInstance();
     
     public ConfigPanel(JDialog window){
         this.window = window;
@@ -48,7 +48,7 @@ public class ConfigPanel extends JPanel {
     public String getKeyStroke() {
         String text = keyField.getText();
         if (text.isEmpty()) {
-            return "ctrl SPACE";
+            return QuickProperties.INITIAL_KEY_STROKE;
         }
         return text;
     }

@@ -30,6 +30,7 @@ class SaveAction extends AbstractAction {
         logger.trace("save:{}",keyStroke);
         QuickProperties properties = configPanel.getProperties();
         properties.setKeyStroke(keyStroke);
+        properties.store();
         JDialog window = configPanel.getWindow();
         window.setVisible(false);
         window.dispose();
