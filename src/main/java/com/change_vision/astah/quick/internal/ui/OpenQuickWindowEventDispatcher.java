@@ -20,6 +20,26 @@ import com.change_vision.astah.quick.internal.model.QuickProperties;
 
 class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
+    private final class ClickOutsideWindowListener implements AWTEventListener {
+        @Override
+        public void eventDispatched(AWTEvent event) {
+            int id = event.getID();
+            if (id == MouseEvent.MOUSE_CLICKED) {
+                if (event instanceof MouseEvent) {
+                    MouseEvent me = (MouseEvent) event;
+                    Object source = me.getSource();
+                    if (source instanceof Component) {
+                        Component c = (Component) source;
+                        if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
+                            window.close();
+                            window.reset();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Logger for this class
      */
@@ -50,6 +70,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
             }
             if(window.isVisible()){
                 window.close();
+                window.reset();
             }else{
                 window.open();
             }
@@ -62,24 +83,10 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     private void createQuickWindow() {
         JFrame frame = wrapper.getMainFrame();
         window = new QuickWindow(frame,commands);
-        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener(){
-            @Override
-            public void eventDispatched(AWTEvent event) {
-                int id = event.getID();
-                if (id == MouseEvent.MOUSE_CLICKED) {
-                    if (event instanceof MouseEvent) {
-                        MouseEvent me = (MouseEvent) event;
-                        Object source = me.getSource();
-                        if (source instanceof Component) {
-                            Component c = (Component) source;
-                            if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
-                                window.close();
-                            }
-                        }
-                    }
-                }
-            }
-            
-        }, AWTEvent.MOUSE_EVENT_MASK);
+        setClickOutsideWindowBehavior();
+    }
+
+    private void setClickOutsideWindowBehavior() {
+        Toolkit.getDefaultToolkit().addAWTEventListener(new ClickOutsideWindowListener(), AWTEvent.MOUSE_EVENT_MASK);
     }
 }
