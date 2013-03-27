@@ -76,7 +76,7 @@ public class InstalledWizardPanel extends JPanel {
         }
     }
 
-    private int current = 1;
+    private int current = 0;
     private BackAction backAction;
     private NextAction nextAction;
     private FinishAction finishAction;
