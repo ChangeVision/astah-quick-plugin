@@ -12,6 +12,7 @@ import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.IPackage;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
 class CreatePackageCommand implements Command {
@@ -33,13 +34,22 @@ class CreatePackageCommand implements Command {
         for (String packageName : args) {
             logger.trace("create package '{}'", packageName); //$NON-NLS-1$
             INamedElement[] found = api.findByFQCN(packageName);
-            if (found.length > 0) {
+            if (found.length > 0 && isFoundPackage(found)) {
                 String message = format(
                         Messages.getString("CreatePackageCommand.already_existed_error_message"), packageName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
             }
             api.createPackage(packageName);
         }
+    }
+
+    private boolean isFoundPackage(INamedElement[] found) {
+        for (INamedElement element : found) {
+            if (element instanceof IPackage) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
