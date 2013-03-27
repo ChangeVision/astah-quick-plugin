@@ -22,7 +22,7 @@ public final class ClassOrPackageFinder implements ModelFinder {
         boolean nameStarts = name.startsWith(lowerCaseKey);
         boolean alias1Starts = element.getAlias1().startsWith(searchKey);
         boolean alias2Starts = element.getAlias2().startsWith(searchKey);
-        boolean isSameNameSpaceLowerCase = element.getFullName(".").toLowerCase().startsWith(lowerCaseKey);
+        boolean isSameNameSpaceLowerCase = element.getFullName(".").toLowerCase().equals(lowerCaseKey);
         return nameStarts || alias1Starts || alias2Starts || isSameNameSpaceLowerCase;
     }
 

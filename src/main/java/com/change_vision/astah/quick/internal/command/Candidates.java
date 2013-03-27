@@ -82,7 +82,8 @@ public class Candidates {
         }
         logger.trace("state:'{}' candidates:'{}'",state.getClass().getSimpleName(), candidates); //$NON-NLS-1$
         selector.setCandidates(candidates);
-        if (isChangedToArgumentState(key,candidates)) {
+        if (isChangedArgumentState(key,candidates)) {
+            logger.trace("change argument state");
             Command committed = (Command) candidates[0];
             if (commandBuilder.isCommitted() == false) {
                 commandBuilder.commit(committed);
@@ -92,10 +93,24 @@ public class Candidates {
             candidates = state.filter(searchKey);
             logger.trace("candidates:'{}'", candidates); //$NON-NLS-1$
             selector.setCandidates(candidates);
+            return;
+        }
+        if (isCommitCandidate(key,candidates)){
+            commandBuilder.add(candidates[0]);
         }
     }
 
-    private boolean isChangedToArgumentState(String key,Candidate[] candidates) {
+    private boolean isCommitCandidate(String key, Candidate[] candidates) {
+        boolean isCurrentArgumentState = state instanceof SelectArgument;
+        boolean isFoundOnlyOneCandidate = candidates.length == 1 && candidates[0] instanceof Candidate;
+        Candidate candidate = candidates[0];
+        String candidateName = candidate.getName().toLowerCase();
+        String keyLowerCase = key.toLowerCase().trim();
+        boolean isDecidedByKey = keyLowerCase.equals(candidateName);
+        return isCurrentArgumentState && isFoundOnlyOneCandidate && isDecidedByKey;
+    }
+
+    private boolean isChangedArgumentState(String key,Candidate[] candidates) {
         boolean isCurrentCommandState = state instanceof SelectCommand;
         boolean isFoundOnlyOneCommand = candidates.length == 1 && candidates[0] instanceof Command;
         if (isCurrentCommandState == false || isFoundOnlyOneCommand == false) {
