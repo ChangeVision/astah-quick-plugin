@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseListener;
 
@@ -46,6 +47,7 @@ public class CandidatesListPanel extends JPanel {
     public CandidatesListPanel(Candidates candidates) {
         this.candidates = candidates;
         scrollPane = new JScrollPane(VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setAutoscrolls(true);
         candidateList = new CandidatesList();
         candidateList.addListSelectionListener(new CandidateSelectionListener());
         scrollPane.setViewportView(candidateList);
@@ -75,8 +77,13 @@ public class CandidatesListPanel extends JPanel {
 
         candidateList.setListData(candidatesData);
         if (candidatesData.length > 0) {
-            candidateList.setSelectedIndex(0);
+            resetCandidateListIndex();
         }
+    }
+
+    private void resetCandidateListIndex() {
+        candidateList.setSelectedIndex(0);
+        scrollPane.getViewport().setViewPosition(new Point(0,0));
     }
 
     public void up() {
@@ -92,7 +99,12 @@ public class CandidatesListPanel extends JPanel {
         logger.trace("down : current '{}'", candidate);
         candidateList.setSelectedValue(candidate, true);
     }
-    
+
+    public void resetIndex(){
+        logger.trace("reset index");
+        resetCandidateListIndex();
+    }
+
     @Override
     public void setVisible(boolean visible) {
         logger.trace("visible:{}",visible);

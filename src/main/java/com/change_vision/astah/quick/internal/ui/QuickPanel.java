@@ -94,13 +94,15 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         if (evt.getPropertyName().equals(CommandBuilder.PROP_OF_COMMAND)) {
             Object newValue = evt.getNewValue();
             if (newValue instanceof Command) {
-                updateIcon(newValue);
+                Command command = (Command) newValue;
+                updateIcon(command);
+                return;
             }
+            iconLabel.setIcon(astahIcon);
         }
     }
 
-    private void updateIcon(Object newValue) {
-        Command command = (Command) newValue;
+    private void updateIcon(Command command) {
         CandidateIconDescription iconDescription = command.getIconDescription();
         Icon icon = iconDescription.getIcon();
         BufferedImage bufferedImage = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);

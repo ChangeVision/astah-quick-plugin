@@ -103,6 +103,9 @@ public class Candidates {
     private boolean isCommitCandidate(String key, Candidate[] candidates) {
         boolean isCurrentArgumentState = state instanceof SelectArgument;
         boolean isFoundOnlyOneCandidate = candidates.length == 1 && candidates[0] instanceof Candidate;
+        if (isCurrentArgumentState == false || isFoundOnlyOneCandidate == false) {
+            return false;
+        }
         Candidate candidate = candidates[0];
         String candidateName = candidate.getName().toLowerCase();
         String keyLowerCase = key.toLowerCase().trim();
