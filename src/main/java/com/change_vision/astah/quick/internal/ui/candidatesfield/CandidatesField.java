@@ -95,6 +95,7 @@ public final class CandidatesField extends JTextField implements PropertyChangeL
             logger.trace("openCandidatesList");
             candidatesList.setVisible(true);
         }
+        candidatesList.resetIndex();
     }
 
     private void closeCandidatesListAndReset() {
