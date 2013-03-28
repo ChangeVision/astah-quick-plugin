@@ -33,6 +33,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                         if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
                             window.close();
                             window.reset();
+                            ((MouseEvent) event).consume();
                         }
                     }
                 }
@@ -60,6 +61,12 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
+    	if (isOnWindowsIllegalEvents(e)) {
+    		return true;
+    	}
+    	if (acceptsOnlyKeyPressedEvent(e)) {
+			return false;
+		}
         KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(e);
         String fireKeyStroke = properties.getKeyStroke();
         KeyStroke strokeEvent = KeyStroke.getKeyStroke(fireKeyStroke);
@@ -74,10 +81,27 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
             }else{
                 window.open();
             }
+            e.consume();
             return true;
         }
         return false;
     }
+
+	private boolean acceptsOnlyKeyPressedEvent(KeyEvent e) {
+		return e.getID() != KeyEvent.KEY_PRESSED;
+	}
+
+	private boolean isOnWindowsIllegalEvents(KeyEvent e) {
+		return isTypedSpaceOrUndefined(e) || isReleasedEscape(e);
+	}
+
+	private boolean isReleasedEscape(KeyEvent e) {
+		return e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE;
+	}
+
+	private boolean isTypedSpaceOrUndefined(KeyEvent e) {
+		return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ');
+	}
     
 
     private void createQuickWindow() {
