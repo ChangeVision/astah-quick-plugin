@@ -32,7 +32,7 @@ public class CloseProjectCommand implements Command {
             case JOptionPane.CANCEL_OPTION:
                 return;
             case JOptionPane.YES_OPTION:
-                api.save();
+                if(api.save() == false) return;
                 break;
             }
             

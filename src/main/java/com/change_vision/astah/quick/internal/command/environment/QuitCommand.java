@@ -25,8 +25,9 @@ public class QuitCommand implements Command {
             int confirm = JOptionPane.showConfirmDialog(frame, Messages.getString("QuitCommand.confirm_before_save_and_quit_message"), Messages.getString("QuitCommand.confirm_before_save_and_quit_title"), JOptionPane.YES_NO_CANCEL_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
             switch (confirm) {
             case JOptionPane.YES_OPTION:
-                api.save();
-                System.exit(0);
+                if (api.save()) {
+                	System.exit(0);
+				}
                 break;
             case JOptionPane.NO_OPTION:
                 System.exit(0);
