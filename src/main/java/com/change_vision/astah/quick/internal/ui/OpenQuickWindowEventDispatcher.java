@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.command.Commands;
 import com.change_vision.astah.quick.internal.model.QuickProperties;
+import com.change_vision.astah.quick.internal.ui.candidatesfield.CandidatesField;
 
 class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
@@ -100,6 +101,9 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 	}
 
 	private boolean isTypedSpaceOrUndefined(KeyEvent e) {
+		if (e.getComponent() instanceof CandidatesField) {
+			return false;
+		}
 		return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ');
 	}
     
