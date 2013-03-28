@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.IPackage;
 
@@ -19,7 +20,10 @@ public class CreatePackageCommandTest {
     
     @Mock
     private INamedElement element;
-    
+
+    @Mock
+    private IClass clazz;
+
     @Mock
     private IPackage packaze;
     
@@ -67,9 +71,17 @@ public class CreatePackageCommandTest {
         });
         command.execute("hoge");
     }
-    
-    @Test(expected=ExecuteCommandException.class)
+
+    @Test
     public void executeWithFoundClassArgument() throws Exception {
+        when(api.findByFQCN("hoge")).thenReturn(new INamedElement[]{
+                clazz
+        });
+        command.execute("hoge");
+    }
+
+    @Test(expected=ExecuteCommandException.class)
+    public void executeWithFoundPackageArgument() throws Exception {
         when(api.findByFQCN("hoge")).thenReturn(new INamedElement[]{
                 packaze
         });
