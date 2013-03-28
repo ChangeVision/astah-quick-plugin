@@ -48,6 +48,7 @@ public class QuickWindow extends JWindow {
 
     public void close() {
         setVisible(false);
+        getParent().setEnabled(true);
     }
 
     public void reset() {
@@ -63,5 +64,6 @@ public class QuickWindow extends JWindow {
         setLocation(centerPoint);
         setVisible(true);
         quickPanel.opened();
+        getParent().setEnabled(false);
     }
 }
