@@ -19,6 +19,13 @@ import com.change_vision.astah.quick.internal.command.Commands;
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
 
+    private static final String OS_NAME = System.getProperty("os.name");
+    public static boolean IS_WINDOWS = isWindows();
+
+    private static boolean isWindows() {
+        return OS_NAME == null || OS_NAME.startsWith("Windows");
+    }
+
     private final QuickPanel quickPanel;
     private final MessageNotifier notifier;
     private final Candidates candidates;
@@ -48,7 +55,7 @@ public class QuickWindow extends JWindow {
 
     public void close() {
         setVisible(false);
-        getParent().setEnabled(true);
+        if(IS_WINDOWS) getParent().setEnabled(true);
     }
 
     public void reset() {
@@ -64,6 +71,7 @@ public class QuickWindow extends JWindow {
         setLocation(centerPoint);
         setVisible(true);
         quickPanel.opened();
-        getParent().setEnabled(false);
+        if(IS_WINDOWS) getParent().setEnabled(false);
     }
+    
 }

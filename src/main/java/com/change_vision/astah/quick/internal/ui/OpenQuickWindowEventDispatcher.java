@@ -31,7 +31,8 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
                     Object source = me.getSource();
                     if (source instanceof Component) {
                         Component c = (Component) source;
-                        if(window != null && window.isVisible() && (window.isAncestorOf(c) || c == window) == false ){
+                        if (window != null && window.isVisible()
+                                && (window.isAncestorOf(c) || c == window) == false) {
                             window.close();
                             window.reset();
                             ((MouseEvent) event).consume();
@@ -45,16 +46,17 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     /**
      * Logger for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(OpenQuickWindowEventDispatcher.class);
-    
+    private static final Logger logger = LoggerFactory
+            .getLogger(OpenQuickWindowEventDispatcher.class);
+
     private final AstahAPIWrapper wrapper = new AstahAPIWrapper();
-    
+
     private final QuickProperties properties;
 
     private QuickWindow window;
-    
+
     private final Commands commands;
-    
+
     OpenQuickWindowEventDispatcher(QuickProperties properties, Commands commands) {
         this.commands = commands;
         this.properties = properties;
@@ -62,24 +64,24 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-    	if (isOnWindowsIllegalEvents(e)) {
-    		return true;
-    	}
-    	if (acceptsOnlyKeyPressedEvent(e)) {
-			return false;
-		}
+        if (isOnWindowsIllegalEvents(e)) {
+            return true;
+        }
+        if (isOnWindowsAcceptsOnlyKeyPressedEvent(e)) {
+            return false;
+        }
         KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(e);
         String fireKeyStroke = properties.getKeyStroke();
         KeyStroke strokeEvent = KeyStroke.getKeyStroke(fireKeyStroke);
-        if(strokeEvent.equals(keyStroke)){
-            logger.trace("{} is fired.",fireKeyStroke);
-            if(window == null){
+        if (strokeEvent.equals(keyStroke)) {
+            logger.trace("{} is fired.", fireKeyStroke);
+            if (window == null) {
                 createQuickWindow();
             }
-            if(window.isVisible()){
+            if (window.isVisible()) {
                 window.close();
                 window.reset();
-            }else{
+            } else {
                 window.open();
             }
             e.consume();
@@ -88,33 +90,33 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
         return false;
     }
 
-	private boolean acceptsOnlyKeyPressedEvent(KeyEvent e) {
-		return e.getID() != KeyEvent.KEY_PRESSED;
-	}
+    private boolean isOnWindowsAcceptsOnlyKeyPressedEvent(KeyEvent e) {
+        return QuickWindow.IS_WINDOWS && e.getID() != KeyEvent.KEY_PRESSED;
+    }
 
-	private boolean isOnWindowsIllegalEvents(KeyEvent e) {
-		return isTypedSpaceOrUndefined(e) || isReleasedEscape(e);
-	}
+    private boolean isOnWindowsIllegalEvents(KeyEvent e) {
+        return QuickWindow.IS_WINDOWS && (isTypedSpaceOrUndefined(e) || isReleasedEscape(e));
+    }
 
-	private boolean isReleasedEscape(KeyEvent e) {
-		return e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE;
-	}
+    private boolean isReleasedEscape(KeyEvent e) {
+        return e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE;
+    }
 
-	private boolean isTypedSpaceOrUndefined(KeyEvent e) {
-		if (e.getComponent() instanceof CandidatesField) {
-			return false;
-		}
-		return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ');
-	}
-    
+    private boolean isTypedSpaceOrUndefined(KeyEvent e) {
+        if (e.getComponent() instanceof CandidatesField) {
+            return false;
+        }
+        return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ');
+    }
 
     private void createQuickWindow() {
         JFrame frame = wrapper.getMainFrame();
-        window = new QuickWindow(frame,commands);
+        window = new QuickWindow(frame, commands);
         setClickOutsideWindowBehavior();
     }
 
     private void setClickOutsideWindowBehavior() {
-        Toolkit.getDefaultToolkit().addAWTEventListener(new ClickOutsideWindowListener(), AWTEvent.MOUSE_EVENT_MASK);
+        Toolkit.getDefaultToolkit().addAWTEventListener(new ClickOutsideWindowListener(),
+                AWTEvent.MOUSE_EVENT_MASK);
     }
 }
