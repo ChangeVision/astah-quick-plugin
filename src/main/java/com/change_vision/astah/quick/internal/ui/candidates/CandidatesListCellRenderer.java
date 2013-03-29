@@ -6,10 +6,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -66,6 +68,7 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
             panel.add(title);
             JLabel description = new JLabel();
             description.setText(candidate.getDescription());
+            description.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
             if (isSelected) {
                 title.setForeground(Color.lightGray.brighter());
                 description.setForeground(Color.lightGray.brighter());
@@ -88,7 +91,12 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
         if (iconDescription != null) {
             Icon icon = iconDescription.getIcon();
             if (icon != null) {
-                title.setIcon(icon);
+                int spaceAroundIcon = 2;
+                BufferedImage bi = new BufferedImage(icon.getIconWidth() ,icon.getIconHeight() + ( 2 * spaceAroundIcon), BufferedImage.TYPE_INT_ARGB);
+                Graphics g = bi.getGraphics();
+                icon.paintIcon(null, g, 0 , spaceAroundIcon * 2);
+                g.dispose();
+                title.setIcon(new ImageIcon(bi));
             }
         }
         return title;

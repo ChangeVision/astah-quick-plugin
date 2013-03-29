@@ -16,7 +16,7 @@ public class QuitCommand implements Command {
     private EnvironmentAPI api = new EnvironmentAPI();
 
     public String getName() {
-        return "quit Astah"; //$NON-NLS-1$
+        return "quit astah"; //$NON-NLS-1$
     }
 
     public void execute(String... args) {
