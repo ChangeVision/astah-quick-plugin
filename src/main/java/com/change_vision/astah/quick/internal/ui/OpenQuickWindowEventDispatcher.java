@@ -91,11 +91,15 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     }
 
     private boolean isOnWindowsOrOnMacAcceptsOnlyKeyPressedEvent(KeyEvent e) {
-        return QuickWindow.IS_WINDOWS && QuickWindow.IS_MAC && e.getID() != KeyEvent.KEY_PRESSED;
+        return isWindowsOrMac() && e.getID() != KeyEvent.KEY_PRESSED;
+    }
+
+    private boolean isWindowsOrMac() {
+        return QuickWindow.IS_WINDOWS || QuickWindow.IS_MAC;
     }
 
     private boolean isOnWindowsOrOnMacIllegalEvents(KeyEvent e) {
-        return QuickWindow.IS_WINDOWS && QuickWindow.IS_MAC && (isTypedSpaceOrUndefined(e) || isReleasedEscape(e));
+        return isWindowsOrMac() && (isTypedSpaceOrUndefined(e) || isReleasedEscape(e));
     }
 
     private boolean isReleasedEscape(KeyEvent e) {
@@ -106,7 +110,11 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
         if (e.getComponent() instanceof CandidatesField) {
             return false;
         }
-        return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ');
+        return e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == 0 || e.getKeyChar() == ' ') && isPressOptionKey(e);
+    }
+
+    private boolean isPressOptionKey(KeyEvent e) {
+        return e.isControlDown() || e.isAltDown() || e.isMetaDown() || e.isShiftDown();
     }
 
     private void createQuickWindow() {
