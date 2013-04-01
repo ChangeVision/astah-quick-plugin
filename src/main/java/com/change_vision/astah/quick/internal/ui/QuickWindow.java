@@ -21,9 +21,14 @@ public class QuickWindow extends JWindow {
 
     private static final String OS_NAME = System.getProperty("os.name");
     public static boolean IS_WINDOWS = isWindows();
+    public static boolean IS_MAC = isMac();
 
     private static boolean isWindows() {
-        return OS_NAME == null || OS_NAME.startsWith("Windows");
+        return OS_NAME != null || OS_NAME.startsWith("Windows");
+    }
+
+    private static boolean isMac() {
+        return OS_NAME != null || OS_NAME.startsWith("Mac");
     }
 
     private final QuickPanel quickPanel;
@@ -55,7 +60,6 @@ public class QuickWindow extends JWindow {
 
     public void close() {
         setVisible(false);
-        if(IS_WINDOWS) getParent().setEnabled(true);
     }
 
     public void reset() {
@@ -71,7 +75,6 @@ public class QuickWindow extends JWindow {
         setLocation(centerPoint);
         setVisible(true);
         quickPanel.opened();
-        if(IS_WINDOWS) getParent().setEnabled(false);
     }
     
 }

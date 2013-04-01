@@ -64,10 +64,10 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-        if (isOnWindowsIllegalEvents(e)) {
+        if (isOnWindowsOrOnMacIllegalEvents(e)) {
             return true;
         }
-        if (isOnWindowsAcceptsOnlyKeyPressedEvent(e)) {
+        if (isOnWindowsOrOnMacAcceptsOnlyKeyPressedEvent(e)) {
             return false;
         }
         KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(e);
@@ -90,12 +90,12 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
         return false;
     }
 
-    private boolean isOnWindowsAcceptsOnlyKeyPressedEvent(KeyEvent e) {
-        return QuickWindow.IS_WINDOWS && e.getID() != KeyEvent.KEY_PRESSED;
+    private boolean isOnWindowsOrOnMacAcceptsOnlyKeyPressedEvent(KeyEvent e) {
+        return QuickWindow.IS_WINDOWS && QuickWindow.IS_MAC && e.getID() != KeyEvent.KEY_PRESSED;
     }
 
-    private boolean isOnWindowsIllegalEvents(KeyEvent e) {
-        return QuickWindow.IS_WINDOWS && (isTypedSpaceOrUndefined(e) || isReleasedEscape(e));
+    private boolean isOnWindowsOrOnMacIllegalEvents(KeyEvent e) {
+        return QuickWindow.IS_WINDOWS && QuickWindow.IS_MAC && (isTypedSpaceOrUndefined(e) || isReleasedEscape(e));
     }
 
     private boolean isReleasedEscape(KeyEvent e) {
