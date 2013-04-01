@@ -24,11 +24,18 @@ public class QuickWindow extends JWindow {
     public static boolean IS_MAC = isMac();
 
     private static boolean isWindows() {
-        return OS_NAME != null || OS_NAME.startsWith("Windows");
+        return isOSNameMatch(OS_NAME,"Windows");
     }
 
     private static boolean isMac() {
-        return OS_NAME != null || OS_NAME.startsWith("Mac");
+        return isOSNameMatch(OS_NAME,"Mac");
+    }
+    
+    private static boolean isOSNameMatch(String osName, String osNamePrefix){
+        if(OS_NAME == null){
+            return false;
+        }
+        return osName.startsWith(osNamePrefix);
     }
 
     private final QuickPanel quickPanel;
