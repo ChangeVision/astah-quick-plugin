@@ -11,6 +11,7 @@ import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
@@ -32,12 +33,21 @@ class CreateClassCommand implements Command {
         for (String className : args) {
             logger.trace("create class '{}'", className); //$NON-NLS-1$
             INamedElement[] found = api.findByFQCN(className);
-            if (found.length > 0) {
+            if (found.length > 0 && isFoundClass(found)) {
                 String message = format(Messages.getString("CreateClassCommand.already_existed_error_message"),className); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
             }
             api.createClass(className);
         }
+    }
+
+    private boolean isFoundClass(INamedElement[] found) {
+        for (INamedElement element : found) {
+            if (element instanceof IClass) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -71,8 +71,8 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         
         candidatesField = new CandidatesField(quickWindow,candidatesList,candidates);
         add(candidatesField, "cell 1 0,growx");
-        helpField = new HelpField();
-        add(helpField, "cell 1 1,growx");
+//        helpField = new HelpField();
+//        add(helpField, "cell 1 1,growx");
         add(candidatesList,"cell 0 2,span 2,growx");
         
         candidatesList.addMouseListener(new CandidateDoubleClickListener(quickWindow,candidatesField,candidates));
@@ -94,13 +94,15 @@ public class QuickPanel extends JPanel implements PropertyChangeListener {
         if (evt.getPropertyName().equals(CommandBuilder.PROP_OF_COMMAND)) {
             Object newValue = evt.getNewValue();
             if (newValue instanceof Command) {
-                updateIcon(newValue);
+                Command command = (Command) newValue;
+                updateIcon(command);
+                return;
             }
+            iconLabel.setIcon(astahIcon);
         }
     }
 
-    private void updateIcon(Object newValue) {
-        Command command = (Command) newValue;
+    private void updateIcon(Command command) {
         CandidateIconDescription iconDescription = command.getIconDescription();
         Icon icon = iconDescription.getIcon();
         BufferedImage bufferedImage = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);

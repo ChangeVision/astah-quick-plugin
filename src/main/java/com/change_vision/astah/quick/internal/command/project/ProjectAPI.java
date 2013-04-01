@@ -125,8 +125,8 @@ class ProjectAPI {
         this.wrapper = wrapper;
     }
 
-    void save(){
-        wrapper.save();
+    boolean save(){
+        return wrapper.save();
     }
 
 }

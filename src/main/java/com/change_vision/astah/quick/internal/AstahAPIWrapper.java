@@ -89,9 +89,10 @@ public class AstahAPIWrapper {
         }
     }
 
-    public void save(){
+    public boolean save(){
         try {
             getProjectAccessor().save();
+            return true;
         } catch (LicenseNotFoundException e) {
             throw new IllegalStateException("License is not installed or using community.",e);
         } catch (ProjectNotFoundException e) {
@@ -99,6 +100,10 @@ public class AstahAPIWrapper {
         } catch (ProjectLockedException e) {
             throw new IllegalStateException("Project is locked.",e);
         } catch (IOException e) {
+            if (e.getMessage() == null) {
+                // maybe choosing cancel when file selection dialog
+                return false;
+            }
             throw new IllegalStateException("IOException is occurred.",e);
         }
     }

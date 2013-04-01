@@ -158,6 +158,30 @@ public class CommandBuilderTest {
     }
     
     @Test
+    public void removeCandidate_candidateFirePropertyChangeEvent() throws Exception {
+        builder.commit(command);
+        builder.add(one);
+        builder.addPropertyChangeListener(propertyChangeListener); // start to receive event
+        builder.removeCandidate();
+        ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+        verify(propertyChangeListener).propertyChange(captor.capture());
+        PropertyChangeEvent event = captor.getValue();
+        assertThat(event.getPropertyName(),is(CommandBuilder.PROP_OF_CANDIDATE));
+    }
+
+    @Test
+    public void removeCandidate_commandFirePropertyChangeEvent() throws Exception {
+        builder.commit(command);
+
+        builder.addPropertyChangeListener(propertyChangeListener); // start to receive event
+        builder.removeCandidate();
+        ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+        verify(propertyChangeListener).propertyChange(captor.capture());
+        PropertyChangeEvent event = captor.getValue();
+        assertThat(event.getPropertyName(),is(CommandBuilder.PROP_OF_COMMAND));
+    }
+
+    @Test
     public void candidateTextWhenUncommitted() throws Exception {
         String candidateText = builder.getCandidateText("hoge");
         assertThat(candidateText,is("hoge"));

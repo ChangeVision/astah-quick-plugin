@@ -183,6 +183,18 @@ public class CandidatesTest {
     }
     
     @Test
+    public void decideCandidate() throws Exception {
+        when(providerCommand.candidate((Candidate[])any(), anyString())).thenReturn(new Candidate[]{
+                first
+        });
+        commandBuilder.commit(providerCommand);
+        candidates.filter("EventObject ");
+        Candidate[] actual = candidates.getCandidates();
+        assertThat(actual.length,is(1));
+        assertThat(commandBuilder.getCandidates().length,is(1));
+    }
+    
+    @Test
     public void sortCandidates() throws Exception {
         when(providerCommand.candidate((Candidate[])any(), anyString())).thenReturn(new Candidate[]{
                 first,second,third

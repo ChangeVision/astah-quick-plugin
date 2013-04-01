@@ -19,6 +19,18 @@ import com.change_vision.astah.quick.internal.command.Commands;
 @SuppressWarnings("serial")
 public class QuickWindow extends JWindow {
 
+    private static final String OS_NAME = System.getProperty("os.name");
+    public static boolean IS_WINDOWS = isWindows();
+    public static boolean IS_MAC = isMac();
+
+    private static boolean isWindows() {
+        return OS_NAME != null || OS_NAME.startsWith("Windows");
+    }
+
+    private static boolean isMac() {
+        return OS_NAME != null || OS_NAME.startsWith("Mac");
+    }
+
     private final QuickPanel quickPanel;
     private final MessageNotifier notifier;
     private final Candidates candidates;
@@ -64,4 +76,5 @@ public class QuickWindow extends JWindow {
         setVisible(true);
         quickPanel.opened();
     }
+    
 }

@@ -3,6 +3,7 @@ package com.change_vision.astah.quick.internal.command.diagram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.change_vision.astah.quick.command.exception.SameNameExistsException;
 import com.change_vision.astah.quick.internal.AstahAPIWrapper;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
@@ -26,7 +27,9 @@ import com.change_vision.jude.api.inf.view.IDiagramViewManager;
 
 class DiagramAPI {
 
-    private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
+    private static final String MESSAGE_OF_SAME_NAME_EXISTS_EXCEPTION = "An element with the same name already exists."; //$NON-NLS-1$
+
+	private static final Logger logger = LoggerFactory.getLogger(DiagramAPI.class);
 
     private final AstahAPIWrapper wrapper;
 
@@ -131,7 +134,11 @@ class DiagramAPI {
             transactionManager.endTransaction();
         } catch (InvalidEditingException e) {
             transactionManager.abortTransaction();
-            throw new IllegalStateException("This API doesn't support in community edition.",e);
+            String message = e.getMessage();
+            if (message != null && message.equals(MESSAGE_OF_SAME_NAME_EXISTS_EXCEPTION)) {
+				throw new SameNameExistsException(Messages.getString("DiagramAPI.same_name_class_diagram_message")); //$NON-NLS-1$
+			}
+			throw new IllegalStateException(message,e);
         }
         return diagram;
     }
@@ -146,7 +153,11 @@ class DiagramAPI {
             transactionManager.endTransaction();
         } catch (InvalidEditingException e) {
             transactionManager.abortTransaction();
-            throw new IllegalStateException("This API doesn't support in community edition.",e);
+            String message = e.getMessage();
+            if (message != null && message.equals(MESSAGE_OF_SAME_NAME_EXISTS_EXCEPTION)) {
+				throw new SameNameExistsException(Messages.getString("DiagramAPI.same_name_usecase_diagram_message")); //$NON-NLS-1$
+			}
+			throw new IllegalStateException(message,e);
         }
         return diagram;
     }
@@ -161,7 +172,11 @@ class DiagramAPI {
             transactionManager.endTransaction();
         } catch (InvalidEditingException e) {
             transactionManager.abortTransaction();
-            throw new IllegalStateException("This API doesn't support in community edition.",e);
+            String message = e.getMessage();
+            if (message != null && message.equals(MESSAGE_OF_SAME_NAME_EXISTS_EXCEPTION)) {
+				throw new SameNameExistsException(Messages.getString("DiagramAPI.same_name_statemachine_diagram_message")); //$NON-NLS-1$
+			}
+			throw new IllegalStateException(message,e);
         }
         return diagram;
     }
@@ -176,7 +191,11 @@ class DiagramAPI {
             transactionManager.endTransaction();
         } catch (InvalidEditingException e) {
             transactionManager.abortTransaction();
-            throw new IllegalStateException("This API doesn't support in community edition.",e);
+            String message = e.getMessage();
+            if (message != null && message.equals(MESSAGE_OF_SAME_NAME_EXISTS_EXCEPTION)) {
+				throw new SameNameExistsException(Messages.getString("DiagramAPI.same_name_sequence_diagram_message")); //$NON-NLS-1$
+			}
+			throw new IllegalStateException(message,e);
         }
         return diagram;
     }

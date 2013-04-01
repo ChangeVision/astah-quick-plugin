@@ -28,9 +28,14 @@ public class CloseProjectCommand implements Command {
             String title = Messages.getString("CloseProjectCommand.confirm_before_save_title");
             int confirm = JOptionPane.showConfirmDialog(frame, message, title,
                     JOptionPane.YES_NO_CANCEL_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
-            if (confirm == JOptionPane.YES_OPTION) {
-                api.save();
+            switch (confirm) {
+            case JOptionPane.CANCEL_OPTION:
+                return;
+            case JOptionPane.YES_OPTION:
+                if(api.save() == false) return;
+                break;
             }
+            
         }
         api.closeProject();
     }

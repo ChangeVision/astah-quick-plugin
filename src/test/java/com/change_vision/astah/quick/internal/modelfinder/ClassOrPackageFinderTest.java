@@ -58,12 +58,20 @@ public class ClassOrPackageFinderTest {
     }
     
     @Test
-    public void namedClassInNamespace() throws Exception {
+    public void namedClassInDefiniteNamespace() throws Exception {
         when(clazz.getName()).thenReturn("Fuga");
         when(clazz.getFullName(".")).thenReturn("hoge.Fuga");
-        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
+        ClassOrPackageFinder finder = new ClassOrPackageFinder("hoge.Fuga");
         boolean target = finder.isTarget(clazz);
         assertThat(target,is(true));
     }
 
+    @Test
+    public void namedClassInIndefiniteNamespace() throws Exception {
+        when(clazz.getName()).thenReturn("Fuga");
+        when(clazz.getFullName(".")).thenReturn("hoge.Fuga");
+        ClassOrPackageFinder finder = new ClassOrPackageFinder("ho");
+        boolean target = finder.isTarget(clazz);
+        assertThat(target,is(false));
+    }
 }

@@ -116,8 +116,6 @@ public class ModelAPI {
                     if (element instanceof IPackage) {
                         parent = (IPackage) element;
                         found = true;
-                    } else {
-                        throw new IllegalArgumentException(Messages.getString("ModelAPI.sameName_existed_error_message")); //$NON-NLS-1$
                     }
                 }
             }

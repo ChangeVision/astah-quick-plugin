@@ -11,52 +11,65 @@ import com.change_vision.astah.quick.command.exception.ExecuteCommandException;
 import com.change_vision.astah.quick.internal.Messages;
 import com.change_vision.astah.quick.internal.annotations.TestForMethod;
 import com.change_vision.astah.quick.internal.command.AstahCommandIconDescription;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.view.IconDescription;
 
-class CreateInterfaceCommand implements Command{
+class CreateInterfaceCommand implements Command {
 
-	private ModelAPI api = new ModelAPI();
+    private ModelAPI api = new ModelAPI();
 
-	private static final Logger logger = LoggerFactory.getLogger(CreateInterfaceCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(CreateInterfaceCommand.class);
 
-	@Override
-	public String getName() {
-		return "create interface"; //$NON-NLS-1$
-	}
+    @Override
+    public String getName() {
+        return "create interface"; //$NON-NLS-1$
+    }
 
-	@Override
-	public void execute(String... args) throws ExecuteCommandException {
-		if(args == null || args.length == 0) throw new IllegalArgumentException(Messages.getString("CreateInterfaceCommand.argument_error_message")); //$NON-NLS-1$
-		for (String interfaceName : args) {
-			logger.trace("create interface '{}'",interfaceName); //$NON-NLS-1$
+    @Override
+    public void execute(String... args) throws ExecuteCommandException {
+        if (args == null || args.length == 0)
+            throw new IllegalArgumentException(
+                    Messages.getString("CreateInterfaceCommand.argument_error_message")); //$NON-NLS-1$
+        for (String interfaceName : args) {
+            logger.trace("create interface '{}'", interfaceName); //$NON-NLS-1$
             INamedElement[] found = api.findByFQCN(interfaceName);
-            if (found.length > 0) {
-                String message = format(Messages.getString("CreateInterfaceCommand.already_existed_error_message"),interfaceName); //$NON-NLS-1$
+            if (found.length > 0 && isFoundClass(found)) {
+                String message = format(
+                        Messages.getString("CreateInterfaceCommand.already_existed_error_message"), interfaceName); //$NON-NLS-1$
                 throw new ExecuteCommandException(message);
             }
-			api.createInterface(interfaceName);
-		}
-	}
+            api.createInterface(interfaceName);
+        }
+    }
 
-	@Override
-	public String getDescription() {
-		return Messages.getString("CreateInterfaceCommand.description"); //$NON-NLS-1$
-	}
-	
-	@Override
-	public boolean isEnabled() {
-		return api.isOpenedProject();
-	}
-	
-	@Override
-	public CandidateIconDescription getIconDescription() {
-		return new AstahCommandIconDescription(IconDescription.UML_CLASS_INTERFACE);
-	}
+    private boolean isFoundClass(INamedElement[] found) {
+        for (INamedElement element : found) {
+            if (element instanceof IClass) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@TestForMethod
+    @Override
+    public String getDescription() {
+        return Messages.getString("CreateInterfaceCommand.description"); //$NON-NLS-1$
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return api.isOpenedProject();
+    }
+
+    @Override
+    public CandidateIconDescription getIconDescription() {
+        return new AstahCommandIconDescription(IconDescription.UML_CLASS_INTERFACE);
+    }
+
+    @TestForMethod
     void setAPI(ModelAPI api) {
-	    this.api = api;
+        this.api = api;
     }
 
 }

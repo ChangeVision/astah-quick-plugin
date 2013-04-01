@@ -16,8 +16,8 @@ class EnvironmentAPI {
         return wrapper.isModifiedProject();
     }
 
-    void save() {
-        wrapper.save();
+    boolean save() {
+        return wrapper.save();
     }
 
 }

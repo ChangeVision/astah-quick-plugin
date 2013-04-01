@@ -58,11 +58,17 @@ public class CommandBuilder {
             if (isCommitted()) {
                 Command old = this.command;
                 this.command = null;
+                support.firePropertyChange(PROP_OF_COMMAND, old, command);
                 return old;
             }
             return null;
         }
-        return candidates.remove(candidates.size() - 1);
+        int index = candidates.size() - 1;
+        Candidate candidate = candidates.remove(index);
+        if (candidate != null) {
+            support.fireIndexedPropertyChange(PROP_OF_CANDIDATE, index, candidate, null);
+        }
+        return candidate;
     }
 
     public String getCandidateText(String candidateText) {
