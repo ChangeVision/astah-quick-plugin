@@ -38,6 +38,18 @@ Commands
  * close project
  * quit astah
 
+How to build
+------------
+1. Install the Astah Plug-in SDK - <http://astah.net/features/sdk>
+2. `git clone git://github.com/ChangeVision/astah-quick-plugin.git`
+3. `cd script`
+4. `astah-build`
+5. `astah-launch`
+
+ * Generating config to load classpath [for Eclipse](http://astah.net/tutorials/plug-ins/plugin_tutorial_en/html/helloworld.html#eclipse)
+
+       * `astah-mvn eclipse:eclipse`
+
 License
 ---------------
 Copyright 2013 Change Vision, Inc.
@@ -53,3 +65,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Third party software licenses
+------------------------------
+ * MiGLayout is licensed under modified BSD License.  Please see the included license file.
