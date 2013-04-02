@@ -1,4 +1,4 @@
-astah* Quick プラグイン
+Quick Command プラグイン
 ===============================
 
 ![demo](https://raw.github.com/kompiro/astah-quick-plugin/master/docs/images/demo.gif)
@@ -15,11 +15,11 @@ Astah Professional 6.7 or later
 ----------------
 このプラグインは複雑な操作を数ステップで完了できるQuick Windowを提供します。
 Quick Windowには1行の入力フィールドがあり、予め定義されたコマンドを実行できます。
-この入力フィールドではコマンドや、その引数をインクリメンタルサーチが行われたり、上下カーソルで選択ができます。入力が簡単です。
+この入力フィールドではコマンドや、その引数をインクリメンタルサーチが行われたり、上下カーソルで選択でき、簡単に入力できます。
 
 インストール方法
 ----------------
-0. [JARファイルのダウンロード](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
+0. [JARファイルのダウンロード](http://afternoon-spire-2467.herokuapp.com/plugins/file/quick-1.0.0.jar)
 1. astah*を起動
 2. プラグイン一覧からインストールする ([ヘルプ]-[プラグイン一覧])
 3. インストール後、再起動するとQuick Windowを表示するための設定画面が開かれます。
@@ -37,6 +37,19 @@ Quick Windowには1行の入力フィールドがあり、予め定義された�
  * open project
  * close project
  * quit astah
+
+ビルド
+------------
+1. Astah Plug-in SDKをインストールします。 - <http://astah.change-vision.com/ja/plugins.html>
+2. `git clone git://github.com/ChangeVision/astah-quick-plugin.git`
+3. `cd script`
+4. `astah-build`
+5. `astah-launch`
+
+ * Generating config to load classpath [for Eclipse](http://astah.change-vision.com/ja/plugin-tutorial/helloworld.html#eclipse)
+
+   * `astah-mvn eclipse:eclipse`
+
 ライセンス
 ---------------
 Copyright 2013 Change Vision, Inc.
@@ -52,3 +65,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+サードパーティライセンス
+------------------------
+ * MiGLayoutは修正BSDライセンスです。同梱するライセンスファイルを参照してください。

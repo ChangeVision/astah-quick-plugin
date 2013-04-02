@@ -1,4 +1,4 @@
-Astah Quick Plugin
+Quick Command Plugin
 ===============================
 
 ![demo](https://raw.github.com/kompiro/astah-quick-plugin/master/docs/images/demo.gif)
@@ -19,7 +19,7 @@ You can easily input command and the command's arguments by incremental search a
 
 How to install
 ----------------
-0. [Download the jar file.](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
+0. [Download the jar file.](http://afternoon-spire-2467.herokuapp.com/plugins/file/quick-1.0.0.jar)
 1. Start Astah
 2. Install the plug-in at the Plugin List Dialog ([help]-[Plugin List] menu)
 3. You find the configuration window to display Quick Window
