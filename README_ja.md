@@ -1,7 +1,7 @@
 Quick Command プラグイン
 ===============================
 
-![demo](https://raw.github.com/kompiro/astah-quick-plugin/master/docs/images/demo.gif)
+![demo](https://raw.github.com/ChangeVision/astah-quick-plugin/master/docs/images/demo.gif)
 
 バージョン
 ----------------
