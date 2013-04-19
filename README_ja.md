@@ -19,7 +19,7 @@ Quick Windowには1行の入力フィールドがあり、予め定義された�
 
 インストール方法
 ----------------
-0. [JARファイルのダウンロード](http://afternoon-spire-2467.herokuapp.com/plugins/file/quick-1.0.0.jar)
+0. [JARファイルのダウンロード](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
 1. astah*を起動
 2. プラグイン一覧からインストールする ([ヘルプ]-[プラグイン一覧])
 3. インストール後、再起動するとQuick Windowを表示するための設定画面が開かれます。
