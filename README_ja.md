@@ -9,7 +9,7 @@ Quick Command プラグイン
 
 対象エディション
 ----------------
-Astah Professional 6.7 or later
+Astah Professional 6.6.4 or later
 
 概要
 ----------------
