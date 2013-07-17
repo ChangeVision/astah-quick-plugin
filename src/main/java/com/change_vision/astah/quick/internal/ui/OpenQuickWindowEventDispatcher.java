@@ -65,7 +65,7 @@ class OpenQuickWindowEventDispatcher implements KeyEventDispatcher {
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         if (isOnWindowsOrOnMacIllegalEvents(e)) {
-            return true;
+            return false;
         }
         if (isOnWindowsOrOnMacAcceptsOnlyKeyPressedEvent(e)) {
             return false;
