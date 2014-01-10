@@ -5,7 +5,7 @@ Quick Command Plugin
 
 Version
 ----------------
-1.0.0
+1.0.1
 
 Available for
 ----------------
@@ -19,7 +19,7 @@ You can easily input command and the command's arguments by incremental search a
 
 How to install
 ----------------
-0. [Download the jar file.](http://cdn.change-vision.com/plugins/quick-1.0.0.jar)
+0. [Download the jar file.](http://cdn.change-vision.com/plugins/quick-1.0.1.jar)
 1. Start Astah
 2. Install the plug-in at the Plugin List Dialog ([help]-[Plugin List] menu)
 3. You find the configuration window to display Quick Window
@@ -31,10 +31,6 @@ How to build
 3. `cd script`
 4. `astah-build`
 5. `astah-launch`
-
- * Generating config to load classpath [for Eclipse](http://astah.net/tutorials/plug-ins/plugin_tutorial_en/html/helloworld.html#eclipse)
-
-       * `astah-mvn eclipse:eclipse`
 
 License
 ---------------
