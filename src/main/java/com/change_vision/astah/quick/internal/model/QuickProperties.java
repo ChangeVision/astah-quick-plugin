@@ -27,7 +27,11 @@ public class QuickProperties {
     private static QuickProperties instance;
     
     QuickProperties() {
-        File propertyFile = getPropertyFile();
+        loadProperties();
+    }
+
+	private void loadProperties() {
+		File propertyFile = getPropertyFile();
         if(propertyFile.exists()){
             try {
                 properties.load(FileUtils.openInputStream(propertyFile));
@@ -35,7 +39,7 @@ public class QuickProperties {
                 logger.error("Error has occurred.",e);
             }
         }
-    }
+	}
     
     public static QuickProperties getInstance(){
         if (instance == null) {
@@ -76,6 +80,8 @@ public class QuickProperties {
     }
     
     void setUserConfigDirectory(UserConfigDirectory userConfigDirectory) {
+    	properties.clear();
         this.userConfigDirectory = userConfigDirectory;
+        loadProperties();
     }
 }
