@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
@@ -28,7 +29,7 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D graphic = (Graphics2D) g.create();
-            graphic.setColor(new Color(224,224,224));
+            graphic.setColor(UIManager.getColor("TextField.foreground")); 
             graphic.drawLine(x, y + c.getHeight() - 1, x + c.getWidth(), y + c.getHeight() - 1);
         }
 
@@ -55,11 +56,11 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
         panel.setBorder(border);
 
         if (isSelected) {
-            panel.setBackground(Color.blue.darker());
-            panel.setForeground(Color.lightGray.brighter());
+            panel.setBackground(UIManager.getColor("List.selectionBackground").darker());
+            panel.setForeground(UIManager.getColor("List.selectionForeground").brighter());
         } else {
-            panel.setBackground(Color.lightGray.brighter());
-            panel.setForeground(Color.DARK_GRAY.darker());
+            panel.setBackground(UIManager.getColor("List.background").brighter());
+            panel.setForeground(UIManager.getColor("List.foreground").darker());
         }
 
         if (value instanceof Candidate) {
@@ -70,11 +71,11 @@ final class CandidatesListCellRenderer implements ListCellRenderer {
             description.setText(candidate.getDescription());
             description.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
             if (isSelected) {
-                title.setForeground(Color.lightGray.brighter());
-                description.setForeground(Color.lightGray.brighter());
+                title.setBackground(UIManager.getColor("List.selectionBackground").darker());
+                description.setForeground(UIManager.getColor("List.selectionForeground").brighter());
             } else {
-                title.setForeground(Color.DARK_GRAY.darker());
-                description.setForeground(Color.gray);
+                title.setForeground(UIManager.getColor("List.foreground"));
+                description.setForeground(UIManager.getColor("List.foreground"));
             }
             panel.add(description);
         }
