@@ -29,8 +29,9 @@ final class KeyConfigField extends JTextField {
     KeyConfigField(String defaultString) {
         this.defaultString = defaultString;
         setEditable(false);
-        setBackground(Color.white);
-        setBorder(new LineBorder(Color.lightGray));
+        setBackground(UIManager.getColor("TextField.background"));
+        setForeground(UIManager.getColor("TextField.foreground"));
+        setBorder(new LineBorder(UIManager.getColor("InternalFrame.borderColor")));
         setFocusable(true);
         Caret caret2 = getCaret();
         caret2.setVisible(true);

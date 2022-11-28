@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import com.change_vision.astah.quick.internal.Messages;
 
@@ -35,7 +36,7 @@ public class HelpField extends JLabel {
         });
         timer.start();
         //        setFont(new Font("Dialog", Font.PLAIN, 12));
-        setForeground(Color.darkGray.brighter());
+        setForeground(UIManager.getColor("TextField.foreground").brighter());
     }
     
 }

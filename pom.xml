@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.change_vision.astah</groupId>
   <artifactId>quick</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
   <name>%bundle.name</name>
   <description>%bundle.description</description>
@@ -48,16 +48,6 @@
     <repository>
       <id>uk-central</id>
       <url>http://uk.maven.org/maven2/</url>
-    </repository>
-    <repository>
-      <id>kompiro.org</id>
-      <url>http://kompiro.org/maven/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
     </repository>
   </repositories>
   <distributionManagement>
@@ -307,25 +297,6 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.9</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kompiro.notification</groupId>
-      <artifactId>ui</artifactId>
-      <version>0.0.7</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>android</artifactId>
-          <groupId>com.google.android</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>x86_64</artifactId>
-          <groupId>org.eclipse.swt.gtk.linux</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>x86</artifactId>
-          <groupId>org.eclipse.swt.gtk.linux</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
